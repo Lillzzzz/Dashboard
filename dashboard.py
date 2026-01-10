@@ -1,4 +1,6 @@
 """
+SPOTIFY A&R MARKET INTELLIGENCE DASHBOARD
+
 Business Intelligence Dashboard – Masterprojekt Marketing
 Hinweis für Korrektor:innen:
 - zentrale Konfiguration via config.json
@@ -6,10 +8,6 @@ Hinweis für Korrektor:innen:
 - Caching für CSV-Daten (lru_cache)
 - Filtertransparenz durch Year-Badge
 - Vergleichbarkeit durch fixierte Y-Achse
-"""
-
-"""
-SPOTIFY A&R MARKET INTELLIGENCE DASHBOARD
 """
 
 # ==================== AUTOR ====================
