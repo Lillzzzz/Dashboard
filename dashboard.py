@@ -1,6 +1,6 @@
 """
 Business Intelligence Dashboard – Masterprojekt Marketing
-Hinweis:
+Hinweis für Korrektor:innen:
 - zentrale Konfiguration via config.json
 - robustes API-Fallback (safe_fetch_spotify)
 - Caching für CSV-Daten (lru_cache)
@@ -8,6 +8,15 @@ Hinweis:
 - Vergleichbarkeit durch fixierte Y-Achse
 """
 
+"""
+SPOTIFY A&R MARKET INTELLIGENCE DASHBOARD
+"""
+
+# ==================== AUTOR ====================
+# Erstellt von: Lilly C.
+# Modul: Business Intelligence (Master)
+# Hochschule: Hochschule Macromedia
+# ========================================================
 
 import dash
 from dash import dcc, html, Input, Output, State, ctx
@@ -28,7 +37,8 @@ import logging
 from functools import lru_cache
 from datetime import datetime
 
-# ==================== ORJSON FALLBACK ====================
+# Orjson-Kompatibilität (Plotly Performance-Bibliothek)
+
 import plotly.io._json as pio_json
 try:
     import orjson
@@ -38,16 +48,14 @@ except Exception:
 logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
-SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
-SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
-LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 
-# CSV von Google Drive laden falls nicht vorhanden
+# CSV von GitHub Release laden falls lokal nicht vorhanden
+
 csv_path = Path('data/spotify_charts_enhanced.csv')
 if not csv_path.exists():
     print("Lade spotify_charts_enhanced.csv von Google Drive...")
     try:
-        url = "https://github.com/Lillzzzz/Dashboard/releases/download/v1.0/spotify_charts_enhanced.csv"
+        url = "https://drive.google.com/uc?export=download&id=1VuoZpc9C9-S2CxvAAyyYqmM4QB5VV1w5"
         response = requests.get(url, timeout=300)
         response.raise_for_status()
         csv_path.parent.mkdir(exist_ok=True)
@@ -56,7 +64,7 @@ if not csv_path.exists():
     except Exception as e:
         print(f"⚠️ Download fehlgeschlagen: {e}")
 
-# ==================== CSV CACHING ====================
+# Caching für CSV-Daten (beschleunigt Ladevorgänge)
 
 @lru_cache(maxsize=8)
 def get_kpi_data():
@@ -85,7 +93,7 @@ else:
     GENRE_MAPPING_DASH = {}
 
 
-
+# Konstanten für Last.fm Gewichtung
 # Last.fm Gewichtung: Last.fm-Tracks werden höher gewichtet, da sie auf
 # echten Nutzer-Plays (7 Tage) basieren und nicht algorithmus-gesteuert sind.
 # Validiert Spotify-Trends gegen Plattform-Bias.
@@ -96,6 +104,7 @@ LASTFM_WEIGHT = 1.2  # Last.fm-Tracks höher gewichten:
 # Rate-Limit Handling
 RATE_LIMIT_WAIT = 60  # Sekunden bei 429-Error (erhöht auf 60s)
 
+# Startup: Prüfe ob alle Dateien vorhanden sind
 
 print("\n" + "="*70)
 print("SPOTIFY A&R DASHBOARD - STARTUP")
@@ -162,7 +171,7 @@ except Exception as e:
 
 print("="*70)
 
-# ==================== LAST.FM API ====================
+# Last.fm API-Klasse
 
 import time
 from datetime import datetime, timedelta
@@ -336,6 +345,9 @@ SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 
+
+# Spotify API-Klasse
+
 class SpotifyAPI:
     def __init__(self):
         self.client_id = SPOTIFY_CLIENT_ID
@@ -456,7 +468,7 @@ class SpotifyAPI:
 
 spotify_api = SpotifyAPI()
 
-# ==================== SPOTIFY FETCH ====================
+# Fallback wenn Spotify API nicht erreichbar
 
 def safe_fetch_spotify():
     """Wrapper mit Fallback für Spotify API"""
@@ -473,6 +485,7 @@ def safe_fetch_spotify():
         ]
 
 
+# Dash App initialisieren
 
 app = dash.Dash(
     __name__,
@@ -496,7 +509,7 @@ def hex_to_rgba(hex_color, alpha=0.15):
     except:
         return 'rgba(29, 185, 84, 0.15)'
 
-# ==================== HELPER ===================
+# Helper-Funktionen für Plotly Theme
 
 def create_plotly_theme():
     return dict(
@@ -570,8 +583,7 @@ def get_accessible_colors():
         'black': '#000000'
     }
 
-# ==================== CUSTOM CSS ====================
-
+# Custom CSS in HTML Head einfügen
 
 app.index_string = f'''
 <!DOCTYPE html>
@@ -635,7 +647,7 @@ app.index_string = f'''
 </html>
 '''
 
-# ================== LAYOUT ====================
+# Layout-Definition
 
 app.layout = dbc.Container([
     dbc.Row([
@@ -1091,7 +1103,7 @@ app.layout = dbc.Container([
     
 ], fluid=True, className='p-0', style={'maxWidth': '100%'})
 
-# ==================== GENRE PREDICTION ====================
+# Callbacks für Interaktivität
 
 def predict_genre_simple(track_name, artist):
     """
@@ -1128,7 +1140,7 @@ def predict_genre_simple(track_name, artist):
     # Fallback wenn kein Keyword matched
     return "Other"
 
-# =================== CALLBACKS ====================
+# ==================== CALLBACKS ====================
 
 @app.callback(
     Output('api-status-text', 'children'),
@@ -2051,6 +2063,7 @@ def update_genre_deviation(markets, n_intervals):
         fig.update_layout(template='plotly_dark', paper_bgcolor='rgba(0,0,0,0)', title="Fehler", height=400)
         return fig, html.Div("Fehler", className="val-pill", style={'background': 'rgba(255, 107, 157, 0.2)', 'color': '#FF6B9D', 'border': '1px solid #FF6B9D'}), ""
 
+# Server-Variable für Render Deployment
 
 # Expose server for Gunicorn
 server = app.server
