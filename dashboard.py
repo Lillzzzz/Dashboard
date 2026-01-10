@@ -42,7 +42,6 @@ SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 
-# ==================== GOOGLE DRIVE CSV DOWNLOAD ====================
 # CSV von Google Drive laden falls nicht vorhanden
 csv_path = Path('data/spotify_charts_enhanced.csv')
 if not csv_path.exists():
@@ -86,7 +85,6 @@ else:
     GENRE_MAPPING_DASH = {}
 
 
-# ==================== KONSTANTEN ====================
 
 # Last.fm Gewichtung: Last.fm-Tracks werden höher gewichtet, da sie auf
 # echten Nutzer-Plays (7 Tage) basieren und nicht algorithmus-gesteuert sind.
@@ -98,7 +96,6 @@ LASTFM_WEIGHT = 1.2  # Last.fm-Tracks höher gewichten:
 # Rate-Limit Handling
 RATE_LIMIT_WAIT = 60  # Sekunden bei 429-Error (erhöht auf 60s)
 
-# ==================== STARTUP ===================
 
 print("\n" + "="*70)
 print("SPOTIFY A&R DASHBOARD - STARTUP")
@@ -476,7 +473,6 @@ def safe_fetch_spotify():
         ]
 
 
-# ==================== DASH APP ====================
 
 app = dash.Dash(
     __name__,
@@ -639,7 +635,7 @@ app.index_string = f'''
 </html>
 '''
 
-# ==================== LAYOUT ====================
+# ================== LAYOUT ====================
 
 app.layout = dbc.Container([
     dbc.Row([
@@ -1132,7 +1128,7 @@ def predict_genre_simple(track_name, artist):
     # Fallback wenn kein Keyword matched
     return "Other"
 
-# ==================== CALLBACKS ====================
+# =================== CALLBACKS ====================
 
 @app.callback(
     Output('api-status-text', 'children'),
@@ -2055,7 +2051,6 @@ def update_genre_deviation(markets, n_intervals):
         fig.update_layout(template='plotly_dark', paper_bgcolor='rgba(0,0,0,0)', title="Fehler", height=400)
         return fig, html.Div("Fehler", className="val-pill", style={'background': 'rgba(255, 107, 157, 0.2)', 'color': '#FF6B9D', 'border': '1px solid #FF6B9D'}), ""
 
-# ==================== RUN ====================
 
 # Expose server for Gunicorn
 server = app.server
