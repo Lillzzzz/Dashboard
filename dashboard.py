@@ -1,6 +1,6 @@
 """
 Business Intelligence Dashboard – Masterprojekt Marketing
-Hinweis für Korrektor:innen:
+Hinweis:
 - zentrale Konfiguration via config.json
 - robustes API-Fallback (safe_fetch_spotify)
 - Caching für CSV-Daten (lru_cache)
@@ -8,17 +8,6 @@ Hinweis für Korrektor:innen:
 - Vergleichbarkeit durch fixierte Y-Achse
 """
 
-"""
-SPOTIFY A&R MARKET INTELLIGENCE DASHBOARD
-FINAL VERSION - ALL FIXES APPLIED
-"""
-
-# ==================== AUTOREN-INFO ====================
-# Erstellt von: Lilly C.
-# Modul: Business Intelligence (Master)
-# Hochschule: Hochschule Macromedia
-# Dashboard-Logik, Datenaufbereitung und API-Integration manuell implementiert
-# ========================================================
 
 import dash
 from dash import dcc, html, Input, Output, State, ctx
