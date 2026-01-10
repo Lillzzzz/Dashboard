@@ -98,7 +98,7 @@ LASTFM_WEIGHT = 1.2  # Last.fm-Tracks höher gewichten:
 # Rate-Limit Handling
 RATE_LIMIT_WAIT = 60  # Sekunden bei 429-Error (erhöht auf 60s)
 
-# ==================== STARTUP VALIDATION ====================
+# ==================== STARTUP ===================
 
 print("\n" + "="*70)
 print("SPOTIFY A&R DASHBOARD - STARTUP")
@@ -459,7 +459,7 @@ class SpotifyAPI:
 
 spotify_api = SpotifyAPI()
 
-# ==================== SAFE SPOTIFY FETCH ====================
+# ==================== SPOTIFY FETCH ====================
 
 def safe_fetch_spotify():
     """Wrapper mit Fallback für Spotify API"""
@@ -500,7 +500,7 @@ def hex_to_rgba(hex_color, alpha=0.15):
     except:
         return 'rgba(29, 185, 84, 0.15)'
 
-# ==================== HELPER FUNCTIONS ====================
+# ==================== HELPER ===================
 
 def create_plotly_theme():
     return dict(
@@ -1095,7 +1095,7 @@ app.layout = dbc.Container([
     
 ], fluid=True, className='p-0', style={'maxWidth': '100%'})
 
-# ==================== GENRE PREDICTION HELPER ====================
+# ==================== GENRE PREDICTION ====================
 
 def predict_genre_simple(track_name, artist):
     """
