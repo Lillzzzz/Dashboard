@@ -59,7 +59,7 @@ csv_path = Path('data/spotify_charts_enhanced.csv')
 if not csv_path.exists():
     print("Lade spotify_charts_enhanced.csv von Google Drive...")
     try:
-        url = "https://drive.google.com/uc?export=download&id=1VuoZpc9C9-S2CxvAAyyYqmM4QB5VV1w5"
+        url = "https://github.com/Lillzzzz/Dashboard/releases/download/v1.0/spotify_charts_enhanced.csv"
         response = requests.get(url, timeout=300)
         response.raise_for_status()
         csv_path.parent.mkdir(exist_ok=True)
