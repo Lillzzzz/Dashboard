@@ -10,11 +10,6 @@ Hinweis für Korrektor:innen:
 - Vergleichbarkeit durch fixierte Y-Achse
 """
 
-# ==================== AUTOR ====================
-# Erstellt von: Lilly C.
-# Modul: Business Intelligence (Master)
-# Hochschule: Hochschule Macromedia
-# ========================================================
 
 import dash
 from dash import dcc, html, Input, Output, State, ctx
