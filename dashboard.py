@@ -669,7 +669,7 @@ app.layout = dbc.Container([
                                 'fontWeight': '500',
                                 'letterSpacing': '0.5px'
                             }),
-                            html.P("Professionelle Marktanalyse für datenbasierte Artist & Repertoire-Entscheidungen. Analysiert Genre-Performance, Audio-Charakteristiken und High-Potential Tracks über Deutschland, UK und Brasilien.", style={
+                            html.P("Marktanalyse für datenbasierte Artist & Repertoire-Entscheidungen. Analysiert Genre-Performance, Audio-Charakteristiken und High-Potential Tracks über Deutschland, UK und Brasilien.", style={
                                 'color': '#5A6169',
                                 'fontSize': '10px',
                                 'fontStyle': 'italic',
