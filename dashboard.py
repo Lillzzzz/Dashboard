@@ -30,6 +30,10 @@ import logging
 from functools import lru_cache
 from datetime import datetime
 
+SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
+SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
+LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
+
 # Orjson-Kompatibilität (Plotly Performance-Bibliothek)
 
 import plotly.io._json as pio_json
@@ -332,11 +336,6 @@ def get_lastfm_toptracks(country, limit=15):
     """Wrapper für Kompatibilität"""
     return lastfm_api.get_top_tracks(country, limit)
 
-
-
-SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
-SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
-LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 
 
 # Spotify API-Klasse
