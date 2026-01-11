@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
-/* ==================== GLOBAL ==================== */
+/* ==================== Allgemein ==================== */
 
 * {
     margin: 0;
@@ -20,7 +20,7 @@ body {
     overflow-x: hidden;
 }
 
-/* ==================== ANIMATIONS ==================== */
+/* ==================== Animierungen ==================== */
 
 @keyframes pulse {
     0%, 100% {
@@ -38,7 +38,7 @@ body {
     50% { opacity: 0.3; }
 }
 
-/* ==================== SIDEBAR ==================== */
+/* ==================== Sidebar ==================== */
 
 .sidebar {
     background: linear-gradient(180deg, rgba(15,20,30,0.88) 0%, rgba(10,15,25,0.92) 100%);
@@ -58,7 +58,7 @@ body {
     padding: 24px;
 }
 
-/* ==================== HEADER ==================== */
+/* ==================== Header ==================== */
 
 .header-section {
     background: linear-gradient(135deg, rgba(15,20,30,0.85) 0%, rgba(20,25,40,0.88) 100%);
@@ -88,7 +88,7 @@ body {
     line-height: 1.6 !important;
 }
 
-/* ==================== FILTER ==================== */
+/* ==================== Filter ==================== */
 
 .filter-card {
     background: rgba(20,25,40,0.85);
@@ -140,7 +140,7 @@ body {
     color: #1DB954 !important;
 }
 
-/* ==================== KPI CARDS ==================== */
+/* ==================== Kpi ==================== */
 
 .kpi-card {
     background: linear-gradient(135deg, rgba(29,185,84,0.12) 0%, rgba(15,20,30,0.85) 100%);
@@ -182,7 +182,7 @@ body {
     margin-top: 8px !important;
 }
 
-/* ==================== CHART CARDS ==================== */
+/* ==================== Karten ==================== */
 
 .chart-card {
     background: rgba(15,20,30,0.85);
@@ -230,7 +230,7 @@ body {
     border-radius: 6px;
 }
 
-/* ==================== VALIDATION PILLS ==================== */
+/* ==================== Validierung ==================== */
 
 .val-pill {
     padding: 6px 12px;
@@ -255,7 +255,7 @@ body {
     background: rgba(255, 107, 107, 0.1);
 }
 
-/* ==================== BADGES ==================== */
+/* ==================== Badges ==================== */
 
 .api-badge {
     display: inline-flex;
@@ -271,7 +271,7 @@ body {
     letter-spacing: 1px;
 }
 
-/* ==================== TRACKS ==================== */
+/* ==================== Tracks ==================== */
 
 .track-item {
     display: flex;
@@ -290,7 +290,7 @@ body {
     transform: translateX(4px);
 }
 
-/* ==================== LOADING ==================== */
+/* ==================== Laden ==================== */
 
 ._dash-loading {
     display: flex;
@@ -303,7 +303,7 @@ body {
     color: #1DB954 !important;
 }
 
-/* ==================== RESPONSIVE ==================== */
+/* ==================== Resonsive Design ==================== */
 
 @media (max-width: 768px) {
     .sidebar {
@@ -332,7 +332,7 @@ body {
     }
 }
 
-/* ==================== SCROLLBAR ==================== */
+/* ==================== Scrollbar ==================== */
 
 ::-webkit-scrollbar {
     width: 8px;
@@ -352,13 +352,13 @@ body {
     background: rgba(29, 185, 84, 0.7);
 }
 
-/* ==================== UTILITY ==================== */
+/* ==================== Utility ==================== */
 
 .mb-4 {
     margin-bottom: 24px !important;
 }
 
-/* ==================== LIVE INDICATOR BLINK ==================== */
+/* ==================== Liveindikator ==================== */
 
 @keyframes live-blink {
     0%, 100% { 
@@ -384,7 +384,7 @@ body {
     display: inline-block;
 }
 
-/* ==================== MOBILE FULL WIDTH FIX ==================== */
+/* ==================== Mobile Ansicht ==================== */
 
 @media (max-width: 768px) {
     .chart-card {
