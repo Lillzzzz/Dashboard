@@ -384,3 +384,42 @@ body {
     display: inline-block;
 }
 
+/* ==================== MOBILE FULL WIDTH FIX ==================== */
+
+@media (max-width: 768px) {
+    .chart-card {
+        padding: 16px 12px !important;
+    }
+    
+    /* Charts auf volle Breite */
+    .js-plotly-plot, .plotly {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    /* Container auf volle Breite */
+    .col-xl-6, .col-lg-6, .col-md-12 {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+    
+    /* Row spacing reduzieren */
+    .row {
+        margin-left: -8px !important;
+        margin-right: -8px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Extra small screens */
+    .chart-card {
+        padding: 12px 8px !important;
+        margin-bottom: 12px !important;
+    }
+    
+    /* Graph container */
+    #chart-genre-shares, #chart-correlation, #chart-audio-scatter,
+    #chart-market-trends, #chart-success-hist, #chart-genre-deviation {
+        width: 100% !important;
+    }
+}
