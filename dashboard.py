@@ -1,7 +1,5 @@
 """
-SPOTIFY A&R MARKET INTELLIGENCE DASHBOARD
-
-Business Intelligence Dashboard – Masterprojekt Marketing
+SPOTIFY A&R Business Intelligence Dashboard
 Hinweise:
 - zentrale Konfiguration via config.json
 - robustes API-Fallback (safe_fetch_spotify)
