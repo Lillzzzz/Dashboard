@@ -8,9 +8,7 @@ import json
 
 warnings.filterwarnings('ignore')
 
-# ═══════════════════════════════════════════════════════════════════════════
 # KONFIGURATION
-# ═══════════════════════════════════════════════════════════════════════════
 
 CONFIG_PATH = Path("config.json")
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
@@ -50,9 +48,7 @@ else:
         "jazz": "Jazz", "bebop": "Jazz", "smooth jazz": "Jazz"
     }
 
-# ═══════════════════════════════════════════════════════════════════════════
 # DATA JOURNAL TRACKING
-# ═══════════════════════════════════════════════════════════════════════════
 
 JOURNAL_LOG = []
 
@@ -83,9 +79,7 @@ def save_journal():
     journal_df.to_csv(journal_path, index=False, encoding='utf-8-sig')
     print(f"\n📝 Data Journal: {journal_path} ({len(JOURNAL_LOG)} Schritte)")
 
-# ═══════════════════════════════════════════════════════════════════════════
 # HILFSFUNKTIONEN
-# ═══════════════════════════════════════════════════════════════════════════
 
 def print_section(title):
     print(f"\n{'='*80}\n  {title}\n{'='*80}")
@@ -165,9 +159,7 @@ def calculate_success_score(df):
     
     return scores.clip(0, 100).round(2)
 
-# ═══════════════════════════════════════════════════════════════════════════
 # HAUPTPIPELINE
-# ═══════════════════════════════════════════════════════════════════════════
 
 def main():
     print_section("SPOTIFY CHARTS - DATENAUFBEREITUNG")
