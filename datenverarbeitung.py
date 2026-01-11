@@ -1,14 +1,3 @@
-"""
-═══════════════════════════════════════════════════════════════════════════════
-SPOTIFY CHARTS - DATENAUFBEREITUNG FÜR BI-DASHBOARD
-═══════════════════════════════════════════════════════════════════════════════
-
-Universitätsprojekt: Business Intelligence & Analytics
-Autor: [Ihr Name]
-Datum: 2025-11-01
-
-KORREKTE DATENBEREINIGUNG - Alle Fehler behoben!
-"""
 
 import pandas as pd
 import numpy as np
