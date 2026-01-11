@@ -7,7 +7,7 @@ Live-Dashboard: https://dashboard-d0z8.onrender.com
 
 Zielsetzung:
 Das Dashboard verfolgt drei konkrete Ziele:
-- Reduktion der Analysezeit für Genre-Performance von mehreren Tagen auf wenige Minuten
+- Reduktion des manuellen Analyseaufwands durch automatisierte Datenaufbereitung und Visualisierung.
 - Identifikation unterschätzter Genres mit hohem ROI-Potenzial  
 - Reaktionszeit unter 24 Stunden auf virale Trends durch Echtzeit-Datenintegration
 
