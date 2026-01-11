@@ -2,7 +2,7 @@
 SPOTIFY A&R MARKET INTELLIGENCE DASHBOARD
 
 Business Intelligence Dashboard – Masterprojekt Marketing
-Hinweis für Korrektor:innen:
+Hinweise:
 - zentrale Konfiguration via config.json
 - robustes API-Fallback (safe_fetch_spotify)
 - Caching für CSV-Daten (lru_cache)
