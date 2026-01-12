@@ -575,47 +575,63 @@ def get_accessible_colors():
 
 # Custom CSS in HTML Head einfügen
 
-app.index_string = '''
+app.index_string = f'''
 <!DOCTYPE html>
 <html>
     <head>
-        {%metas%}
-        <title>{%title%}</title>
-        {%favicon%}
-        {%css%}
+        {{%metas%}}
+        <title>{{%title%}}</title>
+        {{%favicon%}}
+        {{%css%}}
         <style>
-.dark-dropdown .Select-control {
+.dark-dropdown .Select-control {{
     background-color: #1e1e1e !important;
     border: 1px solid #1db954 !important;
     color: #1db954 !important;
-}
+}}
 .dark-dropdown .Select-value-label,
-.dark-dropdown .Select-placeholder {
+.dark-dropdown .Select-placeholder {{
     color: #1db954 !important;
-}
-.dark-dropdown .Select-menu-outer {
+}}
+.dark-dropdown .Select-menu-outer {{
     background-color: #1e1e1e !important;
     border: 1px solid #1db954 !important;
     z-index: 9999 !important;
-}
-.dark-dropdown .VirtualizedSelectOption {
+}}
+.dark-dropdown .VirtualizedSelectOption {{
     background-color: #1e1e1e !important;
     color: #ffffff !important;
-}
-.dark-dropdown .VirtualizedSelectFocusedOption {
+}}
+.dark-dropdown .VirtualizedSelectFocusedOption {{
     background-color: #1db954 !important;
     color: #0f141e !important;
-}
-
-
+}}
+@media (max-width: 768px) {{
+    .market-badge {{
+        flex-wrap: wrap;
+        max-width: 100%;
+        margin-bottom: 4px;
+    }}
+    .chart-header {{
+        gap: 6px;
+        flex-direction: column;
+        align-items: flex-start !important;
+    }}
+    .sidebar {{
+        display: none;
+    }}
+    .main-content {{
+        padding: 10px !important;
+    }}
+}}
         </style>
     </head>
     <body>
-        {%app_entry%}
+        {{%app_entry%}}
         <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
+            {{%config%}}
+            {{%scripts%}}
+            {{%renderer%}}
         </footer>
     </body>
 </html>
@@ -744,7 +760,7 @@ app.layout = dbc.Container([
             html.Div([
                 # Header
                 html.Div([
-                    html.H1("TEST SPOTIFY A&R MARKET INTELLIGENCE", className='header-title'),
+                    html.H1("SPOTIFY A&R MARKET INTELLIGENCE", className='header-title'),
                     html.P([
                         "Dieses Dashboard kombiniert historische Musikmarkt-Analysen (2017–2021) mit ",
                         "Live-Daten aus Spotify und Last.fm, um Markttrends, Erfolgsfaktoren und ",
@@ -753,150 +769,6 @@ app.layout = dbc.Container([
                 ], className='header-section'),
                 
                 
-
-# ==================== TEST-BALKEN FÜR MOBILE (INLINE CSS) ====================
-html.Div([
-    html.H3("🔧 MOBILE BREITEN-TEST", style={
-        'color': '#FF6B6B', 
-        'marginBottom': '15px', 
-        'fontSize': '16px',
-        'textAlign': 'center'
-    }),
-    
-    # BALKEN 1: Viewport-Width (wie Footer)
-    html.Div("1️⃣ VIEWPORT 100vw", style={
-        'width': '100vw',
-        'height': '50px',
-        'background': '#FF6B6B',
-        'margin': '0 0 10px 0',
-        'padding': '15px',
-        'color': 'white',
-        'fontSize': '14px',
-        'fontWeight': 'bold',
-        'display': 'flex',
-        'alignItems': 'center',
-        'justifyContent': 'center',
-        'position': 'relative',
-        'left': '50%',
-        'right': '50%',
-        'marginLeft': '-50vw',
-        'marginRight': '-50vw',
-        'boxSizing': 'border-box'
-    }),
-    
-    # BALKEN 2: Standard 100%
-    html.Div("2️⃣ STANDARD 100%", style={
-        'width': '100%',
-        'height': '50px',
-        'background': '#4ECDC4',
-        'margin': '0 0 10px 0',
-        'padding': '15px',
-        'color': 'white',
-        'fontSize': '14px',
-        'fontWeight': 'bold',
-        'display': 'flex',
-        'alignItems': 'center',
-        'justifyContent': 'center',
-        'boxSizing': 'border-box'
-    }),
-    
-    # BALKEN 3: Negative Margins (Container-Escape)
-    html.Div("3️⃣ NEGATIVE MARGINS", style={
-        'width': 'calc(100% + 24px)',
-        'height': '50px',
-        'background': '#1DB954',
-        'margin': '0 -12px 10px -12px',
-        'padding': '15px',
-        'color': 'white',
-        'fontSize': '14px',
-        'fontWeight': 'bold',
-        'display': 'flex',
-        'alignItems': 'center',
-        'justifyContent': 'center',
-        'boxSizing': 'border-box'
-    }),
-    
-    # BALKEN 4: Absolute Position
-    html.Div([
-        html.Div("4️⃣ ABSOLUTE POSITION", style={
-            'position': 'absolute',
-            'left': '0',
-            'right': '0',
-            'width': '100%',
-            'height': '50px',
-            'background': '#F39C12',
-            'padding': '15px',
-            'color': 'white',
-            'fontSize': '14px',
-            'fontWeight': 'bold',
-            'display': 'flex',
-            'alignItems': 'center',
-            'justifyContent': 'center',
-            'zIndex': '1',
-            'boxSizing': 'border-box'
-        })
-    ], style={
-        'position': 'relative', 
-        'height': '60px', 
-        'marginBottom': '10px'
-    }),
-    
-    # BALKEN 5: Bootstrap Col Override
-    html.Div("5️⃣ BOOTSTRAP OVERRIDE", style={
-        'width': '100%',
-        'maxWidth': '100%',
-        'height': '50px',
-        'background': '#9B59B6',
-        'margin': '0 0 10px 0',
-        'padding': '15px',
-        'color': 'white',
-        'fontSize': '14px',
-        'fontWeight': 'bold',
-        'display': 'flex',
-        'alignItems': 'center',
-        'justifyContent': 'center',
-        'boxSizing': 'border-box',
-        'overflow': 'hidden'
-    }),
-    
-    html.Hr(style={'borderColor': '#FF6B6B', 'margin': '20px 0'}),
-    
-    html.P([
-        "📱 Teste jetzt auf deinem Handy:",
-        html.Br(),
-        html.Strong("Welcher Balken (1-5) geht über die VOLLE Breite?"),
-        html.Br(),
-        "Sag mir die Nummer, dann gebe ich dir den finalen Fix!"
-    ], style={
-        'color': '#FFFFFF', 
-        'fontSize': '13px', 
-        'marginTop': '15px', 
-        'textAlign': 'center',
-        'lineHeight': '1.8',
-        'background': 'rgba(255,107,107,0.2)',
-        'padding': '15px',
-        'borderRadius': '8px'
-    })
-    
-], className='d-block d-md-none', style={
-    'background': 'linear-gradient(135deg, rgba(255,107,107,0.15) 0%, rgba(255,107,107,0.05) 100%)',
-    'padding': '20px',
-    'borderRadius': '12px',
-    'border': '2px dashed #FF6B6B',
-    'marginBottom': '25px',
-    'marginTop': '0'
-}),
-
-"""
-FERTIG! 
--------
-1. Füge diesen Block nach dem Header ein
-2. Deploy auf Render
-3. Öffne auf Handy
-4. Sag mir welcher Balken (1-5) volle Breite hat
-
-DANN gebe ich dir den EXAKTEN Fix!
-"""
                 
                 # Mobile Hinweis
                 html.Div([
@@ -1219,7 +1091,7 @@ DANN gebe ich dir den EXAKTEN Fix!
     dcc.Interval(id='interval-refresh', interval=60000, n_intervals=0),
     dcc.Store(id='selected-markets', data=['DE', 'UK', 'BR'])
     
-], fluid=True, className='p-0', style={'maxWidth': '100%', 'overflowX': 'hidden'})
+], fluid=True, className='p-0', style={'maxWidth': '100%'})
 
 # Callbacks für Interaktivität
 
