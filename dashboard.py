@@ -2224,25 +2224,26 @@ def update_spotify_live(n, markets):
                                 'maxWidth': '180px'
                             })
                         ]),
-                        html.Div([
-                            
-                                'fontSize': '10px',
-                                'color': color,
-                                'fontWeight': '600',
-                                'padding': '2px 8px',
-                                'background': hex_to_rgba(color, 0.15),
-                                'borderRadius': '6px',
-                                'marginRight': '6px'
-                            }),
-                            html.Span(f"Pop: {track['popularity']}", style={
-                                'fontSize': '10px',
-                                'color': '#1DB954',
-                                'fontWeight': '600',
-                                'padding': '2px 8px',
-                                'background': 'rgba(29,185,84,0.15)',
-                                'borderRadius': '6px'
-                            })
-                        ], style={'display': 'flex', 'gap': '4px', 'marginTop': '4px'})
+                       html.Div([
+    html.Span(market_name, style={
+        'fontSize': '10px',
+        'color': color,
+        'fontWeight': '600',
+        'padding': '2px 8px',
+        'background': hex_to_rgba(color, 0.15),
+        'borderRadius': '6px',
+        'marginRight': '6px'
+    }),
+    html.Span(f"Pop: {track['popularity']}", style={
+        'fontSize': '10px',
+        'color': '#1DB954',
+        'fontWeight': '600',
+        'padding': '2px 8px',
+        'background': 'rgba(29,185,84,0.15)',
+        'borderRadius': '6px'
+    })
+], style={'display': 'flex', 'gap': '4px', 'marginTop': '4px'})
+
                     ], style={'flex': '1'})
                 ], style={
                     'display': 'flex',
