@@ -66,13 +66,18 @@ if not csv_path.exists():
 def get_kpi_data():
     return pd.read_csv("data/cleaned_charts_kpi.csv")
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=4)
 def get_enhanced_data():
-    return enhanced_df
+    return pd.read_csv(
+        "data/spotify_charts_enhanced.csv",
+        dtype={'title': 'category', 'artist': 'category', 'market': 'category', 'genre_harmonized': 'category'},
+        low_memory=True
+    )
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=4)
 def get_highpot_data():
-    return highpot_df
+    return pd.read_csv("data/high_potential_tracks.csv")
+
 
 def clear_cache():
     get_kpi_data.cache_clear()
@@ -137,13 +142,9 @@ try:
     kpi_df = get_kpi_data()
     
     # Enhanced CSV mit reduziertem Memory-Footprint laden
-    enhanced_df = pd.read_csv(
-        data_path / 'spotify_charts_enhanced.csv',
-        dtype={'title': 'category', 'artist': 'category', 'market': 'category', 'genre_harmonized': 'category'},
-        low_memory=True
-    )
-    
-    highpot_df = pd.read_csv(data_path / 'high_potential_tracks.csv')
+    enhanced_df = get_enhanced_data()
+    highpot_df = get_highpot_data()
+
     
     # Market Trends CSV einbinden (falls vorhanden)
     market_trends_path = data_path / 'cleaned_market_trends.csv'
@@ -1632,18 +1633,19 @@ def update_correlation(markets):
 
         corr = df[audio_cols].corr()
 
-        # Kürzere Labels für bessere Lesbarkeit
-        label_map = {
-            "danceability": "Dance",
-            "energy": "Energy",
-            "valence": "Valence",
-            "tempo": "Tempo",
-            "acousticness": "Acoustic",
-            "instrumentalness": "Instr.",
-            "speechiness": "Speech",
-            "liveness": "Live"
-        }
-        corr = corr.rename(index=label_map, columns=label_map)
+# Kürzere Labels für bessere Lesbarkeit
+label_map = {
+    "danceability": "Dance",
+    "energy": "Energy",
+    "valence": "Valence",
+    "tempo": "Tempo",
+    "acousticness": "Acoustic",
+    "instrumentalness": "Instr.",
+    "speechiness": "Speech",
+    "liveness": "Live"
+}
+corr = corr.rename(index=label_map, columns=label_map)
+
 
         # Markt-spezifische Farbskala
         if set(markets) == {'DE'}:
