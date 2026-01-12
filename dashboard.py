@@ -1080,7 +1080,7 @@ app.layout = dbc.Container([
                 ], className='mb-4')
                 
             ], className='main-content')
-        ], width=9, className='p-0')
+        ], xs=12, sm=12, md=9, lg=9, xl=9, className='p-0')
     ], className='g-0'),
     
     # Footer
@@ -1257,35 +1257,24 @@ def update_market_selection(n_all, n_de, n_uk, n_br, current_markets):
 
 
 @app.callback(
-    Output('market-dropdown-mobile', 'value'),
-    [Input('btn-all', 'n_clicks'),
-     Input('btn-de', 'n_clicks'),
-     Input('btn-uk', 'n_clicks'),
-     Input('btn-br', 'n_clicks')],
-    [State('selected-markets', 'data')]
-)
-def sync_mobile_dropdown(n_all, n_de, n_uk, n_br, markets):
-    if set(markets) == {'DE', 'UK', 'BR'}:
-        return 'ALL'
-    elif len(markets) == 1:
-        return markets[0]
-    else:
-        return 'ALL'
-
-@app.callback(
     [Output('selected-markets', 'data', allow_duplicate=True),
      Output('btn-all', 'className', allow_duplicate=True),
      Output('btn-de', 'className', allow_duplicate=True),
      Output('btn-uk', 'className', allow_duplicate=True),
-     Output('btn-br', 'className', allow_duplicate=True)],
-    Input('market-dropdown-mobile', 'value'),
+     Output('btn-br', 'className', allow_duplicate=True),
+     Output('market-dropdown-mobile', 'value'),
+     Output('year-filter', 'value', allow_duplicate=True)],
+    [Input('market-dropdown-mobile', 'value'),
+     Input('year-dropdown-mobile', 'value')],
     prevent_initial_call=True
 )
-def update_from_mobile_dropdown(value):
-    if value == 'ALL':
+def update_from_mobile_filters(market_val, year_val):
+    """Mobile Dropdowns ändern Desktop Filter"""
+    # Markt setzen
+    if market_val == 'ALL':
         markets = ['DE', 'UK', 'BR']
     else:
-        markets = [value]
+        markets = [market_val]
     
     is_all = set(markets) == {'DE', 'UK', 'BR'}
     classes = {
@@ -1295,21 +1284,10 @@ def update_from_mobile_dropdown(value):
         'btn-br': 'market-button active' if 'BR' in markets else 'market-button'
     }
     
-    return markets, classes['btn-all'], classes['btn-de'], classes['btn-uk'], classes['btn-br']
-
-@app.callback(
-    [Output('year-filter', 'value', allow_duplicate=True),
-     Output('year-dropdown-mobile', 'value', allow_duplicate=True)],
-    [Input('year-filter', 'value'),
-     Input('year-dropdown-mobile', 'value')],
-    prevent_initial_call=True
-)
-def sync_year_dropdowns(desktop, mobile):
-    trigger = ctx.triggered[0]['prop_id'].split('.')[0]
-    if trigger == 'year-filter':
-        return desktop, desktop
-    else:
-        return mobile, mobile
+    # Jahr = None wenn "ALL" gewählt
+    year_output = None if year_val == "ALL" else year_val
+    
+    return markets, classes['btn-all'], classes['btn-de'], classes['btn-uk'], classes['btn-br'], market_val, year_output
 
 @app.callback(
     [Output('kpi-shannon', 'children'),
