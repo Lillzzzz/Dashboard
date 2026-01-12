@@ -1554,12 +1554,13 @@ def update_correlation(markets):
 def update_audio_scatter(markets):
     try:
         df = enhanced_df[enhanced_df['market'].isin(markets)] if set(markets) != {'DE', 'UK', 'BR'} else enhanced_df
-        
-        # Reproduzierbares Sampling mit random_state
-        df_sample = df.sample(min(1000, len(df)), random_state=42)
-        
+
+        # Reproduzierbares Sampling
+        df_sample = df.sample(min(1000, len(df)), random_state=42).copy()
+
         colors = get_market_colors()
-        
+
+        # Scatter Plot
         fig = px.scatter(
             df_sample,
             x='danceability',
@@ -1568,18 +1569,81 @@ def update_audio_scatter(markets):
             size='success_score',
             opacity=0.6,
             color_discrete_map=colors,
-            labels={'danceability': 'Tanzbarkeit', 'energy': 'Energie', 'market': 'Markt'},
-            hover_data=['success_score']
+            labels={
+                'danceability': 'Tanzbarkeit (0–1)',
+                'energy': 'Energie (0–1)',
+                'market': 'Markt',
+                'success_score': 'Success Score'
+            },
+            hover_data={'success_score': ':.1f'}
         )
-        
+
+        # -----------------------------------------
+        # Trendlinien + R² pro Markt
+        # -----------------------------------------
+        market_labels = {'DE': 'Deutschland', 'UK': 'UK', 'BR': 'Brasilien'}
+
+        r2_lines = []
+        for mkt in sorted(df_sample['market'].dropna().unique()):
+            sub = df_sample[df_sample['market'] == mkt][['danceability', 'energy']].dropna()
+            x = sub['danceability'].to_numpy()
+            y = sub['energy'].to_numpy()
+
+            if len(x) < 3:
+                r2_lines.append(f"{market_labels.get(mkt, mkt)}: R² n/a (n={len(x)})")
+                continue
+
+            # lineare Regression y = a*x + b
+            a, b = np.polyfit(x, y, 1)
+            y_pred = a * x + b
+
+            ss_res = np.sum((y - y_pred) ** 2)
+            ss_tot = np.sum((y - np.mean(y)) ** 2)
+            r2 = 1 - ss_res / ss_tot if ss_tot > 0 else np.nan
+
+            # Linie zeichnen (sortiert)
+            x_line = np.linspace(float(np.min(x)), float(np.max(x)), 50)
+            y_line = a * x_line + b
+
+            fig.add_trace(
+                go.Scatter(
+                    x=x_line,
+                    y=y_line,
+                    mode='lines',
+                    name=f"Trend {mkt}",
+                    hoverinfo='skip',
+                    line=dict(color=colors.get(mkt, '#1DB954'))
+
+                )
+            )
+
+            if np.isfinite(r2):
+                r2_lines.append(f"{market_labels.get(mkt, mkt)}: R²={r2:.3f} (n={len(x)})")
+            else:
+                r2_lines.append(f"{market_labels.get(mkt, mkt)}: R² n/a (n={len(x)})")
+
+        # R²-Block als Annotation (oben links)
+        r2_text = "<br>".join(r2_lines)
+        fig.add_annotation(
+            x=0.02,
+            y=0.98,
+            xref='paper',
+            yref='paper',
+            text=r2_text,
+            showarrow=False,
+            align='left'
+        )
+
         fig.update_layout(create_plotly_theme())
-        
         return fig
+
     except Exception as e:
         print(f"Fehler in update_audio_scatter: {e}")
         import traceback
         traceback.print_exc()
         return go.Figure()
+
+
 
 @app.callback(
     Output('chart-market-trends', 'figure'),
