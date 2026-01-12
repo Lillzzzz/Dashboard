@@ -768,45 +768,7 @@ app.layout = dbc.Container([
                     ], style={'fontSize': '13px', 'color': '#B3B3B3', 'fontStyle': 'italic', 'marginTop': '8px', 'lineHeight': '1.6'})
                 ], className='header-section'),
                 
-             # TEST-BALKEN (ERWEITERT)
-                html.Div([
-                    html.H3("🔧 MOBILE TEST - WELCHER IST 100% BREIT?", style={'color': '#FF6B6B', 'textAlign': 'center', 'marginBottom': '20px', 'fontSize': '18px'}),
-                    
-                    html.Div("1️⃣ VIEWPORT 100vw", style={'width': '100vw', 'height': '50px', 'background': '#FF6B6B', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'position': 'relative', 'left': '50%', 'right': '50%', 'marginLeft': '-50vw', 'marginRight': '-50vw'}),
-                    
-                    html.Div("2️⃣ STANDARD 100%", style={'width': '100%', 'height': '50px', 'background': '#4ECDC4', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}),
-                    
-                    html.Div("3️⃣ NEGATIVE MARGINS", style={'width': 'calc(100% + 24px)', 'height': '50px', 'background': '#1DB954', 'margin': '0 -12px 10px -12px', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}),
-                    
-                    html.Div([html.Div("4️⃣ ABSOLUTE", style={'position': 'absolute', 'left': '0', 'right': '0', 'width': '100%', 'height': '50px', 'background': '#F39C12', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'})], style={'position': 'relative', 'height': '60px', 'marginBottom': '10px'}),
-                    
-                    html.Div("5️⃣ MIN-WIDTH 100%", style={'minWidth': '100%', 'width': '100%', 'height': '50px', 'background': '#9B59B6', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}),
-                    
-                    html.Div("6️⃣ VIEWPORT + TRANSFORM", style={'width': '100vw', 'height': '50px', 'background': '#E74C3C', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'transform': 'translateX(-50%)', 'left': '50%', 'position': 'relative'}),
-                    
-                    html.Div("7️⃣ FLEX 100%", style={'width': '100%', 'maxWidth': '100vw', 'height': '50px', 'background': '#3498DB', 'margin': '0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'flex': '1'}),
-                    
-                    html.Div("8️⃣ VIEWPORT NO MARGINS", style={'width': '100vw', 'height': '50px', 'background': '#2ECC71', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'position': 'relative', 'left': '50%', 'transform': 'translateX(-50%)', 'marginBottom': '10px'}),
-                    
-                    html.Div("9️⃣ CALC 100VW", style={'width': 'calc(100vw - 0px)', 'height': '50px', 'background': '#E67E22', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}),
-                    
-                    html.Div("🔟 VIEWPORT + LEFT 0", style={'width': '100vw', 'height': '50px', 'background': '#16A085', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'position': 'relative', 'left': '0', 'marginLeft': 'calc(-50vw + 50%)', 'marginBottom': '10px'}),
-                    
-                    html.Div("1️⃣1️⃣ MARGIN AUTO", style={'width': '100%', 'height': '50px', 'background': '#8E44AD', 'margin': '0 auto 10px auto', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}),
-                    
-                    html.Div("1️⃣2️⃣ NEGATIVE + VIEWPORT", style={'width': '100vw', 'height': '50px', 'background': '#C0392B', 'margin': '0 -12px 10px -12px', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}),
-                    
-                    html.Div("1️⃣3️⃣ GRID FULL", style={'width': '100%', 'height': '50px', 'background': '#D35400', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'grid', 'placeItems': 'center', 'gridTemplateColumns': '1fr'}),
-                    
-                    html.Div("1️⃣4️⃣ VIEWPORT LEFT RIGHT", style={'width': '100vw', 'height': '50px', 'background': '#27AE60', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'position': 'fixed', 'left': '0', 'right': '0', 'marginBottom': '10px', 'zIndex': '1'}),
-                    
-                    html.Div("1️⃣5️⃣ BLOCK 100%", style={'width': '100%', 'height': '50px', 'background': '#2980B9', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'block', 'textAlign': 'center', 'lineHeight': '50px'}),
-                    
-                    html.Hr(style={'borderColor': '#FF6B6B', 'margin': '20px 0'}),
-                    html.P("📱 SAG MIR DIE NUMMER DES BALKENS DER 100% BREIT IST!", style={'color': '#FFF', 'textAlign': 'center', 'fontSize': '16px', 'fontWeight': 'bold', 'background': 'rgba(255,107,107,0.3)', 'padding': '15px', 'borderRadius': '8px'})
-                    
-                ], className='d-block d-md-none', style={'background': 'linear-gradient(135deg, rgba(255,107,107,0.15) 0%, rgba(255,107,107,0.05) 100%)', 'padding': '20px', 'borderRadius': '12px', 'border': '2px dashed #FF6B6B', 'marginBottom': '20px'}),
-                # Mobile Hinweis
+           # Mobile Hinweis
                 html.Div([
                     html.P("Optimiert für Desktop – Mobile Ansicht eingeschränkt", style={
                         'fontSize': '10px',
