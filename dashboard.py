@@ -620,10 +620,20 @@ app.index_string = f'''
     .sidebar {{
         display: none;
     }}
+
+    /* sauber mittig + natürlicher Rand */
     .main-content {{
-        padding: 10px !important;
+        padding: 12px 14px !important;
+    }}
+
+    /* verhindert seitliche Versätze durch Bootstrap-Gutters */
+    .main-content .row {{
+        --bs-gutter-x: 0.75rem !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }}
 }}
+
         </style>
     </head>
     <body>
