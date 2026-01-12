@@ -1633,18 +1633,18 @@ def update_correlation(markets):
 
         corr = df[audio_cols].corr()
 
-# Kürzere Labels für bessere Lesbarkeit
-label_map = {
-    "danceability": "Dance",
-    "energy": "Energy",
-    "valence": "Valence",
-    "tempo": "Tempo",
-    "acousticness": "Acoustic",
-    "instrumentalness": "Instr.",
-    "speechiness": "Speech",
-    "liveness": "Live"
-}
-corr = corr.rename(index=label_map, columns=label_map)
+    # Kürzere Labels für bessere Lesbarkeit
+        label_map = {
+            "danceability": "Dance",
+            "energy": "Energy",
+            "valence": "Valence",
+            "tempo": "Tempo",
+            "acousticness": "Acoustic",
+            "instrumentalness": "Instr.",
+            "speechiness": "Speech",
+            "liveness": "Live"
+        }
+        corr = corr.rename(index=label_map, columns=label_map)
 
 
         # Markt-spezifische Farbskala
