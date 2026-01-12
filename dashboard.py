@@ -618,7 +618,10 @@ app.index_string = f'''
         align-items: flex-start !important;
     }}
     .sidebar {{
-        display: none;
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        margin-bottom: 20px;
     }}
     .main-content {{
         padding: 10px !important;
@@ -768,18 +771,7 @@ app.layout = dbc.Container([
                     ], style={'fontSize': '13px', 'color': '#B3B3B3', 'fontStyle': 'italic', 'marginTop': '8px', 'lineHeight': '1.6'})
                 ], className='header-section'),
                 
-           # Mobile Hinweis
-                html.Div([
-                    html.P("Optimiert für Desktop – Mobile Ansicht eingeschränkt", style={
-                        'fontSize': '10px',
-                        'color': '#7F8C8D',
-                        'textAlign': 'center',
-                        'margin': '0 0 10px 0',
-                        'padding': '4px',
-                        'backgroundColor': 'rgba(127,140,141,0.1)',
-                        'borderRadius': '4px'
-                    })
-                ], className='d-block d-md-none'),
+          
                 
                 # KPI Row
                 dbc.Row([
