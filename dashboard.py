@@ -99,6 +99,7 @@ LASTFM_WEIGHT = 1.2  # Last.fm-Tracks höher gewichten:
 
 # Rate-Limit Handling
 RATE_LIMIT_WAIT = 60  # Sekunden bei 429-Error (erhöht auf 60s)
+HIGH_POTENTIAL_CUTOFF = 65
 
 # Startup: Prüfe ob alle Dateien vorhanden sind
 
@@ -711,9 +712,32 @@ dbc.RadioItems(
     ],
     value="FILTERED",
     inline=True,
-    style={'color': '#B3B3B3', 'fontSize': '12px'},
-    inputStyle={"marginRight": "6px", "marginLeft": "10px"},
+
+    # ✅ stabiler Container: keine Umbrüche, fixiert die Breite
+    style={
+        'color': '#B3B3B3',
+        'fontSize': '12px',
+        'display': 'flex',
+        'gap': '12px',
+        'flexWrap': 'nowrap',
+        'alignItems': 'center',
+        'userSelect': 'none'
+    },
+
+    # ✅ jedes Item gleich breit, dadurch kein "springen"
+    labelStyle={
+        'display': 'inline-flex',
+        'alignItems': 'center',
+        'minWidth': '92px',     # gleich breit
+        'margin': '0'
+    },
+
+    inputStyle={
+        "marginRight": "6px",
+        "marginLeft": "0px"
+    }
 ),
+
 html.P(
     "Gefiltert: KPIs folgen der Marktauswahl. Global: KPIs zeigen Gesamtmarkt.",
     style={'color': '#5A6169', 'fontSize': '10px', 'fontStyle': 'italic', 'marginTop': '6px', 'marginBottom': '0'}
@@ -875,9 +899,9 @@ html.Div([
                     dbc.Col([
                         html.Div([
                             html.Div("ERFOLGSQUOTE", className='kpi-label'),
-                            html.Div(id='kpi-success', className='kpi-value', title="Anteil Tracks mit Success Score ≥ 65"),
+                            html.Div(id='kpi-success', className='kpi-value', title=f"Anteil Tracks mit Success Score ≥ {HIGH_POTENTIAL_CUTOFF}"),
                             html.Div([
-                                "Prozent Tracks mit Score >= 65. ",
+                                f"Prozent Tracks mit Score >= {HIGH_POTENTIAL_CUTOFF}. ",
                                 html.Strong("Hoch (>30%)"), " = viele erfolgreiche Tracks. ",
                                 html.Strong("Niedrig (<20%)"), " = schwieriger Markt."
                             ], className='kpi-desc')
@@ -895,7 +919,24 @@ html.Div([
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4')
                 ], className='mb-4', style={'padding': '8px', 'background': 'rgba(29,185,84,0.03)', 'borderRadius': '12px', 'border': '1px solid rgba(29,185,84,0.15)'}),
                 
-                
+                html.Div(
+    [
+        html.Strong("Success Score (0–100): "),
+        "kompositer Indikator aus Charts/Streams/Artist-Reichweite (historisch 2017–2021). ",
+        "Hinweis: Score ist ein Vergleichsmaß (deskriptiv) und beweist keine Kausalität."
+    ],
+    style={
+        'color': '#95A5A6',
+        'fontSize': '11px',
+        'marginTop': '-10px',
+        'marginBottom': '14px',
+        'padding': '10px 12px',
+        'background': 'rgba(20,25,40,0.6)',
+        'border': '1px solid rgba(29,185,84,0.15)',
+        'borderRadius': '10px'
+    }
+),
+
                 
                 
                 # Row 1: Genre + Correlation
@@ -1374,7 +1415,7 @@ def update_kpis(markets, kpi_scope):
 
         # Erfolgsquote aus enhanced
         if df_enh is not None and (not df_enh.empty) and ("success_score" in df_enh.columns):
-            success = (df_enh["success_score"] >= 65).sum() / len(df_enh) * 100
+            success = (df_enh["success_score"] >= HIGH_POTENTIAL_CUTOFF).sum() / len(df_enh) * 100
         else:
             success = 0
 
@@ -1432,24 +1473,46 @@ def update_year_badges(year):
     return text, text, shown, shown
 @app.callback(
     Output("data-quality-warning", "children"),
-    Input("year-filter", "value")
+    [Input("selected-markets", "data"),
+     Input("year-filter", "value")]
 )
-def show_data_quality_warning(year):
-    if year == 2021:
-        return dbc.Alert(
-            "Datenhinweis: Für 2021 ist die Genre-Zuordnung teilweise unvollständig (hoher 'Other'-Anteil). "
-            "Interpretation nur eingeschränkt; Bevorzugt 2017–2020 für robuste Trends nutzen.",
-            color="warning",
-            style={
-                "background": "rgba(243,156,18,0.15)",
-                "border": "1px solid rgba(243,156,18,0.35)",
-                "color": "#F39C12",
-                "borderRadius": "10px",
-                "fontSize": "12px",
-                "padding": "10px 12px"
-            }
+def show_data_quality_warning(markets, year):
+    try:
+        df = kpi_df[kpi_df["market"].isin(markets)] if set(markets) != {"DE","UK","BR"} else kpi_df
+
+        if year not in (None, "ALL") and "year" in df.columns:
+            df = df[df["year"] == year]
+
+        if df.empty or "genre_harmonized" not in df.columns or "market_share_percent" not in df.columns:
+            return ""
+
+        # Other-Anteil objektiv prüfen
+        other_share = (
+            df[df["genre_harmonized"] == "Other"]["market_share_percent"]
+            .mean()
         )
-    return ""
+
+        if np.isfinite(other_share) and other_share >= 40:
+            yr = year if year not in (None, "ALL") else "ausgewähltem Zeitraum"
+            return dbc.Alert(
+                f"Datenhinweis: Sehr hoher 'Other'-Anteil (~{other_share:.0f}%) im {yr}. "
+                "Genre-Analysen sind dadurch verzerrt. Empfehlung: 2017–2020 oder Märkte einzeln betrachten.",
+                color="warning",
+                style={
+                    "background": "rgba(243,156,18,0.15)",
+                    "border": "1px solid rgba(243,156,18,0.35)",
+                    "color": "#F39C12",
+                    "borderRadius": "10px",
+                    "fontSize": "12px",
+                    "padding": "10px 12px"
+                }
+            )
+
+        return ""
+    except Exception as e:
+        print(f"Fehler data-quality-warning: {e}")
+        return ""
+
 
 
 @app.callback(
@@ -1557,7 +1620,19 @@ def update_correlation(markets):
 
         
         corr = df[audio_cols].corr()
-        
+        # Kürzere Labels für bessere Lesbarkeit
+label_map = {
+    "danceability": "Dance",
+    "energy": "Energy",
+    "valence": "Valence",
+    "tempo": "Tempo",
+    "acousticness": "Acoustic",
+    "instrumentalness": "Instr.",
+    "speechiness": "Speech",
+    "liveness": "Live"
+}
+corr = corr.rename(index=label_map, columns=label_map)
+
         # Markt-spezifische Farbskala
         if set(markets) == {'DE'}:
             colorscale = [
@@ -1606,8 +1681,8 @@ def update_correlation(markets):
         ))
         
         fig.update_layout(create_plotly_theme())
-        fig.update_xaxes(title='Audio Features')
-        fig.update_yaxes(title='Audio Features')
+        fig.update_xaxes(title='Audio-Features (Kurzlabels)')
+        fig.update_yaxes(title='Audio-Features (Kurzlabels)')
         fig.update_layout(height=400)
         
         return fig
