@@ -38,8 +38,10 @@ LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 import plotly.io._json as pio_json
 try:
     import orjson
+    pio_json.orjson = orjson
 except Exception:
     pio_json.orjson = None
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -899,14 +901,36 @@ html.Div([
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4'),
                     dbc.Col([
                         html.Div([
-                            html.Div("ERFOLGSQUOTE", className='kpi-label'),
-                            html.Div(id='kpi-success', className='kpi-value', title=f"Anteil Tracks mit Success Score ≥ {HIGH_POTENTIAL_CUTOFF}"),
-                            html.Div([
-                                f"Prozent Tracks mit Score >= {HIGH_POTENTIAL_CUTOFF}. ",
-                                html.Strong("Hoch (>30%)"), " = viele erfolgreiche Tracks. ",
-                                html.Strong("Niedrig (<20%)"), " = schwieriger Markt."
-                            ], className='kpi-desc')
-                        ], className='kpi-card')
+    html.Div([
+        "ERFOLGSQUOTE ",
+        html.I(
+            "ⓘ",
+            id="success-info",
+            style={
+                'fontSize': '14px',
+                'color': '#1DB954',
+                'cursor': 'help',
+                'marginLeft': '4px'
+            }
+        )
+    ], className='kpi-label'),
+
+    dbc.Tooltip(
+        "Success Score kombiniert: 25% Charts, 20% Artist-Follower, 15% Streams, "
+        "15% Danceability, 15% Energy, 5% Top-10, 5% Top-50. Skala 0–100, höher = erfolgreicher. "
+        "ERFOLGSQUOTE = Anteil der Tracks mit Success Score ≥ 65.",
+        target="success-info",
+        placement="right"
+    ),
+
+    html.Div(id='kpi-success', className='kpi-value', title="Anteil Tracks mit Success Score ≥ 65"),
+    html.Div([
+        "Prozent Tracks mit Score >= 65. ",
+        html.Strong("Hoch (>30%)"), " = viele erfolgreiche Tracks. ",
+        html.Strong("Niedrig (<20%)"), " = schwieriger Markt."
+    ], className='kpi-desc')
+], className='kpi-card')
+
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4'),
                     dbc.Col([
                         html.Div([
@@ -1932,8 +1956,12 @@ def update_highpot_table(markets):
         
         rows = []
         for i, row in enumerate(df_top.itertuples(), 1):
-            track_display = f"{row.track_name[:35]}..." if len(row.track_name) > 35 else row.track_name
-            artist_display = f"{row.artist[:25]}..." if len(row.artist) > 25 else row.artist
+            track_name = str(row.track_name) if getattr(row, "track_name", None) not in (None, "") else "Unknown"
+            artist_name = str(row.artist) if getattr(row, "artist", None) not in (None, "") else "Unknown"
+
+            track_display = f"{track_name[:35]}..." if len(track_name) > 35 else track_name
+            artist_display = f"{artist_name[:25]}..." if len(artist_name) > 25 else artist_name
+
 
             # Spotify Search Link (ohne Track-ID nötig)
             query = urllib.parse.quote(f"{row.track_name} {row.artist}")
@@ -2056,7 +2084,7 @@ def update_success_hist(markets):
         
         fig.update_layout(create_plotly_theme())
         fig.update_xaxes(title='Success Score (0–100)')
-        fig.update_yaxes(title='Anzahl Tracks (Count)')
+        fig.update_yaxes(title='Anzahl Tracks (n)')
 
         return fig
 
