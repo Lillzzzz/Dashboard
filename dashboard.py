@@ -705,8 +705,15 @@ app.layout = dbc.Container([
                         dcc.Dropdown(
                             id="year-filter",
                             options=[
-                                {"label": "Gesamter Zeitraum", "value": "ALL"}
-                            ] + [{"label": str(y), "value": y} for y in [2017, 2018, 2019, 2020, 2021]],
+                                options=[
+    {"label": "Gesamter Zeitraum", "value": "ALL"},
+    {"label": "2017", "value": 2017},
+    {"label": "2018", "value": 2018},
+    {"label": "2019", "value": 2019},
+    {"label": "2020", "value": 2020},
+    {"label": "⚠ 2021 (Genre-Zuordnung eingeschränkt)", "value": 2021},
+],
+
                             value=None,
                             clearable=True,
                             placeholder="Jahr wählen (optional)",
@@ -794,8 +801,15 @@ app.layout = dbc.Container([
                     dcc.Dropdown(
                         id="year-dropdown-mobile",
                         options=[
-                            {"label": "Alle Jahre", "value": "ALL"}
-                        ] + [{"label": str(y), "value": y} for y in [2017, 2018, 2019, 2020, 2021]],
+                            options=[
+    {"label": "Alle Jahre", "value": "ALL"},
+    {"label": "2017", "value": 2017},
+    {"label": "2018", "value": 2018},
+    {"label": "2019", "value": 2019},
+    {"label": "2020", "value": 2020},
+    {"label": "⚠ 2021 (eingeschränkt)", "value": 2021},
+],
+
                         value="ALL",
                         clearable=False,
                         className="dark-dropdown",
@@ -810,6 +824,10 @@ app.layout = dbc.Container([
                     'padding': '16px',
                     'marginBottom': '16px'
                 }),
+
+
+                html.Div(id="data-quality-warning", style={"marginBottom": "12px"}),
+
                 
                 # KPI Row
                 dbc.Row([
@@ -1386,6 +1404,27 @@ def update_year_badges(year):
     }
     text = f"Jahr: {year}"
     return text, text, shown, shown
+@app.callback(
+    Output("data-quality-warning", "children"),
+    Input("year-filter", "value")
+)
+def show_data_quality_warning(year):
+    if year == 2021:
+        return dbc.Alert(
+            "⚠ Datenhinweis: Für 2021 ist die Genre-Zuordnung teilweise unvollständig (hoher 'Other'-Anteil). "
+            "Interpretation nur eingeschränkt; nutze bevorzugt 2017–2020 für robuste Trends.",
+            color="warning",
+            style={
+                "background": "rgba(243,156,18,0.15)",
+                "border": "1px solid rgba(243,156,18,0.35)",
+                "color": "#F39C12",
+                "borderRadius": "10px",
+                "fontSize": "12px",
+                "padding": "10px 12px"
+            }
+        )
+    return ""
+
 
 @app.callback(
     Output('chart-genre-shares', 'figure'),
