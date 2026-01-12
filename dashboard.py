@@ -25,6 +25,7 @@ import os
 from dotenv import load_dotenv
 import json
 import logging
+import urllib.parse
 from functools import lru_cache
 from datetime import datetime
 
@@ -696,11 +697,29 @@ app.layout = dbc.Container([
                     ], style={'fontSize': '11px', 'color': '#7F8C8D', 'marginBottom': '16px', 'lineHeight': '1.6'}),
                     
                     dbc.Button("ALLE MÄRKTE", id='btn-all', className='market-button', n_clicks=0),
-                    dbc.Button("DEUTSCHLAND", id='btn-de', className='market-button', n_clicks=0),
-                    dbc.Button("UK", id='btn-uk', className='market-button', n_clicks=0),
-                    dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0),
-                    
-                    html.Div([
+dbc.Button("DEUTSCHLAND", id='btn-de', className='market-button', n_clicks=0),
+dbc.Button("UK", id='btn-uk', className='market-button', n_clicks=0),
+dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0),
+
+# ✅ KPI Toggle (neu)
+html.H4("KPI ANSICHT", className='filter-title', style={'marginTop': '18px'}),
+dbc.RadioItems(
+    id="kpi-scope",
+    options=[
+        {"label": "Gefiltert", "value": "FILTERED"},
+        {"label": "Global", "value": "GLOBAL"},
+    ],
+    value="FILTERED",
+    inline=True,
+    style={'color': '#B3B3B3', 'fontSize': '12px'},
+    inputStyle={"marginRight": "6px", "marginLeft": "10px"},
+),
+html.P(
+    "Gefiltert: KPIs folgen der Marktauswahl. Global: KPIs zeigen Gesamtmarkt.",
+    style={'color': '#5A6169', 'fontSize': '10px', 'fontStyle': 'italic', 'marginTop': '6px', 'marginBottom': '0'}
+),
+
+html.Div([
     html.H4("JAHRES-FILTER (OPTIONAL)", className='filter-title', style={'marginTop': '20px'}),
 
     dcc.Dropdown(
@@ -1311,26 +1330,33 @@ def update_from_mobile_filters(market_val, year_val):
      Output('kpi-growth', 'children'),
      Output('kpi-success', 'children'),
      Output('kpi-genre', 'children')],
-    [Input('selected-markets', 'data')]
+    [Input('selected-markets', 'data'),
+     Input('kpi-scope', 'value')]
 )
-def update_kpis(markets):
+def update_kpis(markets, kpi_scope):
     """
-    Berechnet und aktualisiert die vier Haupt-KPIs basierend auf ausgewählten Märkten.
-    Sichere Version mit Spaltenprüfung und Jahr+Markt-Gruppierung.
+    KPIs können wahlweise:
+    - FILTERED: folgen den Marktfiltern
+    - GLOBAL: zeigen Gesamtmarkt (unabhängig von Filtern)
     """
     try:
-        # Märkte filtern (ohne .copy() da nur gefiltert wird)
-        if set(markets) != {"DE", "UK", "BR"}:
-            df_kpi = kpi_df[kpi_df["market"].isin(markets)]
-            df_enh = enhanced_df[enhanced_df["market"].isin(markets)]
-        else:
+        # ✅ Scope-Logik
+        if kpi_scope == "GLOBAL":
             df_kpi = kpi_df
             df_enh = enhanced_df
+        else:
+            # FILTERED
+            if set(markets) != {"DE", "UK", "BR"}:
+                df_kpi = kpi_df[kpi_df["market"].isin(markets)]
+                df_enh = enhanced_df[enhanced_df["market"].isin(markets)]
+            else:
+                df_kpi = kpi_df
+                df_enh = enhanced_df
 
-        if df_kpi.empty:
+        if df_kpi is None or df_kpi.empty:
             return "N/A", "N/A", "0%", "N/A"
 
-        # Wenn year vorhanden: erst pro Markt+Jahr mitteln
+        # year vorhanden: erst pro Markt+Jahr mitteln
         if "year" in df_kpi.columns:
             grouped = (
                 df_kpi
@@ -1343,18 +1369,17 @@ def update_kpis(markets):
             shannon = grouped["shannon_diversity"].mean()
             growth = grouped["growth_momentum_index"].mean()
         else:
-            # Fallback: altes Verhalten
             shannon = df_kpi["shannon_diversity"].mean()
             growth = df_kpi["growth_momentum_index"].mean()
 
         # Erfolgsquote aus enhanced
-        if df_enh is not None and not df_enh.empty and "success_score" in df_enh.columns:
+        if df_enh is not None and (not df_enh.empty) and ("success_score" in df_enh.columns):
             success = (df_enh["success_score"] >= 65).sum() / len(df_enh) * 100
         else:
             success = 0
 
         # Top-Genre sicher bestimmen
-        if "genre_harmonized" in df_kpi.columns and "market_share_percent" in df_kpi.columns:
+        if ("genre_harmonized" in df_kpi.columns) and ("market_share_percent" in df_kpi.columns):
             top_genre = (
                 df_kpi
                 .groupby("genre_harmonized")["market_share_percent"]
@@ -1366,11 +1391,13 @@ def update_kpis(markets):
             top_genre = "N/A"
 
         return f"{shannon:.2f}", f"{growth:.0f}", f"{success:.1f}%", top_genre
+
     except Exception as e:
         print(f"Fehler in update_kpis: {e}")
         import traceback
         traceback.print_exc()
         return "N/A", "N/A", "N/A", "N/A"
+
 
 market_label_outputs = [Output(f'market-label-{i}', 'children') for i in range(1, 7)] + [Output('market-label-spotify-live', 'children')]
 
@@ -1410,8 +1437,8 @@ def update_year_badges(year):
 def show_data_quality_warning(year):
     if year == 2021:
         return dbc.Alert(
-            "⚠ Datenhinweis: Für 2021 ist die Genre-Zuordnung teilweise unvollständig (hoher 'Other'-Anteil). "
-            "Interpretation nur eingeschränkt; nutze bevorzugt 2017–2020 für robuste Trends.",
+            "Datenhinweis: Für 2021 ist die Genre-Zuordnung teilweise unvollständig (hoher 'Other'-Anteil). "
+            "Interpretation nur eingeschränkt; Bevorzugt 2017–2020 für robuste Trends nutzen.",
             color="warning",
             style={
                 "background": "rgba(243,156,18,0.15)",
@@ -1521,8 +1548,13 @@ def update_correlation(markets):
     try:
         df = enhanced_df[enhanced_df['market'].isin(markets)] if set(markets) != {'DE', 'UK', 'BR'} else enhanced_df
         
-        audio_cols = ['danceability', 'energy', 'valence', 'acousticness', 
-                      'instrumentalness', 'liveness', 'speechiness', 'tempo']
+        audio_cols = [
+    'energy', 'danceability', 'valence',
+    'tempo',
+    'acousticness', 'instrumentalness',
+    'speechiness', 'liveness'
+]
+
         
         corr = df[audio_cols].corr()
         
@@ -1673,7 +1705,10 @@ def update_audio_scatter(markets):
         )
 
         fig.update_layout(create_plotly_theme())
+        fig.update_xaxes(title='Tanzbarkeit (0–1)')
+        fig.update_yaxes(title='Energie (0–1)')
         return fig
+
 
     except Exception as e:
         print(f"Fehler in update_audio_scatter: {e}")
@@ -1828,7 +1863,11 @@ def update_highpot_table(markets):
         for i, row in enumerate(df_top.itertuples(), 1):
             track_display = f"{row.track_name[:35]}..." if len(row.track_name) > 35 else row.track_name
             artist_display = f"{row.artist[:25]}..." if len(row.artist) > 25 else row.artist
-            
+
+            # Spotify Search Link (ohne Track-ID nötig)
+            query = urllib.parse.quote(f"{row.track_name} {row.artist}")
+            spotify_url = f"https://open.spotify.com/search/{query}"
+
             # Sichere Farb-Zugriffe
             color = colors.get(row.market, '#1DB954')
             market_name = market_names.get(row.market, row.market)
@@ -1843,16 +1882,23 @@ def update_highpot_table(markets):
                         'textAlign': 'center'
                     }),
                     html.Div([
-                        html.Div(track_display, style={
-                            'fontSize': '13px',
-                            'fontWeight': '700',
-                            'color': '#FFFFFF',
-                            'marginBottom': '2px',
-                            'whiteSpace': 'nowrap',
-                            'overflow': 'hidden',
-                            'textOverflow': 'ellipsis',
-                            'maxWidth': '200px'
-                        }),
+                       html.A(track_display,
+    href=spotify_url,
+    target="_blank",
+    style={
+        'fontSize': '13px',
+        'fontWeight': '700',
+        'color': '#FFFFFF',
+        'marginBottom': '2px',
+        'whiteSpace': 'nowrap',
+        'overflow': 'hidden',
+        'textOverflow': 'ellipsis',
+        'maxWidth': '200px',
+        'display': 'block',
+        'textDecoration': 'none'
+    }
+),
+
                         html.Div(f"von {artist_display}", style={
                             'fontSize': '11px',
                             'color': '#B3B3B3',
@@ -1938,10 +1984,11 @@ def update_success_hist(markets):
         )
         
         fig.update_layout(create_plotly_theme())
-        fig.update_xaxes(title='Success-Score')
-        fig.update_yaxes(title='Anzahl Tracks')
-        
+        fig.update_xaxes(title='Success Score (0–100)')
+        fig.update_yaxes(title='Anzahl Tracks (Count)')
+
         return fig
+
     except Exception as e:
         print(f"Fehler in update_success_hist: {e}")
         import traceback
