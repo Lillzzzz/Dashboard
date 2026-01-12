@@ -752,17 +752,7 @@ app.layout = dbc.Container([
                     ], style={'fontSize': '13px', 'color': '#B3B3B3', 'fontStyle': 'italic', 'marginTop': '8px', 'lineHeight': '1.6'})
                 ], className='header-section'),
                 
-                """
-🔧 MOBILE BREITEN-TEST - EINFÜGEN IN APP.PY
-============================================
-
-SUCHE DIESE ZEILE (ca. Zeile 1150):
-------------------------------------
-], className='header-section'),
-
-FÜGE DIREKT DANACH EIN:
------------------------
-"""
+                
 
 # ==================== TEST-BALKEN FÜR MOBILE (INLINE CSS) ====================
 html.Div([
