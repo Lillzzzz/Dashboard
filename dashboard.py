@@ -607,36 +607,7 @@ app.index_string = '''
     color: #0f141e !important;
 }
 
-/* Mobile 100% Breite Override */
-@media (max-width: 768px) {
-    body, html {
-        overflow-x: hidden !important;
-        max-width: 100vw !important;
-    }
-    .container-fluid {
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-    .row {
-        margin: 0 !important;
-        --bs-gutter-x: 0 !important;
-    }
-    [class*="col-"] {
-        padding: 0 !important;
-    }
-    .main-content {
-        padding: 0 !important;
-        width: 100% !important;
-    }
-    .chart-card {
-        width: 100% !important;
-        border-radius: 0 !important;
-        border-left: none !important;
-        border-right: none !important;
-    }
-}
+
         </style>
     </head>
     <body>
