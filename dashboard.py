@@ -703,30 +703,30 @@ app.layout = dbc.Container([
                     html.Div([
                         html.H4("JAHRES-FILTER (OPTIONAL)", className='filter-title', style={'marginTop': '20px'}),
                         dcc.Dropdown(
-                            id="year-filter",
-                            options=[
-                                options=[
-    {"label": "Gesamter Zeitraum", "value": "ALL"},
-    {"label": "2017", "value": 2017},
-    {"label": "2018", "value": 2018},
-    {"label": "2019", "value": 2019},
-    {"label": "2020", "value": 2020},
-    {"label": "⚠ 2021 (Genre-Zuordnung eingeschränkt)", "value": 2021},
-],
+                            dcc.Dropdown(
+    id="year-filter",
+    options=[
+        {"label": "Gesamter Zeitraum", "value": "ALL"},
+        {"label": "2017", "value": 2017},
+        {"label": "2018", "value": 2018},
+        {"label": "2019", "value": 2019},
+        {"label": "2020", "value": 2020},
+        {"label": "⚠ 2021 (Genre-Zuordnung eingeschränkt)", "value": 2021},
+    ],
+    value=None,
+    clearable=True,
+    placeholder="Jahr wählen (optional)",
+    className="dark-dropdown",
+    style={
+        "backgroundColor": "rgba(6, 8, 14, 0.9)",
+        "color": "#ffffff",
+        "border": "1px solid rgba(29, 185, 84, 0.35)",
+        "borderRadius": "6px",
+        "fontSize": "12px",
+        "zIndex": 9999
+    }
+),
 
-                            value=None,
-                            clearable=True,
-                            placeholder="Jahr wählen (optional)",
-                            className="dark-dropdown",
-                            style={
-                                "backgroundColor": "rgba(6, 8, 14, 0.9)",
-                                "color": "#ffffff",
-                                "border": "1px solid rgba(29, 185, 84, 0.35)",
-                                "borderRadius": "6px",
-                                "fontSize": "12px",
-                                "zIndex": 9999
-                            }
-                        ),
                         html.P(
                             "Hinweis: Der Jahresfilter wirkt nur auf zeitabhängige Visualisierungen (z. B. Markt-Trends, Genre-Entwicklung).",
                             style={
@@ -800,23 +800,21 @@ app.layout = dbc.Container([
                     
                     dcc.Dropdown(
                         id="year-dropdown-mobile",
-                        options=[
-                            options=[
-    {"label": "Alle Jahre", "value": "ALL"},
-    {"label": "2017", "value": 2017},
-    {"label": "2018", "value": 2018},
-    {"label": "2019", "value": 2019},
-    {"label": "2020", "value": 2020},
-    {"label": "⚠ 2021 (eingeschränkt)", "value": 2021},
-],
-
-                        value="ALL",
-                        clearable=False,
-                        className="dark-dropdown",
-                        style={
-                            "backgroundColor": "rgba(6, 8, 14, 0.9)"
-                        }
-                    )
+    options=[
+        {"label": "Alle Jahre", "value": "ALL"},
+        {"label": "2017", "value": 2017},
+        {"label": "2018", "value": 2018},
+        {"label": "2019", "value": 2019},
+        {"label": "2020", "value": 2020},
+        {"label": "⚠ 2021 (eingeschränkt)", "value": 2021},
+    ],
+    value="ALL",
+    clearable=False,
+    className="dark-dropdown",
+    style={
+        "backgroundColor": "rgba(6, 8, 14, 0.9)"
+    }
+)
                 ], className='d-block d-md-none', style={
                     'background': 'rgba(15,20,30,0.9)',
                     'border': '2px solid rgba(29,185,84,0.3)',
