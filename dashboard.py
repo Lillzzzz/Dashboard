@@ -1101,7 +1101,7 @@ app.layout = dbc.Container([
     dcc.Interval(id='interval-refresh', interval=60000, n_intervals=0),
     dcc.Store(id='selected-markets', data=['DE', 'UK', 'BR'])
     
-], fluid=True, className='p-0', style={'maxWidth': '100%'})
+], fluid=True, className='p-0', style={'maxWidth': '100%', 'overflowX': 'hidden'})
 
 # Callbacks für Interaktivität
 
