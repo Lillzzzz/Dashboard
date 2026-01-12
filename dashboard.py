@@ -701,44 +701,45 @@ app.layout = dbc.Container([
                     dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0),
                     
                     html.Div([
-                        html.H4("JAHRES-FILTER (OPTIONAL)", className='filter-title', style={'marginTop': '20px'}),
-                        dcc.Dropdown(
-                            dcc.Dropdown(
-    id="year-filter",
-    options=[
-        {"label": "Gesamter Zeitraum", "value": "ALL"},
-        {"label": "2017", "value": 2017},
-        {"label": "2018", "value": 2018},
-        {"label": "2019", "value": 2019},
-        {"label": "2020", "value": 2020},
-        {"label": "⚠ 2021 (Genre-Zuordnung eingeschränkt)", "value": 2021},
-    ],
-    value=None,
-    clearable=True,
-    placeholder="Jahr wählen (optional)",
-    className="dark-dropdown",
-    style={
-        "backgroundColor": "rgba(6, 8, 14, 0.9)",
-        "color": "#ffffff",
-        "border": "1px solid rgba(29, 185, 84, 0.35)",
-        "borderRadius": "6px",
-        "fontSize": "12px",
-        "zIndex": 9999
-    }
-),
+    html.H4("JAHRES-FILTER (OPTIONAL)", className='filter-title', style={'marginTop': '20px'}),
 
-                        html.P(
-                            "Hinweis: Der Jahresfilter wirkt nur auf zeitabhängige Visualisierungen (z. B. Markt-Trends, Genre-Entwicklung).",
-                            style={
-                                'color': '#5A6169',
-                                'fontSize': '10px',
-                                'fontStyle': 'italic',
-                                'marginTop': '8px',
-                                'marginBottom': '0',
-                                'lineHeight': '1.4'
-                            }
-                        )
-                    ])
+    dcc.Dropdown(
+        id="year-filter",
+        options=[
+            {"label": "Gesamter Zeitraum", "value": "ALL"},
+            {"label": "2017", "value": 2017},
+            {"label": "2018", "value": 2018},
+            {"label": "2019", "value": 2019},
+            {"label": "2020", "value": 2020},
+            {"label": "⚠ 2021 (Genre-Zuordnung eingeschränkt)", "value": 2021},
+        ],
+        value=None,
+        clearable=True,
+        placeholder="Jahr wählen (optional)",
+        className="dark-dropdown",
+        style={
+            "backgroundColor": "rgba(6, 8, 14, 0.9)",
+            "color": "#ffffff",
+            "border": "1px solid rgba(29, 185, 84, 0.35)",
+            "borderRadius": "6px",
+            "fontSize": "12px",
+            "zIndex": 9999
+        }
+    ),
+
+    html.P(
+        "Hinweis: Der Jahresfilter wirkt nur auf zeitabhängige Visualisierungen (z. B. Markt-Trends, Genre-Entwicklung).",
+        style={
+            'color': '#5A6169',
+            'fontSize': '10px',
+            'fontStyle': 'italic',
+            'marginTop': '8px',
+            'marginBottom': '0',
+            'lineHeight': '1.4'
+        }
+    )
+])
+
                 ], className='filter-card'),
                 
                 html.Div([
