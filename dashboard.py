@@ -1963,9 +1963,10 @@ def update_highpot_table(markets):
             artist_display = f"{artist_name[:25]}..." if len(artist_name) > 25 else artist_name
 
 
-            # Spotify Search Link (ohne Track-ID nötig)
-            query = urllib.parse.quote(f"{row.track_name} {row.artist}")
+            # Spotify Search Link (ohne Track-ID nötig) – robust gegen None/leer
+            query = urllib.parse.quote(f"{track_name} {artist_name}")
             spotify_url = f"https://open.spotify.com/search/{query}"
+
 
             # Sichere Farb-Zugriffe
             color = colors.get(row.market, '#1DB954')
@@ -2017,14 +2018,37 @@ def update_highpot_table(markets):
                             'borderRadius': '6px',
                             'marginRight': '6px'
                         }),
-                        html.Span(f"Score: {row.success_score:.0f}", style={
-                            'fontSize': '10px',
-                            'color': '#1DB954',
-                            'fontWeight': '600',
-                            'padding': '2px 8px',
-                            'background': 'rgba(29,185,84,0.15)',
-                            'borderRadius': '6px'
-                        })
+                        html.Div([
+    html.Span(f"Score: {row.success_score:.0f}", style={
+        'fontSize': '10px',
+        'color': '#1DB954',
+        'fontWeight': '700'
+    }),
+    html.Div([
+        html.Div(style={
+            'width': f"{max(0, min(100, float(row.success_score))):.0f}%",
+            'height': '6px',
+            'background': '#1DB954',
+            'borderRadius': '6px'
+        })
+    ], style={
+        'width': '70px',
+        'height': '6px',
+        'background': 'rgba(255,255,255,0.10)',
+        'borderRadius': '6px',
+        'overflow': 'hidden',
+        'marginTop': '3px'
+    })
+], style={
+    'display': 'flex',
+    'flexDirection': 'column',
+    'gap': '3px',
+    'padding': '2px 8px',
+    'background': 'rgba(29,185,84,0.15)',
+    'borderRadius': '6px'
+})
+
+
                     ], style={'display': 'flex', 'gap': '4px'})
                 ], style={
                     'display': 'flex',
@@ -2192,7 +2216,7 @@ def update_spotify_live(n, markets):
                             })
                         ]),
                         html.Div([
-                            html.Span(market_name, style={
+                            
                                 'fontSize': '10px',
                                 'color': color,
                                 'fontWeight': '600',
