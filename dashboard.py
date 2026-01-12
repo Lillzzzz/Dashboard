@@ -1604,74 +1604,61 @@ def update_genre_shares(markets, year):
 def update_correlation(markets):
     """
     Erstellt Korrelations-Heatmap für Audio-Features.
-    
-    Analysiert statistische Zusammenhänge zwischen 8 Audio-Charakteristiken.
-    Farbskala passt sich automatisch an gewählte Märkte an.
     """
     try:
         df = enhanced_df[enhanced_df['market'].isin(markets)] if set(markets) != {'DE', 'UK', 'BR'} else enhanced_df
-        
-        audio_cols = [
-    'energy', 'danceability', 'valence',
-    'tempo',
-    'acousticness', 'instrumentalness',
-    'speechiness', 'liveness'
-]
 
-        
+        audio_cols = [
+            'energy', 'danceability', 'valence',
+            'tempo',
+            'acousticness', 'instrumentalness',
+            'speechiness', 'liveness'
+        ]
+
+        # Safety: falls Spalten fehlen
+        missing = [c for c in audio_cols if c not in df.columns]
+        if missing:
+            fig = go.Figure()
+            fig.update_layout(
+                template="plotly_dark",
+                paper_bgcolor='rgba(0,0,0,0)',
+                annotations=[dict(
+                    text=f"Fehlende Audio-Feature Spalten: {', '.join(missing)}",
+                    showarrow=False, x=0.5, y=0.5, font=dict(size=14, color="#F39C12")
+                )],
+                height=400
+            )
+            return fig
+
         corr = df[audio_cols].corr()
+
         # Kürzere Labels für bessere Lesbarkeit
-label_map = {
-    "danceability": "Dance",
-    "energy": "Energy",
-    "valence": "Valence",
-    "tempo": "Tempo",
-    "acousticness": "Acoustic",
-    "instrumentalness": "Instr.",
-    "speechiness": "Speech",
-    "liveness": "Live"
-}
-corr = corr.rename(index=label_map, columns=label_map)
+        label_map = {
+            "danceability": "Dance",
+            "energy": "Energy",
+            "valence": "Valence",
+            "tempo": "Tempo",
+            "acousticness": "Acoustic",
+            "instrumentalness": "Instr.",
+            "speechiness": "Speech",
+            "liveness": "Live"
+        }
+        corr = corr.rename(index=label_map, columns=label_map)
 
         # Markt-spezifische Farbskala
         if set(markets) == {'DE'}:
-            colorscale = [
-                [0.0, '#0a3d20'],
-                [0.25, '#0d5028'],
-                [0.5, '#146634'],
-                [0.75, '#1a7f3d'],
-                [1.0, '#1DB954']
-            ]
+            colorscale = [[0.0, '#0a3d20'], [0.25, '#0d5028'], [0.5, '#146634'], [0.75, '#1a7f3d'], [1.0, '#1DB954']]
         elif set(markets) == {'UK'}:
-            colorscale = [
-                [0.0, '#4a0a0a'],
-                [0.25, '#6b1010'],
-                [0.5, '#9a1e1e'],
-                [0.75, '#cc3333'],
-                [1.0, '#FF6B6B']
-            ]
+            colorscale = [[0.0, '#4a0a0a'], [0.25, '#6b1010'], [0.5, '#9a1e1e'], [0.75, '#cc3333'], [1.0, '#FF6B6B']]
         elif set(markets) == {'BR'}:
-            colorscale = [
-                [0.0, '#0a3a3a'],
-                [0.25, '#0f5555'],
-                [0.5, '#1a7070'],
-                [0.75, '#2a9999'],
-                [1.0, '#4ECDC4']
-            ]
+            colorscale = [[0.0, '#0a3a3a'], [0.25, '#0f5555'], [0.5, '#1a7070'], [0.75, '#2a9999'], [1.0, '#4ECDC4']]
         else:
-            # Multi-Markt oder alle Märkte: Standard Grün
-            colorscale = [
-                [0.0, '#0a3d20'],
-                [0.25, '#0d5028'],
-                [0.5, '#146634'],
-                [0.75, '#1a7f3d'],
-                [1.0, '#1DB954']
-            ]
-        
+            colorscale = [[0.0, '#0a3d20'], [0.25, '#0d5028'], [0.5, '#146634'], [0.75, '#1a7f3d'], [1.0, '#1DB954']]
+
         fig = go.Figure(data=go.Heatmap(
             z=corr.values,
             x=corr.columns,
-            y=corr.columns,
+            y=corr.index,
             colorscale=colorscale,
             zmid=0,
             text=np.round(corr.values, 2),
@@ -1679,18 +1666,25 @@ corr = corr.rename(index=label_map, columns=label_map)
             textfont=dict(size=10, color='white'),
             colorbar=dict(title="Korrelation")
         ))
-        
-        fig.update_layout(create_plotly_theme())
+
+        fig.update_layout(create_plotly_theme(), height=400)
         fig.update_xaxes(title='Audio-Features (Kurzlabels)')
         fig.update_yaxes(title='Audio-Features (Kurzlabels)')
-        fig.update_layout(height=400)
-        
         return fig
+
     except Exception as e:
         print(f"Fehler in update_correlation: {e}")
         import traceback
         traceback.print_exc()
-        return go.Figure()
+        fig = go.Figure()
+        fig.update_layout(
+            template="plotly_dark",
+            paper_bgcolor='rgba(0,0,0,0)',
+            annotations=[dict(text="Fehler beim Laden der Korrelation", showarrow=False, x=0.5, y=0.5)],
+            height=400
+        )
+        return fig
+
 
 @app.callback(
     Output('chart-audio-scatter', 'figure'),
