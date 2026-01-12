@@ -445,26 +445,60 @@ body {
 /* ==================== Mobile Ansicht ==================== */
 
 @media (max-width: 768px) {
-    .chart-card {
-        padding: 16px 12px !important;
-    }
-    
-    /* Charts auf volle Breite */
-    .js-plotly-plot, .plotly {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-    
-    /* Container auf volle Breite */
-    .col-xl-6, .col-lg-6, .col-md-12 {
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-    }
-    
-    /* Row spacing reduzieren */
-    .row {
-        margin-left: -8px !important;
-        margin-right: -8px !important;
-    }
+
+  html, body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Bootstrap Container wirklich “edge-to-edge” */
+  .container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Row/Cols ohne komische Offsets */
+  .container-fluid > .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    --bs-gutter-x: 0 !important;
+  }
+
+  .container-fluid > .row > [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Main Content: volle Breite + sauberer Rand */
+  .main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 12px 12px !important;
+  }
+
+  /* Cards sollen sich an den Rand halten */
+  .header-section,
+  .chart-card {
+    width: 100% !important;
+    margin: 0 0 12px 0 !important;
+    border-radius: 12px !important;
+  }
+
+  /* WICHTIG: killt deine “überbreit”-Hacks */
+  #highpot-table-container,
+  #spotify-live-tracks {
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  /* KPI: keine extra Außenmargins die Breite verzerren */
+  .kpi-card {
+    margin: 0 0 12px 0 !important;
+  }
 }
 
