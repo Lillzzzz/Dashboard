@@ -760,7 +760,7 @@ app.layout = dbc.Container([
             html.Div([
                 # Header
                 html.Div([
-                    html.H1("TEST SPOTIFY A&R MARKET INTELLIGENCE", className='header-title'),
+                    html.H1("SPOTIFY A&R MARKET INTELLIGENCE", className='header-title'),
                     html.P([
                         "Dieses Dashboard kombiniert historische Musikmarkt-Analysen (2017–2021) mit ",
                         "Live-Daten aus Spotify und Last.fm, um Markttrends, Erfolgsfaktoren und ",
