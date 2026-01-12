@@ -1088,7 +1088,7 @@ app.layout = dbc.Container([
                 ], className='mb-4')
                 
             ], className='main-content')
-        ], width=9, className='p-0')
+        ], xs=12, sm=12, md=9, lg=9, xl=9, className='p-0')
     ], className='g-0'),
     
     # Footer
