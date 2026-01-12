@@ -307,18 +307,54 @@ body {
 
 @media (max-width: 768px) {
     .sidebar {
-        position: relative;
-        min-height: auto;
-        max-height: 60vh;
-        border-right: none;
-        border-bottom: 2px solid rgba(29,185,84,0.3);
-        padding: 16px;
-        overflow-y: auto;
+        display: none;
     }
-    
+
+    .main-content {
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .container-fluid {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .main-content .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        --bs-gutter-x: 0 !important;
+    }
+
+    .main-content [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .chart-card {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+    }
+
+    .header-section {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+    }
+
     .kpi-card {
         min-height: 140px;
         padding: 16px 12px !important;
+        border-radius: 8px !important;
+        margin-left: 8px !important;
+        margin-right: 8px !important;
     }
     
     .kpi-value {
