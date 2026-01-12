@@ -760,7 +760,7 @@ app.layout = dbc.Container([
             html.Div([
                 # Header
                 html.Div([
-                    html.H1("SPOTIFY A&R MARKET INTELLIGENCE", className='header-title'),
+                    html.H1("TEST SPOTIFY A&R MARKET INTELLIGENCE", className='header-title'),
                     html.P([
                         "Dieses Dashboard kombiniert historische Musikmarkt-Analysen (2017–2021) mit ",
                         "Live-Daten aus Spotify und Last.fm, um Markttrends, Erfolgsfaktoren und ",
@@ -768,7 +768,16 @@ app.layout = dbc.Container([
                     ], style={'fontSize': '13px', 'color': '#B3B3B3', 'fontStyle': 'italic', 'marginTop': '8px', 'lineHeight': '1.6'})
                 ], className='header-section'),
                 
-                
+                # TEST-BALKEN
+                html.Div([
+                    html.H3("🔧 TEST", style={'color': '#FF6B6B', 'textAlign': 'center', 'marginBottom': '15px'}),
+                    html.Div("1️⃣ VIEWPORT", style={'width': '100vw', 'height': '50px', 'background': '#FF6B6B', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center', 'position': 'relative', 'left': '50%', 'right': '50%', 'marginLeft': '-50vw', 'marginRight': '-50vw'}),
+                    html.Div("2️⃣ STANDARD", style={'width': '100%', 'height': '50px', 'background': '#4ECDC4', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}),
+                    html.Div("3️⃣ NEGATIVE", style={'width': 'calc(100% + 24px)', 'height': '50px', 'background': '#1DB954', 'margin': '0 -12px 10px -12px', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}),
+                    html.Div([html.Div("4️⃣ ABSOLUTE", style={'position': 'absolute', 'left': '0', 'right': '0', 'width': '100%', 'height': '50px', 'background': '#F39C12', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'})], style={'position': 'relative', 'height': '60px', 'marginBottom': '10px'}),
+                    html.Div("5️⃣ BOOTSTRAP", style={'width': '100%', 'height': '50px', 'background': '#9B59B6', 'margin': '0 0 10px 0', 'padding': '15px', 'color': 'white', 'fontSize': '14px', 'fontWeight': 'bold', 'display': 'flex', 'alignItems': 'center', 'justifyContent': 'center'}),
+                    html.P("Welcher Balken (1-5) ist voll breit?", style={'color': '#FFF', 'textAlign': 'center', 'marginTop': '15px'})
+                ], className='d-block d-md-none', style={'background': 'rgba(255,107,107,0.1)', 'padding': '20px', 'borderRadius': '12px', 'border': '2px dashed #FF6B6B', 'marginBottom': '20px'}),
                 
                 # Mobile Hinweis
                 html.Div([
