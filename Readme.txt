@@ -152,13 +152,31 @@ Hinweis zur großen Datei: Die spotify_charts_enhanced.csv (309 MB) konnte nicht
 
 
 Reproduzierbarkeit:
-Das Projekt kann in drei Schritten vollständig reproduziert werden:
+Das Projekt kann in vier Schritten vollständig reproduziert werden:
 
-1. Repository klonen und Dependencies installieren
-2. .env Datei mit API-Keys erstellen  
-3. datenverarbeitung.py und dashboard.py ausführen
+1. Repository klonen:
+   git clone https://github.com/Lillzzzz/Dashboard.git
+   cd Dashboard
 
-Das Dashboard sollte dann auf localhost:8050 laufen und alle CSV-Dateien sollten im data/ Ordner erstellt werden.
+2. Python-Umgebung einrichten:
+   python -m venv venv
+   source venv/bin/activate  (Windows: venv\Scripts\activate)
+   pip install -r requirements.txt
+
+3. API-Keys konfigurieren (nur für Live-Daten erforderlich):
+   Erstelle eine .env Datei im Hauptverzeichnis mit:
+   SPOTIFY_CLIENT_ID=your_spotify_id
+   SPOTIFY_CLIENT_SECRET=your_spotify_secret
+   LASTFM_API_KEY=your_lastfm_key
+
+   Hinweis: Das Dashboard funktioniert auch ohne API-Keys (Fallback auf lokale Daten).
+
+4. Dashboard starten:
+   python dashboard.py
+   Öffne anschließend http://localhost:8050
+
+Hinweis: datenverarbeitung.py muss nur ausgeführt werden, wenn die CSV-Dateien neu generiert werden sollen
+(die vorbereiteten CSV-Dateien sind bereits enthalten).
 
 
 Dokumentation:
