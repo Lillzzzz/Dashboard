@@ -618,10 +618,7 @@ app.index_string = f'''
         align-items: flex-start !important;
     }}
     .sidebar {{
-        display: block !important;
-        position: static !important;
-        width: 100% !important;
-        margin-bottom: 20px;
+        display: none;
     }}
     .main-content {{
         padding: 10px !important;
@@ -771,7 +768,48 @@ app.layout = dbc.Container([
                     ], style={'fontSize': '13px', 'color': '#B3B3B3', 'fontStyle': 'italic', 'marginTop': '8px', 'lineHeight': '1.6'})
                 ], className='header-section'),
                 
-          
+                
+                
+               # MOBILE FILTER
+                html.Div([
+                    html.H4("FILTER", style={'color': '#1DB954', 'fontSize': '14px', 'fontWeight': '700', 'marginBottom': '12px'}),
+                    
+                    dcc.Dropdown(
+                        id='market-dropdown-mobile',
+                        options=[
+                            {'label': 'Alle Märkte', 'value': 'ALL'},
+                            {'label': 'Deutschland', 'value': 'DE'},
+                            {'label': 'UK', 'value': 'UK'},
+                            {'label': 'Brasilien', 'value': 'BR'}
+                        ],
+                        value='ALL',
+                        clearable=False,
+                        className="dark-dropdown",
+                        style={
+                            "backgroundColor": "rgba(6, 8, 14, 0.9)",
+                            "marginBottom": "12px"
+                        }
+                    ),
+                    
+                    dcc.Dropdown(
+                        id="year-dropdown-mobile",
+                        options=[
+                            {"label": "Alle Jahre", "value": "ALL"}
+                        ] + [{"label": str(y), "value": y} for y in [2017, 2018, 2019, 2020, 2021]],
+                        value="ALL",
+                        clearable=False,
+                        className="dark-dropdown",
+                        style={
+                            "backgroundColor": "rgba(6, 8, 14, 0.9)"
+                        }
+                    )
+                ], className='d-block d-md-none', style={
+                    'background': 'rgba(15,20,30,0.9)',
+                    'border': '2px solid rgba(29,185,84,0.3)',
+                    'borderRadius': '12px',
+                    'padding': '16px',
+                    'marginBottom': '16px'
+                }),
                 
                 # KPI Row
                 dbc.Row([
@@ -1042,7 +1080,7 @@ app.layout = dbc.Container([
                 ], className='mb-4')
                 
             ], className='main-content')
-        ], xs=12, sm=12, md=9, lg=9, xl=9, className='p-0')
+        ], width=9, className='p-0')
     ], className='g-0'),
     
     # Footer
@@ -1213,6 +1251,65 @@ def update_market_selection(n_all, n_de, n_uk, n_br, current_markets):
     except Exception as e:
         print(f"Fehler in update_market_selection: {e}")
         return ['DE', 'UK', 'BR'], 'market-button active', 'market-button', 'market-button', 'market-button'
+
+
+
+
+
+@app.callback(
+    Output('market-dropdown-mobile', 'value'),
+    [Input('btn-all', 'n_clicks'),
+     Input('btn-de', 'n_clicks'),
+     Input('btn-uk', 'n_clicks'),
+     Input('btn-br', 'n_clicks')],
+    [State('selected-markets', 'data')]
+)
+def sync_mobile_dropdown(n_all, n_de, n_uk, n_br, markets):
+    if set(markets) == {'DE', 'UK', 'BR'}:
+        return 'ALL'
+    elif len(markets) == 1:
+        return markets[0]
+    else:
+        return 'ALL'
+
+@app.callback(
+    [Output('selected-markets', 'data', allow_duplicate=True),
+     Output('btn-all', 'className', allow_duplicate=True),
+     Output('btn-de', 'className', allow_duplicate=True),
+     Output('btn-uk', 'className', allow_duplicate=True),
+     Output('btn-br', 'className', allow_duplicate=True)],
+    Input('market-dropdown-mobile', 'value'),
+    prevent_initial_call=True
+)
+def update_from_mobile_dropdown(value):
+    if value == 'ALL':
+        markets = ['DE', 'UK', 'BR']
+    else:
+        markets = [value]
+    
+    is_all = set(markets) == {'DE', 'UK', 'BR'}
+    classes = {
+        'btn-all': 'market-button active' if is_all else 'market-button',
+        'btn-de': 'market-button active' if 'DE' in markets else 'market-button',
+        'btn-uk': 'market-button active' if 'UK' in markets else 'market-button',
+        'btn-br': 'market-button active' if 'BR' in markets else 'market-button'
+    }
+    
+    return markets, classes['btn-all'], classes['btn-de'], classes['btn-uk'], classes['btn-br']
+
+@app.callback(
+    [Output('year-filter', 'value', allow_duplicate=True),
+     Output('year-dropdown-mobile', 'value', allow_duplicate=True)],
+    [Input('year-filter', 'value'),
+     Input('year-dropdown-mobile', 'value')],
+    prevent_initial_call=True
+)
+def sync_year_dropdowns(desktop, mobile):
+    trigger = ctx.triggered[0]['prop_id'].split('.')[0]
+    if trigger == 'year-filter':
+        return desktop, desktop
+    else:
+        return mobile, mobile
 
 @app.callback(
     [Output('kpi-shannon', 'children'),
