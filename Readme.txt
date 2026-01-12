@@ -1,6 +1,5 @@
 Projektübersicht:
-Dieses Dashboard habe ich im Rahmen des Moduls "Business Intelligence & Analytics" entwickelt. Es soll A&R-Manager bei der Bewertung von Musikmärkten unterstützen, 
-indem es Genre-Trends und Audio-Features in drei internationalen Märkten analysiert.
+Dieses Dashboard habe ich im Rahmen des Moduls "Business Intelligence & Analytics" entwickelt. Es soll A&R-Manager bei der Bewertung von Musikmärkten unterstützen, indem es Genre-Trends und Audio-Features in drei internationalen Märkten analysiert.
 
 Live-Dashboard: https://dashboard-d0z8.onrender.com
 
@@ -82,15 +81,11 @@ Für das Projekt habe ich verschiedene Datenquellen kombiniert:
 
 - Spotify Charts Dataset: Tägliche Chart-Positionen 2017-2021 
   (26,2 Millionen Zeilen)
-  
 - Spotify Audio Features Dataset: Technische Song-Eigenschaften wie 
   Danceability, Energy, Tempo für 114.000 Tracks
-  
 - Final Database: Artist-Informationen und Follower-Zahlen 
   (170.000 Einträge)
-  
 - Spotify API: Live-Daten für aktuelle Top-Tracks
-
 - Last.fm API: Nutzer-basierte Genre-Trends zur Validierung
 
 
@@ -106,8 +101,7 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 7. Berechnung eines Success Scores aus mehreren Faktoren
 8. Aggregation zu KPI-Metriken
 
-Die Genre-Standardisierung ist in genre_mapping.json definiert. Beispielsweise 
-werden "hip hop", "rap", "trap" und "deutschrap" alle als "Hip-Hop" klassifiziert.
+Die Genre-Standardisierung ist in genre_mapping.json definiert. Beispielsweise werden "hip hop", "rap", "trap" und "deutschrap" alle als "Hip-Hop" klassifiziert.
 
 Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
 
@@ -131,13 +125,9 @@ Aus der Analyse ergeben sich mehrere interessante Muster:
 
 - Tracks mit mittleren Werten bei Danceability und Energy (0,6-0,8) 
   sind kommerziell am erfolgreichsten
-  
 - Der UK-Markt zeigt die höchste Genre-Diversität
-
 - In Brasilien wächst Electronic besonders stark
-
 - Energy und Danceability korrelieren stark positiv (r = 0,74)
-
 - Die Top 5% der Tracks generieren über 80% aller Streams
 
 
@@ -158,9 +148,7 @@ Instance Type: Standard (2 GB RAM, 1 CPU)
 
 Die Environment Variables müssen in den Render-Einstellungen gesetzt werden.
 
-Hinweis zur großen Datei: Die spotify_charts_enhanced.csv (309 MB) konnte nicht 
-direkt auf GitHub hochgeladen werden wegen der 25 MB Größenbeschränkung. Sie liegt 
-deshalb als GitHub Release und wird beim Dashboard-Start automatisch heruntergeladen.
+Hinweis zur großen Datei: Die spotify_charts_enhanced.csv (309 MB) konnte nicht direkt auf GitHub hochgeladen werden wegen der 25 MB Größenbeschränkung. Sie liegt deshalb als GitHub Release und wird beim Dashboard-Start automatisch heruntergeladen.
 
 
 Reproduzierbarkeit:
@@ -170,8 +158,7 @@ Das Projekt kann in drei Schritten vollständig reproduziert werden:
 2. .env Datei mit API-Keys erstellen  
 3. datenverarbeitung.py und dashboard.py ausführen
 
-Das Dashboard sollte dann auf localhost:8050 laufen und alle CSV-Dateien 
-sollten im data/ Ordner erstellt werden.
+Das Dashboard sollte dann auf localhost:8050 laufen und alle CSV-Dateien sollten im data/ Ordner erstellt werden.
 
 
 Dokumentation:
