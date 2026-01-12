@@ -303,42 +303,42 @@ body {
     color: #1DB954 !important;
 }
 
-/* ==================== Resonsive Design ==================== */
 
 /* ==================== Mobile Ansicht ==================== */
 
 @media (max-width: 768px) {
-    /* Sidebar komplett ausblenden */
-    .sidebar {
-        display: none !important;
-    }
-    
-    /* Main Container auf 100% */
+    /* Container komplett ohne Abstände */
     .container-fluid {
         padding: 0 !important;
         margin: 0 !important;
-        max-width: 100vw !important;
-        width: 100vw !important;
+        max-width: 100% !important;
+        width: 100% !important;
     }
     
-    /* Main Content */
-    .main-content {
-        padding: 0 !important;
-        margin: 0 !important;
-        width: 100vw !important;
-    }
-    
-    /* Alle Rows */
+    /* Rows ohne Bootstrap Gutters */
     .row {
-        margin: 0 !important;
-        padding: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
         --bs-gutter-x: 0 !important;
     }
     
-    /* Alle Columns */
+    /* Columns ohne Padding */
     [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    
+    /* Main Content volle Breite */
+    .main-content {
         padding: 0 !important;
         margin: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
+    
+    /* Sidebar ausblenden */
+    .sidebar {
+        display: none !important;
     }
     
     /* Header volle Breite */
@@ -357,9 +357,17 @@ body {
         border-right: none !important;
         margin: 0 0 2px 0 !important;
         padding: 16px 12px !important;
+        width: 100% !important;
     }
     
-    /* KPI Cards mit mini Rand */
+    /* Plotly Charts selbst */
+    .js-plotly-plot, .plotly, .plot-container {
+        width: 100% !important;
+        max-width: 100vw !important;
+        margin: 0 !important;
+    }
+    
+    /* KPI Cards mit Rand */
     .kpi-card {
         min-height: 140px;
         padding: 16px 12px !important;
@@ -371,10 +379,10 @@ body {
         font-size: 32px !important;
     }
     
-    /* Charts auf 100% */
-    .js-plotly-plot, .plotly {
-        width: 100% !important;
-        max-width: 100vw !important;
+    /* Tabellen Container */
+    #highpot-table-container, #spotify-live-tracks {
+        margin: 0 -12px !important;
+        width: calc(100% + 24px) !important;
     }
 }
 
@@ -385,6 +393,10 @@ body {
     
     .chart-card {
         padding: 12px 8px !important;
+    }
+    
+    .chart-title {
+        font-size: 14px !important;
     }
 }
 
