@@ -29,18 +29,27 @@ import urllib.parse
 from functools import lru_cache
 from datetime import datetime
 
+logging.basicConfig(level=logging.INFO)
+
+# .env zuerst laden, dann Variablen lesen
+load_dotenv()
+
 SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 
-# Orjson-Kompatibilität (Plotly Performance-Bibliothek)
-
-import plotly.io._json as pio_json
+# Optional: orjson-Beschleunigung (funktioniert auch ohne)
 try:
-    import orjson
-    pio_json.orjson = orjson
+    import plotly.io._json as pio_json  # private Plotly API -> kann fehlen je nach Version
+    try:
+        import orjson
+        pio_json.orjson = orjson
+    except Exception:
+        pio_json.orjson = None
 except Exception:
-    pio_json.orjson = None
+    # Wenn plotly intern anders ist: einfach ohne orjson weiterlaufen
+    pass
+
 
 
 logging.basicConfig(level=logging.INFO)
