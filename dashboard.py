@@ -575,14 +575,14 @@ def get_accessible_colors():
 
 # Custom CSS in HTML Head einfügen
 
-app.index_string = f'''
+app.index_string = '''
 <!DOCTYPE html>
 <html>
     <head>
-        {{%metas%}}
-        <title>{{%title%}}</title>
-        {{%favicon%}}
-        {{%css%}}
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
         <style>
 .dark-dropdown .Select-control {
     background-color: #1e1e1e !important;
@@ -640,11 +640,11 @@ app.index_string = f'''
         </style>
     </head>
     <body>
-        {{%app_entry%}}
+        {%app_entry%}
         <footer>
-            {{%config%}}
-            {{%scripts%}}
-            {{%renderer%}}
+            {%config%}
+            {%scripts%}
+            {%renderer%}
         </footer>
     </body>
 </html>
