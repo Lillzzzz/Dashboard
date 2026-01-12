@@ -584,56 +584,59 @@ app.index_string = f'''
         {{%favicon%}}
         {{%css%}}
         <style>
-.dark-dropdown .Select-control {{
+.dark-dropdown .Select-control {
     background-color: #1e1e1e !important;
     border: 1px solid #1db954 !important;
     color: #1db954 !important;
-}}
+}
 .dark-dropdown .Select-value-label,
-.dark-dropdown .Select-placeholder {{
+.dark-dropdown .Select-placeholder {
     color: #1db954 !important;
-}}
-.dark-dropdown .Select-menu-outer {{
+}
+.dark-dropdown .Select-menu-outer {
     background-color: #1e1e1e !important;
     border: 1px solid #1db954 !important;
     z-index: 9999 !important;
-}}
-.dark-dropdown .VirtualizedSelectOption {{
+}
+.dark-dropdown .VirtualizedSelectOption {
     background-color: #1e1e1e !important;
     color: #ffffff !important;
-}}
-.dark-dropdown .VirtualizedSelectFocusedOption {{
+}
+.dark-dropdown .VirtualizedSelectFocusedOption {
     background-color: #1db954 !important;
     color: #0f141e !important;
-}}
-@media (max-width: 768px) {{
-    .market-badge {{
-        flex-wrap: wrap;
-        max-width: 100%;
-        margin-bottom: 4px;
-    }}
-    .chart-header {{
-        gap: 6px;
-        flex-direction: column;
-        align-items: flex-start !important;
-    }}
-    .sidebar {{
-        display: none;
-    }}
+}
 
-    /* sauber mittig + natürlicher Rand */
-    .main-content {{
-        padding: 12px 14px !important;
-    }}
-
-    /* verhindert seitliche Versätze durch Bootstrap-Gutters */
-    .main-content .row {{
-        --bs-gutter-x: 0.75rem !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }}
-}}
-
+/* Mobile 100% Breite Override */
+@media (max-width: 768px) {
+    body, html {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+    .container-fluid {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    .row {
+        margin: 0 !important;
+        --bs-gutter-x: 0 !important;
+    }
+    [class*="col-"] {
+        padding: 0 !important;
+    }
+    .main-content {
+        padding: 0 !important;
+        width: 100% !important;
+    }
+    .chart-card {
+        width: 100% !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+    }
+}
         </style>
     </head>
     <body>
