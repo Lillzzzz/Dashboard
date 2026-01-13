@@ -1499,11 +1499,13 @@ def mobile_toggle_to_kpi_scope(is_global):
 @app.callback(
     [Output("kpi-scope-toggle", "value", allow_duplicate=True),
      Output("kpi-scope-toggle-label", "children")],
-    Input("kpi-scope", "value")
+    Input("kpi-scope", "value"),
+    prevent_initial_call="initial_duplicate"
 )
 def kpi_scope_to_mobile_toggle(scope):
     is_global = (scope == "GLOBAL")
     return is_global, ("Global" if is_global else "Gefiltert")
+
 
 
 
