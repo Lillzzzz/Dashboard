@@ -598,6 +598,103 @@ app.index_string = f'''
         {{%favicon%}}
         {{%css%}}
         <style>
+        
+
+
+.kpi-scope-segment {{
+  display: flex !important;
+  gap: 0 !important;
+  width: 220px;              /* fix -> kein Verspringen */
+  background: rgba(20,25,40,0.9);
+  border: 1px solid rgba(29,185,84,0.35);
+  border-radius: 999px;
+  padding: 3px;
+}}
+
+.kpi-scope-segment .form-check {{
+  flex: 1 1 0;
+  margin: 0 !important;
+  padding: 0 !important;
+}}
+
+.kpi-scope-segment input[type="radio"] {{
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}}
+
+.kpi-scope-segment label {{
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 !important;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #B3B3B3;
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}}
+
+/* active */
+.kpi-scope-segment input[type="radio"]:checked + label {{
+  background: rgba(29,185,84,0.18);
+  color: #1DB954;
+  border: 1px solid rgba(29,185,84,0.55);
+  box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
+}}
+
+
+
+.toggle-row {{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}}
+
+.toggle {{
+  position: relative;
+  width: 56px;
+  height: 30px;
+  border-radius: 999px;
+  background: rgba(127,127,127,0.25);
+  border: 1px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  transition: all 0.2s ease;
+}}
+
+.toggle .toggle-slider {{
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  left: 3px;
+  transition: transform 0.2s ease;
+}}
+
+/* checked state */
+.toggle-input:checked + .toggle {{
+  background: rgba(29,185,84,0.22);
+  border: 1px solid rgba(29,185,84,0.55);
+}}
+
+.toggle-input:checked + .toggle .toggle-slider {{
+  transform: translateX(26px);
+}}
+
+.toggle-text {{
+  color: #B3B3B3;
+  font-size: 12px;
+  font-weight: 700;
+}}
+
 .dark-dropdown .Select-control {{
     background-color: #1e1e1e !important;
     border: 1px solid #1db954 !important;
@@ -638,6 +735,8 @@ app.index_string = f'''
         padding: 10px !important;
     }}
 }}
+
+
         </style>
     </head>
     <body>
@@ -718,37 +817,15 @@ dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0),
 html.H4("KPI ANSICHT", className='filter-title', style={'marginTop': '18px'}),
 dbc.RadioItems(
     id="kpi-scope",
+    className="kpi-scope-segment",
     options=[
         {"label": "Gefiltert", "value": "FILTERED"},
         {"label": "Global", "value": "GLOBAL"},
     ],
     value="FILTERED",
     inline=True,
-
-    # ✅ stabiler Container: keine Umbrüche, fixiert die Breite
-    style={
-        'color': '#B3B3B3',
-        'fontSize': '12px',
-        'display': 'flex',
-        'gap': '12px',
-        'flexWrap': 'nowrap',
-        'alignItems': 'center',
-        'userSelect': 'none'
-    },
-
-    # ✅ jedes Item gleich breit, dadurch kein "springen"
-    labelStyle={
-        'display': 'inline-flex',
-        'alignItems': 'center',
-        'minWidth': '92px',     # gleich breit
-        'margin': '0'
-    },
-
-    inputStyle={
-        "marginRight": "6px",
-        "marginLeft": "0px"
-    }
 ),
+
 
 html.P(
     "Gefiltert: KPIs folgen der Marktauswahl. Global: KPIs zeigen Gesamtmarkt.",
@@ -871,6 +948,38 @@ html.Div([
         "backgroundColor": "rgba(6, 8, 14, 0.9)"
     }
 )
+
+                    html.Div(
+    [
+        html.Div("KPI Ansicht", style={
+            "color": "#1DB954",
+            "fontSize": "12px",
+            "fontWeight": "700",
+            "marginBottom": "8px"
+        }),
+
+        html.Div(
+            [
+                dcc.Input(
+                    id="kpi-scope-toggle",
+                    type="checkbox",
+                    className="toggle-input",
+                    style={"display": "none"}
+                ),
+                html.Label(
+                    html.Span(className="toggle-slider"),
+                    htmlFor="kpi-scope-toggle",
+                    className="toggle"
+                ),
+                html.Div(id="kpi-scope-toggle-label", className="toggle-text")
+            ],
+            className="toggle-row"
+        )
+    ],
+    className="d-block d-md-none",
+    style={"marginTop": "12px"}
+),
+
                 ], className='d-block d-md-none', style={
                     'background': 'rgba(15,20,30,0.9)',
                     'border': '2px solid rgba(29,185,84,0.3)',
@@ -1381,6 +1490,30 @@ def update_api_status(n):
         return result
     except:
         return "Verbindung unterbrochen"
+
+
+@app.callback(
+    Output("kpi-scope", "value", allow_duplicate=True),
+    Input("kpi-scope-toggle", "value"),
+    prevent_initial_call=True
+)
+def mobile_toggle_to_kpi_scope(toggle_val):
+    # dcc.Input checkbox: value ist "on" wenn aktiv, sonst None
+    return "GLOBAL" if toggle_val else "FILTERED"
+
+
+@app.callback(
+    [Output("kpi-scope-toggle", "value", allow_duplicate=True),
+     Output("kpi-scope-toggle-label", "children")],
+    Input("kpi-scope", "value"),
+    prevent_initial_call=True
+)
+def kpi_scope_to_mobile_toggle(scope):
+    is_global = (scope == "GLOBAL")
+    label = "Global" if is_global else "Gefiltert"
+    # Checkbox: "on" bedeutet checked
+    return ("on" if is_global else None), label
+
 
 @app.callback(
     [Output('live-timestamp-spotify', 'children'),
