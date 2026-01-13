@@ -898,9 +898,13 @@ html.Div([
 ], className='kpi-label'),
 
 dbc.Tooltip(
-    "Misst die Genre-Vielfalt. Höher = vielfältiger. Niedriger = wenige dominante Genres.",
+    "Basis: Spotify-Charts (DE/UK/BR), Historie 2017–2021. "
+    "Berechnung nutzt die 9 harmonisierten Hauptgenres (Pop…Other). "
+    "Wichtig: 2021 ist teils stark von „Other“ geprägt → Vielfalt kann verzerrt wirken.",
     target="shannon-info",
-    placement="right"
+    placement="right",
+    style={"maxWidth": "320px"},
+    delay={"show": 180, "hide": 80}
 ),
 
                             html.Div(id='kpi-shannon', className='kpi-value', title="Genrekonzentration, höher = vielfältiger Markt"),
@@ -928,14 +932,15 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-        "Index für die Marktentwicklung im Zeitverlauf (Basisjahr = 2017 = 100). "
-        "Werte >100 bedeuten überdurchschnittliches Wachstum, "
-        "Werte <100 zeigen Marktschwäche oder Rückgang. "
-        "Der Index ist ein relatives Vergleichsmaß und zeigt Trends, "
-        "keine absoluten Streaming-Zahlen.",
-        target="growth-info",
-        placement="right"
-    ),
+      "Hinweis zur Methodik: Der Index (2017=100) dient nur als Referenz-Skalierung. "
+      "Er wird im Projekt nicht als echtes Wachstum/Prognose interpretiert. "
+      "Für Trends bitte die Zeitreihen-Charts (Markt-Vergleich nach Jahr) nutzen.",
+      target="growth-info",
+      placement="right",
+      style={"maxWidth": "320px"},
+      delay={"show": 180, "hide": 80}
+),
+
 
     html.Div(id='kpi-growth', className='kpi-value'),
 
@@ -965,12 +970,15 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-        "Success Score kombiniert: 25% Charts, 20% Artist-Follower, 15% Streams, "
-        "15% Danceability, 15% Energy, 5% Top-10, 5% Top-50. Skala 0–100, höher = erfolgreicher. "
-        "ERFOLGSQUOTE = Anteil der Tracks mit Success Score ≥ 65.",
-        target="success-info",
-        placement="right"
-    ),
+        "Erfolgsquote = Anteil Tracks mit Success Score ≥ 65 (historischer Cutoff). "
+        "Score kombiniert 7 Signale: Chart-Performance, Streams (log), Follower (log), "
+        "Danceability, Energy, Top-10 & Top-50 (Gewichtungen im Report). "
+        "Wichtig: deskriptiver Vergleichs-Index, kein Kausalbeweis.",
+    target="success-info",
+    placement="right",
+    style={"maxWidth": "340px"},
+    delay={"show": 180, "hide": 80}
+),
 
     html.Div(id='kpi-success', className='kpi-value', title="Anteil Tracks mit Success Score ≥ 65"),
     html.Div([
@@ -998,14 +1006,14 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-        "Genre mit dem höchsten durchschnittlichen Marktanteil "
-        "im ausgewählten Markt und Zeitraum (historische Daten 2017–2021). "
-        "Das Top-Genre zeigt aktuelle Präferenzen des Marktes, "
-        "bedeutet jedoch nicht automatisch das höchste Wachstum oder "
-        "die beste Zukunftsperformance.",
+        "Bestimmt aus Ø Marktanteil je Genre (Historie 2017–2021). "
+        "Genres sind harmonisiert (49 → 9 Kategorien) für bessere Marktvergleichbarkeit. "
+        "Trade-off: Nischen-Details gehen verloren — „Other“ kann 2021 dominieren.",
         target="topgenre-info",
-        placement="right"
-    ),
+        placement="right",
+        style={"maxWidth": "320px"},
+        delay={"show": 180, "hide": 80}
+),
 
     html.Div(id='kpi-genre', className='kpi-value', style={'fontSize': '24px'}),
 
