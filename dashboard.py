@@ -688,6 +688,16 @@ app.index_string = '''
           font-size: 12px;
           font-weight: 700;
         }
+        .toggle-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  justify-content:flex-start;
+  width:100%;
+  margin:0 !important;
+  padding:0 !important;
+}
+
         .dark-dropdown .Select-control {
             background-color: #1e1e1e !important;
             border: 1px solid #1db954 !important;
@@ -957,7 +967,7 @@ html.Div([
                 className="toggle-switch"
                 ),
 
-                html.Div(id="kpi-scope-toggle-label", className="toggle-text")
+                html.Div("Gefiltert", id="kpi-scope-toggle-label", className="toggle-text")
             ],
             className="toggle-row"
         )
@@ -1489,12 +1499,12 @@ def mobile_toggle_to_kpi_scope(is_global):
 @app.callback(
     [Output("kpi-scope-toggle", "value", allow_duplicate=True),
      Output("kpi-scope-toggle-label", "children")],
-    Input("kpi-scope", "value"),
-    prevent_initial_call=True
+    Input("kpi-scope", "value")
 )
 def kpi_scope_to_mobile_toggle(scope):
     is_global = (scope == "GLOBAL")
     return is_global, ("Global" if is_global else "Gefiltert")
+
 
 
 
@@ -1559,6 +1569,18 @@ def update_market_selection(n_all, n_de, n_uk, n_br, current_markets):
         return ['DE', 'UK', 'BR'], 'market-button active', 'market-button', 'market-button', 'market-button'
 
 
+@app.callback(
+    Output('market-dropdown-mobile', 'value'),
+    Input('selected-markets', 'data'),
+    prevent_initial_call=False
+)
+def sync_mobile_market_dropdown(markets):
+    if not markets or set(markets) == {'DE', 'UK', 'BR'}:
+        return 'ALL'
+    if len(markets) == 1:
+        return markets[0]
+    # Mobile Dropdown kann keine 2 Märkte darstellen → fallback
+    return 'ALL'
 
 
 
@@ -1817,7 +1839,10 @@ def update_genre_shares(markets, year):
         
         fig.update_layout(create_plotly_theme())
         fig.update_xaxes(title='Genre')
-        fig.update_yaxes(title='Marktanteil (%)', range=[0, 100], ticksuffix="%")
+        max_val = float(df_tooltip['market_share_percent'].max()) if len(df_tooltip) else 0.0
+        upper = min(100, max(10, max_val * 1.15))  # 15% Padding, mind. 10%
+        fig.update_yaxes(title='Marktanteil (%)', range=[0, upper], ticksuffix="%")
+
         
         return fig
     except Exception as e:
