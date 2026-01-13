@@ -589,7 +589,8 @@ def get_accessible_colors():
 
 # Custom CSS in HTML Head einfügen
 
-app.index_string = f'''
+app.index_string = '''
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -601,7 +602,7 @@ app.index_string = f'''
         
 
 
-.kpi-scope-segment {{
+.kpi-scope-segment {
   display: flex !important;
   gap: 0 !important;
   width: 220px;              /* fix -> kein Verspringen */
@@ -609,21 +610,21 @@ app.index_string = f'''
   border: 1px solid rgba(29,185,84,0.35);
   border-radius: 999px;
   padding: 3px;
-}}
+}
 
-.kpi-scope-segment .form-check {{
+.kpi-scope-segment .form-check {
   flex: 1 1 0;
   margin: 0 !important;
   padding: 0 !important;
-}}
+}
 
-.kpi-scope-segment input[type="radio"] {{
+.kpi-scope-segment input[type="radio"] {
   position: absolute;
   opacity: 0;
   pointer-events: none;
-}}
+}
 
-.kpi-scope-segment label {{
+.kpi-scope-segment label {
   display: flex !important;
   justify-content: center;
   align-items: center;
@@ -637,7 +638,7 @@ app.index_string = f'''
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
-}}
+}
 
 /* fallback if markup is label > input */
 .kpi-scope-segment label:has(input[type="radio"]:checked) {
@@ -649,12 +650,12 @@ app.index_string = f'''
 
 
 /* active */
-.kpi-scope-segment input[type="radio"]:checked + label {{
+.kpi-scope-segment input[type="radio"]:checked + label {
   background: rgba(29,185,84,0.18);
   color: #1DB954;
   border: 1px solid rgba(29,185,84,0.55);
   box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
-}}
+}
 
 /* ===== Mobile KPI Switch (dbc.Switch) styled like slider ===== */
 .toggle-row {
