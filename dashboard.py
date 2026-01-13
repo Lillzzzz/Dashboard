@@ -639,6 +639,15 @@ app.index_string = f'''
   white-space: nowrap;
 }}
 
+/* fallback if markup is label > input */
+.kpi-scope-segment label:has(input[type="radio"]:checked) {
+  background: rgba(29,185,84,0.18);
+  color: #1DB954;
+  border: 1px solid rgba(29,185,84,0.55);
+  box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
+}
+
+
 /* active */
 .kpi-scope-segment input[type="radio"]:checked + label {{
   background: rgba(29,185,84,0.18);
@@ -647,53 +656,67 @@ app.index_string = f'''
   box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
 }}
 
-
-
-.toggle-row {{
+/* ===== Mobile KPI Switch (dbc.Switch) styled like slider ===== */
+.toggle-row {
   display: flex;
   align-items: center;
   gap: 12px;
-}}
+}
 
-.toggle {{
-  position: relative;
-  width: 56px;
-  height: 30px;
-  border-radius: 999px;
-  background: rgba(127,127,127,0.25);
-  border: 1px solid rgba(255,255,255,0.12);
+/* kill default spacing */
+.toggle-switch .form-check {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+
+/* hide default label if any */
+.toggle-switch label {
+  display: none !important;
+}
+
+/* switch track */
+.toggle-switch .form-check-input {
+  width: 56px !important;
+  height: 30px !important;
+  border-radius: 999px !important;
+  background-color: rgba(127,127,127,0.25) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  padding: 2px;
-  transition: all 0.2s ease;
-}}
+  margin: 0 !important;
+  box-shadow: none !important;
+}
 
-.toggle .toggle-slider {{
+/* knob */
+.toggle-switch .form-check-input::before {
+  content: "";
   position: absolute;
+  top: 3px;
+  left: 3px;
   width: 24px;
   height: 24px;
   border-radius: 999px;
   background: #ffffff;
-  left: 3px;
   transition: transform 0.2s ease;
-}}
+}
 
-/* checked state */
-.toggle-input:checked + .toggle {{
-  background: rgba(29,185,84,0.22);
-  border: 1px solid rgba(29,185,84,0.55);
-}}
+/* checked = Spotify green */
+.toggle-switch .form-check-input:checked {
+  background-color: rgba(29,185,84,0.22) !important;
+  border: 1px solid rgba(29,185,84,0.55) !important;
+}
 
-.toggle-input:checked + .toggle .toggle-slider {{
+/* move knob when checked */
+.toggle-switch .form-check-input:checked::before {
   transform: translateX(26px);
-}}
+}
 
-.toggle-text {{
+.toggle-text {
   color: #B3B3B3;
   font-size: 12px;
   font-weight: 700;
-}}
+}
+
 
 .dark-dropdown .Select-control {{
     background-color: #1e1e1e !important;
@@ -947,7 +970,7 @@ html.Div([
     style={
         "backgroundColor": "rgba(6, 8, 14, 0.9)"
     }
-)
+),
 
                     html.Div(
     [
@@ -960,23 +983,17 @@ html.Div([
 
         html.Div(
             [
-                dcc.Input(
-                    id="kpi-scope-toggle",
-                    type="checkbox",
-                    className="toggle-input",
-                    style={"display": "none"}
+              dbc.Switch(
+                id="kpi-scope-toggle",
+                value=False,              # False = FILTERED, True = GLOBAL
+                className="toggle-switch"
                 ),
-                html.Label(
-                    html.Span(className="toggle-slider"),
-                    htmlFor="kpi-scope-toggle",
-                    className="toggle"
-                ),
+
                 html.Div(id="kpi-scope-toggle-label", className="toggle-text")
             ],
             className="toggle-row"
         )
     ],
-    className="d-block d-md-none",
     style={"marginTop": "12px"}
 ),
 
@@ -1497,9 +1514,8 @@ def update_api_status(n):
     Input("kpi-scope-toggle", "value"),
     prevent_initial_call=True
 )
-def mobile_toggle_to_kpi_scope(toggle_val):
-    # dcc.Input checkbox: value ist "on" wenn aktiv, sonst None
-    return "GLOBAL" if toggle_val else "FILTERED"
+def mobile_toggle_to_kpi_scope(is_global):
+    return "GLOBAL" if is_global else "FILTERED"
 
 
 @app.callback(
@@ -1510,9 +1526,8 @@ def mobile_toggle_to_kpi_scope(toggle_val):
 )
 def kpi_scope_to_mobile_toggle(scope):
     is_global = (scope == "GLOBAL")
-    label = "Global" if is_global else "Gefiltert"
-    # Checkbox: "on" bedeutet checked
-    return ("on" if is_global else None), label
+    return is_global, ("Global" if is_global else "Gefiltert")
+
 
 
 @app.callback(
