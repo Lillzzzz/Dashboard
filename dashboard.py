@@ -887,7 +887,22 @@ html.Div([
                 dbc.Row([
                     dbc.Col([
                         html.Div([
-                            html.Div("SHANNON DIVERSITÄT", className='kpi-label'),
+                            html.Div([
+    "SHANNON DIVERSITÄT ",
+    html.I("ⓘ", id="shannon-info", style={
+        'fontSize': '14px',
+        'color': '#1DB954',
+        'cursor': 'help',
+        'marginLeft': '4px'
+    })
+], className='kpi-label'),
+
+dbc.Tooltip(
+    "Misst die Genre-Vielfalt. Höher = vielfältiger. Niedriger = wenige dominante Genres.",
+    target="shannon-info",
+    placement="right"
+),
+
                             html.Div(id='kpi-shannon', className='kpi-value', title="Genrekonzentration, höher = vielfältiger Markt"),
                             html.Div([
                                 "Misst Genre-Vielfalt. ",
@@ -1046,7 +1061,13 @@ html.Div([
                                 type="circle",
                                 color="#1DB954",
                                 children=dcc.Graph(id='chart-audio-scatter', config={'displayModeBar': False}, style={'height': '400px', 'width': '100%'})
-                            )
+                           ),
+html.Div(id='audio-toptracks-text', style={
+    'marginTop': '8px',
+    'color': '#95A5A6',
+    'fontSize': '11px',
+    'fontStyle': 'italic'
+})
                         ], className='chart-card')
                     ], xl=6, lg=6, md=12, className='mb-4'),
                     dbc.Col([
@@ -1722,10 +1743,12 @@ def update_correlation(markets):
 
 
 @app.callback(
-    Output('chart-audio-scatter', 'figure'),
+    [Output('chart-audio-scatter', 'figure'),
+     Output('audio-toptracks-text', 'children')],
     [Input('selected-markets', 'data')]
 )
 def update_audio_scatter(markets):
+
     try:
         df = enhanced_df[enhanced_df['market'].isin(markets)] if set(markets) != {'DE', 'UK', 'BR'} else enhanced_df
 
@@ -1808,38 +1831,35 @@ def update_audio_scatter(markets):
             align='left'
         )
 
-                # --- Top-3 Tracks (nach Success Score) annotieren ---
-        # robust: nimmt track_name oder title, fallback "Unknown"
-        top3 = df_sample.nlargest(3, 'success_score')
-
-        for _, r in top3.iterrows():
-            name = r.get('track_name', None)
-            if name is None or str(name).strip() == "":
-                name = r.get('title', "Unknown")
-            name = str(name)[:22]
-
-            fig.add_annotation(
-                x=float(r['danceability']),
-                y=float(r['energy']),
-                text=f"<b>{name}</b><br>Score: {float(r['success_score']):.0f}",
-                showarrow=True,
-                arrowhead=2,
-                ax=35,
-                ay=-35
-            )
+                
 
         
         fig.update_layout(create_plotly_theme())
         fig.update_xaxes(title='Tanzbarkeit (0–1)')
         fig.update_yaxes(title='Energie (0–1)')
-        return fig
+        
+# --- Top-3 als Text unter dem Chart (statt im Plot zu überlappen) ---
+top3 = df_sample.nlargest(3, 'success_score')
+top_lines = []
+
+for _, r in top3.iterrows():
+    name = str(r.get('track_name', r.get('title', 'Unknown')))
+    artist = str(r.get('artist', 'Unknown'))
+    score = float(r.get('success_score', 0))
+    top_lines.append(f"{artist} – {name} (Score {score:.0f})")
+
+top_text = "Top-3 nach Success Score (Sample): " + " | ".join(top_lines)
+
+return fig, top_text
+
 
 
     except Exception as e:
         print(f"Fehler in update_audio_scatter: {e}")
         import traceback
         traceback.print_exc()
-        return go.Figure()
+        return go.Figure(), ""
+
 
 
 
