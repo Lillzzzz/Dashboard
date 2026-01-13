@@ -590,186 +590,153 @@ def get_accessible_colors():
 # Custom CSS in HTML Head einfügen
 
 app.index_string = '''
-
 <!DOCTYPE html>
 <html>
     <head>
-        {{%metas%}}
-        <title>{{%title%}}</title>
-        {{%favicon%}}
-        {{%css%}}
+        {%metas%}
+        <title>{%title%}</title>
+        {%favicon%}
+        {%css%}
         <style>
-        
-
-
-.kpi-scope-segment {
-  display: flex !important;
-  gap: 0 !important;
-  width: 220px;              /* fix -> kein Verspringen */
-  background: rgba(20,25,40,0.9);
-  border: 1px solid rgba(29,185,84,0.35);
-  border-radius: 999px;
-  padding: 3px;
-}
-
-.kpi-scope-segment .form-check {
-  flex: 1 1 0;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.kpi-scope-segment .form-check-input {
-  position: absolute;
-  opacity: 0;
-  width: 1px;
-  height: 1px;
-  margin: 0;
-  pointer-events: auto;
-}
-
-
-.kpi-scope-segment label {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin: 0 !important;
-  padding: 8px 10px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #B3B3B3;
-  border-radius: 999px;
-  cursor: pointer;
-  user-select: none;
-  white-space: nowrap;
-}
-
-/* fallback if markup is label > input */
-.kpi-scope-segment label:has(input[type="radio"]:checked) {
-  background: rgba(29,185,84,0.18);
-  color: #1DB954;
-  border: 1px solid rgba(29,185,84,0.55);
-  box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
-}
-
-
-/* active */
-.kpi-scope-segment .form-check-input:checked + .form-check-label {
-  background: rgba(29,185,84,0.18);
-  color: #1DB954;
-  border: 1px solid rgba(29,185,84,0.55);
-  box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
-}
-
-
-/* kill default spacing */
-.toggle-switch .form-check {
-  margin: 0 !important;
-  padding: 0 !important;
-  min-height: 0 !important;
-}
-
-/* hide default label if any */
-.toggle-switch label {
-  display: none !important;
-}
-
-/* switch track */
-.toggle-switch .form-check-input {
-  width: 56px !important;
-  height: 30px !important;
-  border-radius: 999px !important;
-  background-color: rgba(127,127,127,0.25) !important;
-  border: 1px solid rgba(255,255,255,0.12) !important;
-  cursor: pointer;
-  margin: 0 !important;
-  box-shadow: none !important;
-}
-
-/* knob */
-.toggle-switch .form-check-input::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
-  background: #ffffff;
-  transition: transform 0.2s ease;
-}
-
-/* checked = Spotify green */
-.toggle-switch .form-check-input:checked {
-  background-color: rgba(29,185,84,0.22) !important;
-  border: 1px solid rgba(29,185,84,0.55) !important;
-}
-
-/* move knob when checked */
-.toggle-switch .form-check-input:checked::before {
-  transform: translateX(26px);
-}
-
-.toggle-text {
-  color: #B3B3B3;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-
-.dark-dropdown .Select-control {
-    background-color: #1e1e1e !important;
-    border: 1px solid #1db954 !important;
-    color: #1db954 !important;
-}
-.dark-dropdown .Select-value-label,
-.dark-dropdown .Select-placeholder {
-    color: #1db954 !important;
-}
-.dark-dropdown .Select-menu-outer {
-    background-color: #1e1e1e !important;
-    border: 1px solid #1db954 !important;
-    z-index: 9999 !important;
-}
-.dark-dropdown .VirtualizedSelectOption {
-    background-color: #1e1e1e !important;
-    color: #ffffff !important;
-}
-.dark-dropdown .VirtualizedSelectFocusedOption {
-    background-color: #1db954 !important;
-    color: #0f141e !important;
-}
-
-@media (max-width: 768px) {
-    .market-badge {
-        flex-wrap: wrap;
-        max-width: 100%;
-        margin-bottom: 4px;
-    }
-    .chart-header {
-        gap: 6px;
-        flex-direction: column;
-        align-items: flex-start !important;
-    }
-    .sidebar {
-        display: none;
-    }
-    .main-content {
-        padding: 10px !important;
-    }
-}
-
-
-
+        .kpi-scope-segment {
+          display: flex !important;
+          gap: 0 !important;
+          width: 220px;
+          background: rgba(20,25,40,0.9);
+          border: 1px solid rgba(29,185,84,0.35);
+          border-radius: 999px;
+          padding: 3px;
+        }
+        .kpi-scope-segment .form-check {
+          flex: 1 1 0;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        .kpi-scope-segment .form-check-input {
+          position: absolute;
+          opacity: 0;
+          width: 1px;
+          height: 1px;
+          margin: 0;
+          pointer-events: auto;
+        }
+        .kpi-scope-segment label {
+          display: flex !important;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          margin: 0 !important;
+          padding: 8px 10px;
+          font-size: 12px;
+          font-weight: 700;
+          color: #B3B3B3;
+          border-radius: 999px;
+          cursor: pointer;
+          user-select: none;
+          white-space: nowrap;
+        }
+        .kpi-scope-segment label:has(input[type="radio"]:checked) {
+          background: rgba(29,185,84,0.18);
+          color: #1DB954;
+          border: 1px solid rgba(29,185,84,0.55);
+          box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
+        }
+        .kpi-scope-segment .form-check-input:checked + .form-check-label {
+          background: rgba(29,185,84,0.18);
+          color: #1DB954;
+          border: 1px solid rgba(29,185,84,0.55);
+          box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
+        }
+        .toggle-switch .form-check {
+          margin: 0 !important;
+          padding: 0 !important;
+          min-height: 0 !important;
+        }
+        .toggle-switch label {
+          display: none !important;
+        }
+        .toggle-switch .form-check-input {
+          width: 56px !important;
+          height: 30px !important;
+          border-radius: 999px !important;
+          background-color: rgba(127,127,127,0.25) !important;
+          border: 1px solid rgba(255,255,255,0.12) !important;
+          cursor: pointer;
+          margin: 0 !important;
+          box-shadow: none !important;
+        }
+        .toggle-switch .form-check-input::before {
+          content: "";
+          position: absolute;
+          top: 3px;
+          left: 3px;
+          width: 24px;
+          height: 24px;
+          border-radius: 999px;
+          background: #ffffff;
+          transition: transform 0.2s ease;
+        }
+        .toggle-switch .form-check-input:checked {
+          background-color: rgba(29,185,84,0.22) !important;
+          border: 1px solid rgba(29,185,84,0.55) !important;
+        }
+        .toggle-switch .form-check-input:checked::before {
+          transform: translateX(26px);
+        }
+        .toggle-text {
+          color: #B3B3B3;
+          font-size: 12px;
+          font-weight: 700;
+        }
+        .dark-dropdown .Select-control {
+            background-color: #1e1e1e !important;
+            border: 1px solid #1db954 !important;
+            color: #1db954 !important;
+        }
+        .dark-dropdown .Select-value-label,
+        .dark-dropdown .Select-placeholder {
+            color: #1db954 !important;
+        }
+        .dark-dropdown .Select-menu-outer {
+            background-color: #1e1e1e !important;
+            border: 1px solid #1db954 !important;
+            z-index: 9999 !important;
+        }
+        .dark-dropdown .VirtualizedSelectOption {
+            background-color: #1e1e1e !important;
+            color: #ffffff !important;
+        }
+        .dark-dropdown .VirtualizedSelectFocusedOption {
+            background-color: #1db954 !important;
+            color: #0f141e !important;
+        }
+        @media (max-width: 768px) {
+            .market-badge {
+                flex-wrap: wrap;
+                max-width: 100%;
+                margin-bottom: 4px;
+            }
+            .chart-header {
+                gap: 6px;
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                padding: 10px !important;
+            }
+        }
         </style>
     </head>
     <body>
-        {{%app_entry%}}
-        <footer>
-            {{%config%}}
-            {{%scripts%}}
-            {{%renderer%}}
-        </footer>
+        {%app_entry%}
+        <div>
+            {%config%}
+            {%scripts%}
+            {%renderer%}
+        </div>
     </body>
 </html>
 '''
@@ -1726,7 +1693,7 @@ def update_market_labels(markets):
 def update_year_badges(year):
     if not year or year == "ALL":
         hidden = {'display': 'none'}
-        return None, None, hidden, hidden
+        return "", "", hidden, hidden
     shown = {
         'display': 'inline-flex',
         'marginLeft': '6px'
