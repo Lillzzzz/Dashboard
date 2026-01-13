@@ -913,15 +913,40 @@ dbc.Tooltip(
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4'),
                     dbc.Col([
                         html.Div([
-                            html.Div("WACHSTUMS-MOMENTUM", className='kpi-label'),
-                            html.Div(id='kpi-growth', className='kpi-value', title="Index relativ zu 2017, 100 = gleichbleibend"),
-                            html.Div([
-                                "Index für Marktwachstum. ",
-                                html.Strong(">100"), " = überdurchschnittliches Wachstum. ",
-                                html.Strong("<100"), " = unterdurchschnittlich. ",
-                                html.Strong("100"), " = Durchschnitt."
-                            ], className='kpi-desc')
-                        ], className='kpi-card')
+    html.Div([
+        "WACHSTUMS-MOMENTUM ",
+        html.I(
+            "ⓘ",
+            id="growth-info",
+            style={
+                'fontSize': '14px',
+                'color': '#1DB954',
+                'cursor': 'help',
+                'marginLeft': '4px'
+            }
+        )
+    ], className='kpi-label'),
+
+    dbc.Tooltip(
+        "Index für die Marktentwicklung im Zeitverlauf (Basisjahr = 2017 = 100). "
+        "Werte >100 bedeuten überdurchschnittliches Wachstum, "
+        "Werte <100 zeigen Marktschwäche oder Rückgang. "
+        "Der Index ist ein relatives Vergleichsmaß und zeigt Trends, "
+        "keine absoluten Streaming-Zahlen.",
+        target="growth-info",
+        placement="right"
+    ),
+
+    html.Div(id='kpi-growth', className='kpi-value'),
+
+    html.Div([
+        "Index für Marktwachstum. ",
+        html.Strong(">100"), " = überdurchschnittliches Wachstum. ",
+        html.Strong("<100"), " = unterdurchschnittlich. ",
+        html.Strong("100"), " = Durchschnitt."
+    ], className='kpi-desc')
+], className='kpi-card')
+
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4'),
                     dbc.Col([
                         html.Div([
@@ -958,13 +983,38 @@ dbc.Tooltip(
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4'),
                     dbc.Col([
                         html.Div([
-                            html.Div("TOP GENRE", className='kpi-label'),
-                            html.Div(id='kpi-genre', className='kpi-value', style={'fontSize': '24px'}, title="Genre mit höchstem mittleren Marktanteil"),
-                            html.Div([
-                                "Dominantes Genre mit größtem Marktanteil. ",
-                                "Zeigt aktuelle Präferenzen und Portfolio-Fokus des Marktes."
-                            ], className='kpi-desc')
-                        ], className='kpi-card')
+    html.Div([
+        "TOP GENRE ",
+        html.I(
+            "ⓘ",
+            id="topgenre-info",
+            style={
+                'fontSize': '14px',
+                'color': '#1DB954',
+                'cursor': 'help',
+                'marginLeft': '4px'
+            }
+        )
+    ], className='kpi-label'),
+
+    dbc.Tooltip(
+        "Genre mit dem höchsten durchschnittlichen Marktanteil "
+        "im ausgewählten Markt und Zeitraum (historische Daten 2017–2021). "
+        "Das Top-Genre zeigt aktuelle Präferenzen des Marktes, "
+        "bedeutet jedoch nicht automatisch das höchste Wachstum oder "
+        "die beste Zukunftsperformance.",
+        target="topgenre-info",
+        placement="right"
+    ),
+
+    html.Div(id='kpi-genre', className='kpi-value', style={'fontSize': '24px'}),
+
+    html.Div([
+        "Dominantes Genre mit größtem Marktanteil. ",
+        "Zeigt aktuelle Präferenzen und Portfolio-Fokus des Marktes."
+    ], className='kpi-desc')
+], className='kpi-card')
+
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4')
                 ], className='mb-4', style={'padding': '8px', 'background': 'rgba(29,185,84,0.03)', 'borderRadius': '12px', 'border': '1px solid rgba(29,185,84,0.15)'}),
                 
@@ -1685,9 +1735,9 @@ def update_correlation(markets):
             )
             return fig
 
-        corr = df[audio_cols].corr()
+                corr = df[audio_cols].corr()
 
-    # Kürzere Labels für bessere Lesbarkeit
+        # Kürzere Labels für bessere Lesbarkeit
         label_map = {
             "danceability": "Dance",
             "energy": "Energy",
@@ -1699,6 +1749,7 @@ def update_correlation(markets):
             "liveness": "Live"
         }
         corr = corr.rename(index=label_map, columns=label_map)
+
 
 
         # Markt-spezifische Farbskala
@@ -1838,19 +1889,20 @@ def update_audio_scatter(markets):
         fig.update_xaxes(title='Tanzbarkeit (0–1)')
         fig.update_yaxes(title='Energie (0–1)')
         
-# --- Top-3 als Text unter dem Chart (statt im Plot zu überlappen) ---
-top3 = df_sample.nlargest(3, 'success_score')
-top_lines = []
+        # --- Top-3 als Text unter dem Chart (statt im Plot zu überlappen) ---
+        top3 = df_sample.nlargest(3, 'success_score')
+        top_lines = []
 
-for _, r in top3.iterrows():
-    name = str(r.get('track_name', r.get('title', 'Unknown')))
-    artist = str(r.get('artist', 'Unknown'))
-    score = float(r.get('success_score', 0))
-    top_lines.append(f"{artist} – {name} (Score {score:.0f})")
+        for _, r in top3.iterrows():
+            name = str(r.get('track_name', r.get('title', 'Unknown')))
+            artist = str(r.get('artist', 'Unknown'))
+            score = float(r.get('success_score', 0))
+            top_lines.append(f"{artist} – {name} (Score {score:.0f})")
 
-top_text = "Top-3 nach Success Score (Sample): " + " | ".join(top_lines)
+        top_text = "Top-3 nach Success Score (Sample): " + " | ".join(top_lines)
 
-return fig, top_text
+        return fig, top_text
+
 
 
 
