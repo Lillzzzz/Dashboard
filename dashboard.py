@@ -1734,8 +1734,8 @@ def update_correlation(markets):
                 height=400
             )
             return fig
+        corr = df[audio_cols].corr()
 
-                corr = df[audio_cols].corr()
 
         # Kürzere Labels für bessere Lesbarkeit
         label_map = {
