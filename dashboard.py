@@ -618,11 +618,15 @@ app.index_string = '''
   padding: 0 !important;
 }
 
-.kpi-scope-segment input[type="radio"] {
+.kpi-scope-segment .form-check-input {
   position: absolute;
   opacity: 0;
-  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: auto;
 }
+
 
 .kpi-scope-segment label {
   display: flex !important;
@@ -650,19 +654,13 @@ app.index_string = '''
 
 
 /* active */
-.kpi-scope-segment input[type="radio"]:checked + label {
+.kpi-scope-segment .form-check-input:checked + .form-check-label {
   background: rgba(29,185,84,0.18);
   color: #1DB954;
   border: 1px solid rgba(29,185,84,0.55);
   box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
 }
 
-/* ===== Mobile KPI Switch (dbc.Switch) styled like slider ===== */
-.toggle-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 
 /* kill default spacing */
 .toggle-switch .form-check {
@@ -719,46 +717,48 @@ app.index_string = '''
 }
 
 
-.dark-dropdown .Select-control {{
+.dark-dropdown .Select-control {
     background-color: #1e1e1e !important;
     border: 1px solid #1db954 !important;
     color: #1db954 !important;
-}}
+}
 .dark-dropdown .Select-value-label,
-.dark-dropdown .Select-placeholder {{
+.dark-dropdown .Select-placeholder {
     color: #1db954 !important;
-}}
-.dark-dropdown .Select-menu-outer {{
+}
+.dark-dropdown .Select-menu-outer {
     background-color: #1e1e1e !important;
     border: 1px solid #1db954 !important;
     z-index: 9999 !important;
-}}
-.dark-dropdown .VirtualizedSelectOption {{
+}
+.dark-dropdown .VirtualizedSelectOption {
     background-color: #1e1e1e !important;
     color: #ffffff !important;
-}}
-.dark-dropdown .VirtualizedSelectFocusedOption {{
+}
+.dark-dropdown .VirtualizedSelectFocusedOption {
     background-color: #1db954 !important;
     color: #0f141e !important;
-}}
-@media (max-width: 768px) {{
-    .market-badge {{
+}
+
+@media (max-width: 768px) {
+    .market-badge {
         flex-wrap: wrap;
         max-width: 100%;
         margin-bottom: 4px;
-    }}
-    .chart-header {{
+    }
+    .chart-header {
         gap: 6px;
         flex-direction: column;
         align-items: flex-start !important;
-    }}
-    .sidebar {{
+    }
+    .sidebar {
         display: none;
-    }}
-    .main-content {{
+    }
+    .main-content {
         padding: 10px !important;
-    }}
-}}
+    }
+}
+
 
 
         </style>
