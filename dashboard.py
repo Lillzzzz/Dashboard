@@ -1206,7 +1206,7 @@ html.Div([
                         " – Konfiguration über ",
                         html.Code("config.json", style={'color': '#1DB954'}),
                         " (Basis: historische Analyse 2017–2021). ",
-                        "Methodische Hinweise: Kennzahlen sind als vergleichende Marktindikatoren zu verstehen und ersetzen kein detailliertes A&R-Listening."
+                        "Methodische Hinweise: Kennzahlen sind als vergleichende Marktindikatoren zu verstehen."
                     ],
                     style={
                         'color': '#95a5a6',
@@ -1808,6 +1808,27 @@ def update_audio_scatter(markets):
             align='left'
         )
 
+                # --- Top-3 Tracks (nach Success Score) annotieren ---
+        # robust: nimmt track_name oder title, fallback "Unknown"
+        top3 = df_sample.nlargest(3, 'success_score')
+
+        for _, r in top3.iterrows():
+            name = r.get('track_name', None)
+            if name is None or str(name).strip() == "":
+                name = r.get('title', "Unknown")
+            name = str(name)[:22]
+
+            fig.add_annotation(
+                x=float(r['danceability']),
+                y=float(r['energy']),
+                text=f"<b>{name}</b><br>Score: {float(r['success_score']):.0f}",
+                showarrow=True,
+                arrowhead=2,
+                ax=35,
+                ay=-35
+            )
+
+        
         fig.update_layout(create_plotly_theme())
         fig.update_xaxes(title='Tanzbarkeit (0–1)')
         fig.update_yaxes(title='Energie (0–1)')
