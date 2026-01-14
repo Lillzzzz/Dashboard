@@ -1521,16 +1521,17 @@ def update_live_timestamps(n):
     return f"Stand: {ts}", f"Stand: {ts}"
 
 @app.callback(
-    [Output('selected-markets', 'data'),
-     Output('btn-all', 'className'),
-     Output('btn-de', 'className'),
-     Output('btn-uk', 'className'),
-     Output('btn-br', 'className')],
+    [Output('selected-markets', 'data', allow_duplicate=True),
+     Output('btn-all', 'className', allow_duplicate=True),
+     Output('btn-de', 'className', allow_duplicate=True),
+     Output('btn-uk', 'className', allow_duplicate=True),
+     Output('btn-br', 'className', allow_duplicate=True)],
     [Input('btn-all', 'n_clicks'),
      Input('btn-de', 'n_clicks'),
      Input('btn-uk', 'n_clicks'),
      Input('btn-br', 'n_clicks')],
-    [State('selected-markets', 'data')]
+    [State('selected-markets', 'data')],
+    prevent_initial_call=True
 )
 def update_market_selection(n_all, n_de, n_uk, n_br, current_markets):
     try:
