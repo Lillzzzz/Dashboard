@@ -656,15 +656,21 @@ app.index_string = '''
           display: none !important;
         }
         .toggle-switch .form-check-input {
-          width: 56px !important;
-          height: 30px !important;
-          border-radius: 999px !important;
-          background-color: rgba(127,127,127,0.25) !important;
-          border: 1px solid rgba(255,255,255,0.12) !important;
-          cursor: pointer;
-          margin: 0 !important;
-          box-shadow: none !important;
-        }
+  position: relative;   /* ✅ WICHTIG: damit ::before nicht “an die Seite” springt */
+  width: 56px !important;
+  height: 30px !important;
+  border-radius: 999px !important;
+  background-color: rgba(127,127,127,0.25) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  cursor: pointer;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+        .toggle-switch .form-check-input {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
         .toggle-switch .form-check-input::before {
           content: "";
           position: absolute;
@@ -1494,7 +1500,7 @@ def update_api_status(n):
     [Output("kpi-scope-toggle", "value", allow_duplicate=True),
      Output("kpi-scope-toggle-label", "children")],
     Input("kpi-scope", "value"),
-    prevent_initial_call="initial_duplicate"
+    prevent_initial_call=True  # ← FIX
 )
 def kpi_scope_to_mobile_toggle(scope):
     is_global = (scope == "GLOBAL")
