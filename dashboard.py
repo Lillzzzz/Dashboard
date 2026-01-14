@@ -652,6 +652,29 @@ app.index_string = '''
           padding: 0 !important;
           min-height: 0 !important;
         }
+        .toggle-row{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  margin-left:0 !important;
+  padding-left:0 !important;
+}
+
+.toggle-switch{
+  margin-left:0 !important;
+  padding-left:0 !important;
+}
+
+.kpi-scope-help{
+  color:#5A6169;
+  font-size:10px;
+  font-style:italic;
+  margin-top:6px;
+  margin-bottom:0;
+  line-height:1.4;
+}
+
         .toggle-switch label {
           display: none !important;
         }
@@ -815,10 +838,11 @@ app.layout = dbc.Container([
                         "gezielt analysieren und marktspezifische Trends identifizieren."
                     ], style={'fontSize': '11px', 'color': '#7F8C8D', 'marginBottom': '16px', 'lineHeight': '1.6'}),
                     
-                    dbc.Button("ALLE MÄRKTE", id='btn-all', className='market-button', n_clicks=0),
+dbc.Button("ALLE MÄRKTE", id='btn-all', className='market-button active', n_clicks=0),
 dbc.Button("DEUTSCHLAND", id='btn-de', className='market-button', n_clicks=0),
 dbc.Button("UK", id='btn-uk', className='market-button', n_clicks=0),
 dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0),
+
 
 # ✅ KPI Toggle (neu)
 html.H4("KPI ANSICHT", className='filter-title', style={'marginTop': '18px'}),
@@ -956,7 +980,7 @@ html.Div([
     }
 ),
 
-                    html.Div(
+                 html.Div(
     [
         html.Div("KPI Ansicht", style={
             "color": "#1DB954",
@@ -967,19 +991,24 @@ html.Div([
 
         html.Div(
             [
-              dbc.Switch(
-                id="kpi-scope-toggle",
-                value=False,              # False = FILTERED, True = GLOBAL
-                className="toggle-switch"
+                dbc.Switch(
+                    id="kpi-scope-toggle",
+                    value=False,  # False = FILTERED, True = GLOBAL
+                    className="toggle-switch"
                 ),
-
-                html.Div("Gefiltert", id="kpi-scope-toggle-label", className="toggle-text")
+                html.Div(id="kpi-scope-toggle-label", className="toggle-text")
             ],
             className="toggle-row"
+        ),
+
+        html.P(
+            "Gefiltert: KPIs folgen der Marktauswahl. Global: KPIs zeigen Gesamtmarkt.",
+            className="kpi-scope-help"
         )
     ],
     style={"marginTop": "12px"}
 ),
+
 
                 ], className='d-block d-md-none', style={
                     'background': 'rgba(15,20,30,0.9)',
@@ -1495,16 +1524,33 @@ def update_api_status(n):
 
 
 
+from dash import no_update
 
 @app.callback(
-    [Output("kpi-scope-toggle", "value", allow_duplicate=True),
-     Output("kpi-scope-toggle-label", "children")],
+    Output("kpi-scope", "value"),
+    Output("kpi-scope-toggle", "value"),
+    Output("kpi-scope-toggle-label", "children"),
+    Input("kpi-scope-toggle", "value"),
     Input("kpi-scope", "value"),
-    prevent_initial_call=True  # ← FIX
 )
-def kpi_scope_to_mobile_toggle(scope):
-    is_global = (scope == "GLOBAL")
-    return is_global, ("Global" if is_global else "Gefiltert")
+def sync_kpi_scope(mobile_is_global, desktop_scope):
+    trigger = ctx.triggered_id
+
+    # Wenn der Mobile-Switch bewegt wird → setze Scope
+    if trigger == "kpi-scope-toggle":
+        scope = "GLOBAL" if mobile_is_global else "FILTERED"
+        return scope, mobile_is_global, ("Global" if mobile_is_global else "Gefiltert")
+
+    # Wenn Desktop-Radio geändert wird → setze Mobile-Switch + Label
+    if trigger == "kpi-scope":
+        is_global = (desktop_scope == "GLOBAL")
+        return desktop_scope, is_global, ("Global" if is_global else "Gefiltert")
+
+    # Initialer Fallback
+    is_global = (desktop_scope == "GLOBAL")
+    return desktop_scope, is_global, ("Global" if is_global else "Gefiltert")
+
+
 
 
 
