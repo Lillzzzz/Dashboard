@@ -1572,18 +1572,6 @@ def update_market_selection(n_all, n_de, n_uk, n_br, current_markets):
         return ['DE', 'UK', 'BR'], 'market-button active', 'market-button', 'market-button', 'market-button'
 
 
-@app.callback(
-    Output('market-dropdown-mobile', 'value'),
-    Input('selected-markets', 'data'),
-    prevent_initial_call=False
-)
-def sync_mobile_market_dropdown(markets):
-    if not markets or set(markets) == {'DE', 'UK', 'BR'}:
-        return 'ALL'
-    if len(markets) == 1:
-        return markets[0]
-    # Mobile Dropdown kann keine 2 Märkte darstellen → fallback
-    return 'ALL'
 
 
 
