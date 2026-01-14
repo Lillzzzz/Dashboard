@@ -1487,13 +1487,7 @@ def update_api_status(n):
         return "Verbindung unterbrochen"
 
 
-@app.callback(
-    Output("kpi-scope", "value", allow_duplicate=True),
-    Input("kpi-scope-toggle", "value"),
-    prevent_initial_call=True
-)
-def mobile_toggle_to_kpi_scope(is_global):
-    return "GLOBAL" if is_global else "FILTERED"
+
 
 
 @app.callback(
