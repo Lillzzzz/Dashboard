@@ -1227,11 +1227,28 @@ dbc.Tooltip(
                                 id="loading-correlation",
                                 type="circle",
                                 color="#1DB954",
-                                children=dcc.Graph(id='chart-correlation', config={'displayModeBar': False}, style={'height': '400px', 'width': '100%'})
+                                children=dcc.Graph(
+                                    id='chart-correlation',
+                                    config={'displayModeBar': False},
+                                    style={'height': '400px', 'width': '100%'}
+                                )
+                            ),
+
+        
+                            html.P(
+                                "Hinweis: Korrelationen beschreiben statistische Zusammenhänge ",
+                                
+                                style={
+                                    'fontSize': '10px',
+                                    'color': '#7F8C8D',
+                                    'fontStyle': 'italic',
+                                    'marginTop': '6px',
+                                    'marginBottom': '0'
+                                }
                             )
+
                         ], className='chart-card')
-                    ], xl=6, lg=6, md=12, className='mb-4')
-                ], className='mb-4'),
+                    ], xl=6, lg=6, md=12, className='mb-4'),
                 
                 # Row 2: Audio Scatter + Market Trends
                 dbc.Row([
