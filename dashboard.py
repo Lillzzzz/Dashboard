@@ -30,7 +30,6 @@ from functools import lru_cache
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
-
 # .env zuerst laden, dann Variablen lesen
 load_dotenv()
 
@@ -52,9 +51,6 @@ except Exception:
 
 
 
-logging.basicConfig(level=logging.INFO)
-
-load_dotenv()
 
 # CSV von GitHub Release laden falls lokal nicht vorhanden
 
@@ -147,6 +143,11 @@ if missing_files:
     for file in missing_files:
         print(file)
     print("Dashboard startet ohne diese Daten.\n")
+
+kpi_df = pd.DataFrame()
+enhanced_df = pd.DataFrame()
+highpot_df = pd.DataFrame()
+market_trends_df = None
 
 try:
     print("Lade Daten...")
@@ -441,11 +442,13 @@ class SpotifyAPI:
                     response = requests.get(url, headers=headers, timeout=10)
             
             if response.status_code == 429:
-                import time
                 retry_after = int(response.headers.get('Retry-After', RATE_LIMIT_WAIT))
-                time.sleep(retry_after)
-                return self.get_featured_tracks(market, limit)
-            
+                logging.warning(
+                    f"Spotify Rate Limit ({api_market}), retry-after={retry_after}s. "
+                    "Returning empty list (non-blocking)."
+                )
+                return []
+                
             if response.status_code != 200:
                 print(f"API Error {api_market}: Status {response.status_code}")
                 return []
@@ -1536,17 +1539,22 @@ from dash import no_update
 def sync_kpi_scope(mobile_is_global, desktop_scope):
     trigger = ctx.triggered_id
 
-    # Wenn der Mobile-Switch bewegt wird → setze Scope
+    if not ctx.triggered:
+        # Initialer Aufruf
+        is_global = (desktop_scope == "GLOBAL")
+        return desktop_scope, is_global, ("Global" if is_global else "Gefiltert")
+    
+    # Wenn der Mobile-Switch bewegt wird
     if trigger == "kpi-scope-toggle":
         scope = "GLOBAL" if mobile_is_global else "FILTERED"
         return scope, mobile_is_global, ("Global" if mobile_is_global else "Gefiltert")
-
-    # Wenn Desktop-Radio geändert wird → setze Mobile-Switch + Label
+    
+    # Wenn Desktop-Radio geändert wird
     if trigger == "kpi-scope":
         is_global = (desktop_scope == "GLOBAL")
         return desktop_scope, is_global, ("Global" if is_global else "Gefiltert")
-
-    # Initialer Fallback
+    
+    # Fallback
     is_global = (desktop_scope == "GLOBAL")
     return desktop_scope, is_global, ("Global" if is_global else "Gefiltert")
 
