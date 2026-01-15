@@ -19,8 +19,6 @@ import numpy as np
 from pathlib import Path
 import requests
 import base64
-import io
-import sys
 import os
 from dotenv import load_dotenv
 import json
@@ -639,31 +637,18 @@ app.index_string = '''
           user-select: none;
           white-space: nowrap;
         }
-        .kpi-scope-segment label:has(input[type="radio"]:checked) {
-          background: rgba(29,185,84,0.18);
-          color: #1DB954;
-          border: 1px solid rgba(29,185,84,0.55);
-          box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
-        }
         .kpi-scope-segment .form-check-input:checked + .form-check-label {
-          background: rgba(29,185,84,0.18);
-          color: #1DB954;
-          border: 1px solid rgba(29,185,84,0.55);
-          box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
-        }
+  background: rgba(29,185,84,0.18);
+  color: #1DB954;
+  border: 1px solid rgba(29,185,84,0.55);
+  box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
+}
         .toggle-switch .form-check {
           margin: 0 !important;
           padding: 0 !important;
           min-height: 0 !important;
         }
-        .toggle-row{
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:10px;
-  margin-left:0 !important;
-  padding-left:0 !important;
-}
+   
 
 .toggle-switch{
   margin-left:0 !important;
@@ -1518,7 +1503,7 @@ def update_api_status(n):
         result = []
         for i, part in enumerate(status_parts):
             if i > 0:
-                result.append(" | ")
+                result.append(html.Span(" | "))
             result.append(part)
         
         return result
@@ -1593,7 +1578,7 @@ def update_market_selection(n_all, n_de, n_uk, n_br, current_markets):
         if not ctx.triggered:
             return ['DE', 'UK', 'BR'], 'market-button active', 'market-button', 'market-button', 'market-button'
         
-        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+        button_id = ctx.triggered_id
         
         if button_id == 'btn-all':
             markets = ['DE', 'UK', 'BR']
@@ -1908,7 +1893,17 @@ def update_correlation(markets):
     try:
         df = enhanced_df[enhanced_df['market'].isin(markets)] if set(markets) != {'DE', 'UK', 'BR'} else enhanced_df
 
-        audio_cols = [
+        if df is None or df.empty:
+            fig = go.Figure()
+            fig.update_layout(
+                template="plotly_dark",
+                paper_bgcolor='rgba(0,0,0,0)',
+                annotations=[dict(text="Keine Daten verfügbar", showarrow=False, x=0.5, y=0.5, font=dict(size=16, color="#1DB954"))],
+                height=400
+            )
+            return fig
+
+        audio_cols = [...]
             'energy', 'danceability', 'valence',
             'tempo',
             'acousticness', 'instrumentalness',
@@ -2391,7 +2386,17 @@ def update_highpot_table(markets):
 def update_success_hist(markets):
     try:
         df = enhanced_df[enhanced_df['market'].isin(markets)] if set(markets) != {'DE', 'UK', 'BR'} else enhanced_df
-        
+
+        if df is None or df.empty or "success_score" not in df.columns:
+            fig = go.Figure()
+            fig.update_layout(
+                template="plotly_dark",
+                paper_bgcolor='rgba(0,0,0,0)',
+                annotations=[dict(text="Keine Success-Score Daten verfügbar", showarrow=False, x=0.5, y=0.5, font=dict(size=14, color="#F39C12"))],
+                height=400
+            )
+            return fig
+
         median = df['success_score'].median()
         colors = get_market_colors()
         
@@ -2589,9 +2594,12 @@ def update_genre_deviation(markets, n_intervals):
         
         current_tracks = []
         for m in markets:
-            spotify_tracks = spotify_api.get_featured_tracks(m, 10) or []  # reduziert von 20
+            spotify_tracks = spotify_api.get_featured_tracks(m, 10) or []
+            if not spotify_tracks:
+                # Fallback-Format passt (name/artist/weight wird unten gesetzt)
+                spotify_tracks = safe_fetch_spotify() or []
             current_tracks.extend(spotify_tracks)
-        
+            
         for m in markets:
             country = LASTFM_COUNTRY_MAP.get(m)
             if country:
