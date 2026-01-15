@@ -780,13 +780,15 @@ app.layout = dbc.Container([
                     html.Div([
                         
                         html.Div([
-                            html.H3("SPOTIFY", style={
-                                'color': '#1DB954',
-                                'marginBottom': '2px',
-                                'fontWeight': '900',
-                                'fontSize': '26px',
-                                'letterSpacing': '2px'
-                            }),
+                            html.Img(
+                                src="https://cdn.dribbble.com/userupload/21518263/file/original-8953c5cfc4bf26578308d60adb6069e6.gif",
+                                style={
+                                    'width': '120px',
+                                    'height': 'auto',
+                                    'marginBottom': '10px',
+                                    'display': 'block'
+                                }
+                            ),
                             html.Div(style={
                                 'width': '60px',
                                 'height': '3px',
