@@ -1998,6 +1998,24 @@ def update_audio_scatter(markets):
     try:
         df = enhanced_df[enhanced_df['market'].isin(markets)] if set(markets) != {'DE', 'UK', 'BR'} else enhanced_df
 
+        if df is None or df.empty:
+            return go.Figure(), ""
+
+        required = {"danceability", "energy", "market", "success_score"}
+        missing = required - set(df.columns)
+        if missing:
+            fig = go.Figure()
+            fig.update_layout(
+                template="plotly_dark",
+                paper_bgcolor="rgba(0,0,0,0)",
+                annotations=[dict(
+                    text=f"Fehlende Spalten: {', '.join(sorted(missing))}",
+                    showarrow=False, x=0.5, y=0.5
+                )],
+                height=400
+            )
+            return fig, ""
+
         # Reproduzierbares Sampling
         df_sample = df.sample(min(1000, len(df)), random_state=42).copy()
 
