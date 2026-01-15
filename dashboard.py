@@ -1903,7 +1903,7 @@ def update_correlation(markets):
             )
             return fig
 
-        audio_cols = [...]
+         audio_cols = [
             'energy', 'danceability', 'valence',
             'tempo',
             'acousticness', 'instrumentalness',
