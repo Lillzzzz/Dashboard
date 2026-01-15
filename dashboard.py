@@ -1893,26 +1893,35 @@ def update_correlation(markets):
     Erstellt Korrelations-Heatmap für Audio-Features.
     """
     try:
-        df = enhanced_df[enhanced_df['market'].isin(markets)] if set(markets) != {'DE', 'UK', 'BR'} else enhanced_df
+        df = (
+            enhanced_df[enhanced_df['market'].isin(markets)]
+            if set(markets) != {'DE', 'UK', 'BR'}
+            else enhanced_df
+        )
 
         if df is None or df.empty:
             fig = go.Figure()
             fig.update_layout(
                 template="plotly_dark",
                 paper_bgcolor='rgba(0,0,0,0)',
-                annotations=[dict(text="Keine Daten verfügbar", showarrow=False, x=0.5, y=0.5, font=dict(size=16, color="#1DB954"))],
+                annotations=[dict(
+                    text="Keine Daten verfügbar",
+                    showarrow=False,
+                    x=0.5,
+                    y=0.5,
+                    font=dict(size=16, color="#1DB954")
+                )],
                 height=400
             )
             return fig
 
-         audio_cols = [
+        audio_cols = [
             'energy', 'danceability', 'valence',
             'tempo',
             'acousticness', 'instrumentalness',
             'speechiness', 'liveness'
         ]
 
-        # Safety: falls Spalten fehlen
         missing = [c for c in audio_cols if c not in df.columns]
         if missing:
             fig = go.Figure()
@@ -1921,15 +1930,17 @@ def update_correlation(markets):
                 paper_bgcolor='rgba(0,0,0,0)',
                 annotations=[dict(
                     text=f"Fehlende Audio-Feature Spalten: {', '.join(missing)}",
-                    showarrow=False, x=0.5, y=0.5, font=dict(size=14, color="#F39C12")
+                    showarrow=False,
+                    x=0.5,
+                    y=0.5,
+                    font=dict(size=14, color="#F39C12")
                 )],
                 height=400
             )
             return fig
+
         corr = df[audio_cols].corr()
 
-
-        # Kürzere Labels für bessere Lesbarkeit
         label_map = {
             "danceability": "Dance",
             "energy": "Energy",
@@ -1941,8 +1952,6 @@ def update_correlation(markets):
             "liveness": "Live"
         }
         corr = corr.rename(index=label_map, columns=label_map)
-
-
 
         # Markt-spezifische Farbskala
         if set(markets) == {'DE'}:
@@ -1983,6 +1992,7 @@ def update_correlation(markets):
             height=400
         )
         return fig
+
 
 
 @app.callback(
