@@ -813,7 +813,15 @@ app.layout = dbc.Container([
                         ])
                     ], style={
                         'padding': '20px',
-                        'background': 'linear-gradient(135deg, rgba(29, 185, 84, 0.08) 0%, rgba(15, 20, 30, 0.95) 100%)',
+                        'background': (
+    'linear-gradient('
+    '135deg, '
+    'rgba(0,0,0,1) 0%, '
+    'rgba(0,0,0,1) 22%, '
+    'rgba(29, 185, 84, 0.08) 45%, '
+    'rgba(15, 20, 30, 0.95) 100%'
+    ')'
+),
                         'borderRadius': '14px',
                         'border': '1px solid rgba(29, 185, 84, 0.25)',
                         'marginBottom': '24px',
