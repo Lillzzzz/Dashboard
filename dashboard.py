@@ -39,33 +39,38 @@ LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 
 # Optional: orjson-Beschleunigung (funktioniert auch ohne)
 try:
-    import plotly.io._json as pio_json  # private Plotly API -> kann fehlen je nach Version
-    try:
-        import orjson
-        pio_json.orjson = orjson
-    except Exception:
-        pio_json.orjson = None
+    import orjson  # noqa: F401
+    import plotly.io as pio
+    # Plotly-Versionen unterscheiden sich leicht -> defensiv prüfen
+    if hasattr(pio, "json") and hasattr(pio.json, "config"):
+        pio.json.config.default_engine = "orjson"
 except Exception:
-    # Wenn plotly intern anders ist: einfach ohne orjson weiterlaufen
     pass
 
 
 
 
 # CSV von GitHub Release laden falls lokal nicht vorhanden
+def ensure_enhanced_csv():
+    csv_path = Path('data/spotify_charts_enhanced.csv')
+    if csv_path.exists():
+        return True
 
-csv_path = Path('data/spotify_charts_enhanced.csv')
-if not csv_path.exists():
-    print("Lade spotify_charts_enhanced.csv von GitHub Release...")
+    logging.info("Lade spotify_charts_enhanced.csv von GitHub Release...")
     try:
         url = "https://github.com/Lillzzzz/Dashboard/releases/download/v1.0/spotify_charts_enhanced.csv"
-        response = requests.get(url, timeout=300)
+        response = requests.get(url, timeout=30)
         response.raise_for_status()
         csv_path.parent.mkdir(exist_ok=True)
         csv_path.write_bytes(response.content)
-        print("✅ spotify_charts_enhanced.csv von GitHub Release geladen!")
+        logging.info("✅ spotify_charts_enhanced.csv geladen!")
+        return True
     except Exception as e:
-        print(f"⚠️ Download fehlgeschlagen: {e}")
+        logging.warning(f"⚠️ Download fehlgeschlagen: {e}")
+        return False
+        
+# einmalig versuchen (non-fatal)
+ensure_enhanced_csv()
 
 # Caching für CSV-Daten (beschleunigt Ladevorgänge)
 
@@ -201,7 +206,7 @@ LASTFM_COUNTRY_MAP = {
 class LastFmAPI:
     def __init__(self):
         self.api_key = LASTFM_API_KEY
-        self.base_url = "http://ws.audioscrobbler.com/2.0/"
+        self.base_url = "https://ws.audioscrobbler.com/2.0/"
         self.status = "Verbindung wird hergestellt..."
         self.cache = {}
         self.cache_duration = timedelta(minutes=15)  # 15min cache
@@ -276,22 +281,18 @@ class LastFmAPI:
                 # Rate Limit (429)
                 if resp.status_code == 429:
                     retry_after = int(resp.headers.get('Retry-After', 30))
-                    print(f"Last.fm Rate Limit ({country}), warte {retry_after}s...")
-                    if attempt < max_retries - 1:
-                        time.sleep(retry_after)
-                        continue
-                    else:
-                        print(f"Last.fm Rate Limit überschritten ({country})")
-                        return []
+                    logging.warning(
+                        f"Last.fm Rate Limit ({country}), retry-after={retry_after}s. "
+                        "Returning empty list (non-blocking)."
+                    )
+                    return []
+                        
                 
                 # Server Error (5xx)
                 if 500 <= resp.status_code < 600:
-                    print(f"Last.fm Server Error {resp.status_code} ({country})")
-                    if attempt < max_retries - 1:
-                        time.sleep(5)
-                        continue
-                    else:
-                        return []
+                    logging.warning(f"Last.fm Server Error {resp.status_code} ({country}). Returning empty list.")
+                    return []
+                        
                 
                 # Success
                 if resp.status_code == 200:
@@ -2688,9 +2689,6 @@ def update_genre_deviation(markets, n_intervals):
         return fig, html.Div("Fehler", className="val-pill", style={'background': 'rgba(255, 107, 157, 0.2)', 'color': '#FF6B9D', 'border': '1px solid #FF6B9D'}), ""
 
 # Server-Variable für Render Deployment
-
-# Expose server for Gunicorn
-server = app.server
 
 if __name__ == '__main__':
     print("\nDashboard: http://127.0.0.1:8050")
