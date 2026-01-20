@@ -1,5 +1,7 @@
+Business Intelligence andAnalytics - Dashboard Spotify Performance Insights
+
 Projektübersicht:
-Dieses Dashboard habe ich im Rahmen des Moduls "Business Intelligence & Analytics" entwickelt. Es soll A&R-Manager bei der Bewertung von Musikmärkten unterstützen, indem es Genre-Trends und Audio-Features in drei internationalen Märkten analysiert.
+Dieses Dashboard habe ich im Rahmen des Kurses "Business Intelligence and Analytics" entwickelt. Es soll A&R-Manager bei der Bewertung von Musikmärkten unterstützen, indem es Genre-Trends und Audio-Features in drei internationalen Märkten analysiert.
 
 Live-Dashboard: https://dashboard-d0z8.onrender.com
 
@@ -7,8 +9,8 @@ Live-Dashboard: https://dashboard-d0z8.onrender.com
 Zielsetzung:
 Das Dashboard verfolgt drei konkrete Ziele:
 - Reduktion des manuellen Analyseaufwands durch automatisierte Datenaufbereitung und Visualisierung.
-- Identifikation unterschätzter Genres mit hohem ROI-Potenzial  
-- Reaktionszeit unter 24 Stunden auf virale Trends durch Echtzeit-Datenintegration
+- Identifikation marktspezifischer Genre-Schwerpunkte und Erfolgsmuster zur Unterstützung von A&R- und Marketingentscheidungen.
+- Optionale Kontextualisierung kurzfristiger Streaming-Impulse über Spotify- und Last.fm-APIs (nicht Bestandteil der historischen KPI-Berechnung).
 
 Analysierte Märkte: Deutschland, UK, Brasilien (2017-2021)
 
@@ -109,7 +111,7 @@ Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
 Visualisierungen:
 Das Dashboard enthält acht verschiedene Visualisierungen:
 
-1. Marktanteile und Wachstumsdynamik (Liniendiagramm)
+1. Zeitliche Entwicklung der Marktanteile (Liniendiagramm)
 2. Genre-Diversität nach Shannon-Index  
 3. Korrelation zwischen Audio-Features (Heatmap)
 4. Zusammenhang zwischen Audio-Features und Erfolg (Scatter Plot)
@@ -121,18 +123,16 @@ Das Dashboard enthält acht verschiedene Visualisierungen:
 
 Zentrale Erkenntnisse:
 
-Aus der Analyse ergeben sich mehrere interessante Muster:
+Aus der Analyse ergeben sich mehrere zentrale Muster:
 
-- Tracks mit mittleren Werten bei Danceability und Energy (0,6-0,8) 
-  sind kommerziell am erfolgreichsten
-- Der UK-Markt zeigt die höchste Genre-Diversität
-- In Brasilien wächst Electronic besonders stark
-- Energy und Danceability korrelieren stark positiv (r = 0,74)
-- Die Top 5% der Tracks generieren über 80% aller Streams
+- Die drei betrachteten Märkte (Deutschland, UK, Brasilien) unterscheiden sich deutlich in ihren Genre-Strukturen.
+- Die Shannon-Diversität liegt in allen Märkten im Bereich von ca. 1,27–1,40 und weist auf insgesamt konzentrierte Märkte mit wenigen dominanten Genres hin.
+- Brasilien zeigt im Zeitverlauf einen Aufwärtstrend in den Marktverläufen, während der UK-Markt relativ an Anteil verliert.
+- Audio-Features wie Danceability und Energy zeigen Zusammenhänge mit Erfolg, erklären diesen jedoch nur begrenzt und nicht kausal.
 
 
 Technischer Stack:
-Backend: Python 3.13 mit Pandas und NumPy
+Backend: Python 3.x mit Pandas und NumPy
 Dashboard: Dash 2.18 und Plotly 5.24
 Styling: Custom CSS mit Dash Bootstrap Components  
 Deployment: Render.com mit Gunicorn
