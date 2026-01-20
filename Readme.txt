@@ -106,6 +106,7 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 Die Genre-Standardisierung ist in genre_mapping.json definiert. Beispielsweise werden "hip hop", "rap", "trap" und "deutschrap" alle als "Hip-Hop" klassifiziert.
 
 Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
+Die ETL-Pipeline ist deterministisch implementiert, sodass bei identischen Eingabedaten identische Ausgabe-Dateien erzeugt werden.
 
 
 Visualisierungen:
@@ -152,6 +153,7 @@ Hinweis zur großen Datei: Die spotify_charts_enhanced.csv (309 MB) konnte nicht
 
 
 Reproduzierbarkeit:
+Die folgenden Schritte beziehen sich auf den aktuellen Stand des GitHub-Repositories (Branch: main).
 Das Projekt kann in vier Schritten vollständig reproduziert werden:
 
 1. Repository klonen:
@@ -170,6 +172,8 @@ Das Projekt kann in vier Schritten vollständig reproduziert werden:
    LASTFM_API_KEY=your_lastfm_key
 
    Hinweis: Das Dashboard funktioniert auch ohne API-Keys (Fallback auf lokale Daten).
+   Die Live-API-Komponenten dienen ausschließlich der optionalen Kontextualisierung und sind nicht Bestandteil der historischen Analyse oder der KPI-Berechnung.
+
 
 4. Dashboard starten:
    python dashboard.py
