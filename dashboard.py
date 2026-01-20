@@ -1,5 +1,6 @@
 """
-SPOTIFY A&R Business Intelligence Dashboard
+Business Intelligence andAnalytics - Dashboard Spotify Performance Insights
+Lilly C. - M.A.BusinessManagement
 """
 
 
@@ -774,7 +775,7 @@ app.layout = dbc.Container([
                     html.Div([
                         
                         html.Div([
-                            html.H3("SPOTIFY", style={
+                            html.H3("DASHBOARD", style={
                                 'color': '#1DB954',
                                 'marginBottom': '2px',
                                 'fontWeight': '900',
@@ -795,12 +796,14 @@ app.layout = dbc.Container([
                                 'fontWeight': '500',
                                 'letterSpacing': '0.5px'
                             }),
-                            html.P("Marktanalyse für datenbasierte Artist & Repertoire-Entscheidungen. Analysiert Genre-Performance, Audio-Charakteristiken und High-Potential Tracks über Deutschland, UK und Brasilien.", style={
-                                'color': '#5A6169',
-                                'fontSize': '10px',
+                            html.P("Datenbasierte Markt- und Erfolgsanalyse zur Unterstützung strategischer A&R-Entscheidungen. "
+                                    "Untersucht Genre-Marktanteile, Erfolgskennzahlen, Audio-Charakteristiken sowie High-Potential-Tracks "
+                                    "in den Märkten Deutschland, Vereinigtes Königreich und Brasilien.", style={
+                                'color': '#7F8C8D',
+                                'fontSize': '11px',
                                 'fontStyle': 'italic',
                                 'marginBottom': '0',
-                                'lineHeight': '1.5'
+                                'lineHeight': '1.6'
                             })
                         ])
                     ], style={
@@ -922,12 +925,14 @@ html.Div([
             html.Div([
                 # Header
                 html.Div([
-                    html.H1("SPOTIFY A&R MARKET INTELLIGENCE", className='header-title'),
+                    html.H1("Spotify Performance Insights", className='header-title'),
                     html.P([
-                        "Dieses Dashboard kombiniert historische Musikmarkt-Analysen (2017–2021) mit ",
-                        "Live-Daten aus Spotify und Last.fm, um Markttrends, Erfolgsfaktoren und ",
-                        "aktuelle Streaming-Bewegungen in Echtzeit zu visualisieren."
-                    ], style={'fontSize': '13px', 'color': '#B3B3B3', 'fontStyle': 'italic', 'marginTop': '8px', 'lineHeight': '1.6'})
+                        "Dieses interaktive Business-Intelligence-Dashboard analysiert internationale ",
+    "Musikmärkte auf Basis historischer Spotify-Daten (2017–2021) und ergänzt diese ",
+    "optional um aktuelle Streaming-Impulse aus Spotify- und Last.fm-APIs. Ziel ist ",
+    "die transparente Visualisierung von Marktstrukturen, Genre-Dynamiken und ",
+    "Erfolgsmustern zur Unterstützung datenbasierter A&R- und Marketingentscheidungen."
+                    ], style={'fontSize': '13px', 'color': '#7F8C8D', 'fontStyle': 'italic', 'marginTop': '8px', 'lineHeight': '1.6'})
                 ], className='header-section'),
                 
                 
@@ -997,7 +1002,10 @@ html.Div([
             className="kpi-scope-help"
         )
     ],
-    style={"marginTop": "12px"}
+    style={
+    "marginTop": "12px",
+    "color": "#7F8C8D"
+}
 ),
 
 
@@ -1427,14 +1435,12 @@ html.Div(id='audio-toptracks-text', style={
             html.Div([
                 html.Small(
                     [
-                        "Quelle: Spotify & Last.fm APIs – aggregierte, historische Auswertung. ",
-                        "Datenstand siehe ",
-                        html.Code("data/data_journal.csv", style={'color': '#1DB954'}),
-                        " – Konfiguration über ",
-                        html.Code("config.json", style={'color': '#1DB954'}),
-                        " (Basis: historische Analyse 2017–2021). ",
-                        "Methodische Hinweise: Kennzahlen sind als vergleichende Marktindikatoren zu verstehen."
-                    ],
+        "Datenbasis (Historie): Spotify Charts & Spotify Audio Features (2017–2021, DE/UK/BR). ",
+        "Optional: Live-Kontext über Spotify Web API und Last.fm (nicht Teil der historischen KPI-Berechnung). ",
+        "Datenstand und ETL-Prozess siehe ",
+        html.Code("data/data_journal.csv", style={'color': '#1DB954'}),
+        ". Methodische Hinweise: Kennzahlen sind als vergleichende Marktindikatoren zu verstehen."
+    ],
                     style={
                         'color': '#95a5a6',
                         'fontSize': '11px',
@@ -1446,9 +1452,9 @@ html.Div(id='audio-toptracks-text', style={
                     }
                 ),
                 html.Div([
-                    html.Span("Platform Bias: Nur Spotify", style={'backgroundColor': '#2C3E50', 'color': '#BDC3C7', 'padding': '3px 8px', 'borderRadius': '12px', 'fontSize': '9px', 'marginRight': '6px'}),
-                    html.Span("Temporal Scope: 2017-2021", style={'backgroundColor': '#2C3E50', 'color': '#BDC3C7', 'padding': '3px 8px', 'borderRadius': '12px', 'fontSize': '9px', 'marginRight': '6px'}),
-                    html.Span("Genre Prediction: Keyword-based", style={'backgroundColor': '#2C3E50', 'color': '#BDC3C7', 'padding': '3px 8px', 'borderRadius': '12px', 'fontSize': '9px'})
+                    html.Span("Historie: Spotify-basiert", style={'backgroundColor': '#2C3E50', 'color': '#BDC3C7', 'padding': '3px 8px', 'borderRadius': '12px', 'fontSize': '9px', 'marginRight': '6px'}),
+                    html.Span("Zeitraum: 2017–2021", style={'backgroundColor': '#2C3E50', 'color': '#BDC3C7', 'padding': '3px 8px', 'borderRadius': '12px', 'fontSize': '9px', 'marginRight': '6px'}),
+                    html.Span("Live: Spotify + Last.fm", style={'backgroundColor': '#2C3E50', 'color': '#BDC3C7', 'padding': '3px 8px', 'borderRadius': '12px', 'fontSize': '9px'})
                 ], style={'textAlign': 'center', 'paddingBottom': '15px'})
             ])
         ], width=12)
