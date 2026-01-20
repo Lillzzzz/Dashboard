@@ -1052,7 +1052,6 @@ dbc.Tooltip(
     "Misst Genre-Vielfalt (Shannon). ",
     html.Strong("Höher"), " = vielfältiger Markt, ",
     html.Strong("niedriger"), " = stärker konzentriert. ",
-    "Im Datensatz liegen die Werte typischerweise um ~1.3–1.4."
 ], className='kpi-desc')
 
                         ], className='kpi-card')
