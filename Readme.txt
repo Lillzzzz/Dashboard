@@ -182,7 +182,7 @@ Hinweis: datenverarbeitung.py muss nur ausgeführt werden, wenn die CSV-Dateien 
 Dokumentation:
 Zusätzlich zum Code gibt es folgende Dokumentation:
 
-- Report: Dashboard_Report.docx
-- Data Journal: data/data_journal.csv
-- Genre-Mapping: data/genre_mapping.json
+- Report: Dashboard Spotify Performance Insights Report.pdf
+- Data Journal: data_journal.csv
+- Genre-Mapping: genre_mapping.json
 - Config: config.json
