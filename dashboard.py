@@ -495,7 +495,7 @@ app = dash.Dash(
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     suppress_callback_exceptions=True
 )
-app.title = "Spotify A&R Intelligence"
+app.title = "Spotify Performance Insights"
 
 # Server-Variable für Deployment (z.B. Render.com)
 server = app.server
@@ -791,7 +791,7 @@ app.layout = dbc.Container([
                                 'marginBottom': '10px',
                                 'borderRadius': '2px'
                             }),
-                            html.P("A&R Intelligence", style={
+                            html.P("Business Intelligence and Analytics", style={
                                 'color': '#7F8C8D',
                                 'fontSize': '12px',
                                 'marginBottom': '8px',
