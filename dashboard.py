@@ -33,11 +33,11 @@ LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 
-# Optional: orjson-Beschleunigung (funktioniert auch ohne)
+# Optional: orjson-Beschleunigung (geht auch ohne)
 try:
     import orjson  # noqa: F401
     import plotly.io as pio
-    # Plotly-Versionen unterscheiden sich leicht -> defensiv prüfen
+    
     if hasattr(pio, "json") and hasattr(pio.json, "config"):
         pio.json.config.default_engine = "orjson"
 except Exception:
@@ -59,10 +59,10 @@ def ensure_enhanced_csv():
         response.raise_for_status()
         csv_path.parent.mkdir(exist_ok=True)
         csv_path.write_bytes(response.content)
-        logging.info("✅ spotify_charts_enhanced.csv geladen!")
+        logging.info("spotify_charts_enhanced.csv geladen!")
         return True
     except Exception as e:
-        logging.warning(f"⚠️ Download fehlgeschlagen: {e}")
+        logging.warning(f" Download fehlgeschlagen: {e}")
         return False
         
 # einmalig versuchen (non-fatal)
@@ -106,8 +106,7 @@ else:
 # echten Nutzer-Plays (7 Tage) basieren und nicht algorithmus-gesteuert sind.
 # Validiert Spotify-Trends gegen Plattform-Bias.
 LASTFM_WEIGHT = 1.2  # Last.fm-Tracks höher gewichten: 
-                         # Basiert auf echten Nutzer-Plays (7 Tage),
-                         # nicht algorithmus-gesteuert. Stabilisiert Trends.
+                    
 
 # Rate-Limit Handling
 RATE_LIMIT_WAIT = 60  # Sekunden bei 429-Error (erhöht auf 60s)
@@ -278,7 +277,7 @@ class LastFmAPI:
                     retry_after = int(resp.headers.get('Retry-After', 30))
                     logging.warning(
                         f"Last.fm Rate Limit ({country}), retry-after={retry_after}s. "
-                        "Returning empty list (non-blocking)."
+                        "Leere Rückgabe (Dashboard läuft weiter)."
                     )
                     return []
                         
@@ -342,7 +341,7 @@ class LastFmAPI:
 lastfm_api = LastFmAPI()
 
 def get_lastfm_toptracks(country, limit=15):
-    """Wrapper für Kompatibilität"""
+    """Hilfsfunktion für Last.fm Abfrage"""
     return lastfm_api.get_top_tracks(country, limit)
 
 
@@ -422,7 +421,6 @@ class SpotifyAPI:
             api_market = market_codes.get(market, 'DE')
             
             # Query-Strategie: 2024-2025 für aktuelle Charts-Relevanz
-            # Defensiv genug um immer Daten zu bekommen
             url = f"https://api.spotify.com/v1/search?q=year:2024-2025&type=track&market={api_market}&limit={limit}"
             response = requests.get(url, headers=headers, timeout=10)
             
@@ -441,7 +439,7 @@ class SpotifyAPI:
                 retry_after = int(response.headers.get('Retry-After', RATE_LIMIT_WAIT))
                 logging.warning(
                     f"Spotify Rate Limit ({api_market}), retry-after={retry_after}s. "
-                    "Returning empty list (non-blocking)."
+                    "Leere Liste zurückgegeben, um das Dashboard weiter auszuführen."
                 )
                 return []
                 
@@ -474,7 +472,7 @@ spotify_api = SpotifyAPI()
 # Fallback wenn Spotify API nicht erreichbar
 
 def safe_fetch_spotify():
-    """Wrapper mit Fallback für Spotify API"""
+    """Spotify-Fallback laden"""
     try:
         data = spotify_api.get_featured_tracks()
         logging.info("Spotify API data fetched successfully.")
@@ -665,7 +663,7 @@ app.index_string = '''
           display: none !important;
         }
         .toggle-switch .form-check-input {
-  position: relative;   /* ✅ WICHTIG: damit ::before nicht “an die Seite” springt */
+  position: relative;   /* WICHTIG: damit ::before nicht “an die Seite” springt */
   width: 56px !important;
   height: 30px !important;
   border-radius: 999px !important;
@@ -800,7 +798,7 @@ app.layout = dbc.Container([
                             }),
                             html.P("Datenbasierte Markt- und Erfolgsanalyse zur Unterstützung strategischer A&R-Entscheidungen. "
                                     "Untersucht Genre-Marktanteile, Erfolgskennzahlen, Audio-Charakteristiken sowie High-Potential-Tracks "
-                                    "in den Märkten Deutschland, Vereinigtes Königreich und Brasilien.", style={
+                                    "in den Märkten Deutschland, UK und Brasilien.", style={
                                 'color': '#7F8C8D',
                                 'fontSize': '11px',
                                 'fontStyle': 'italic',
@@ -840,7 +838,7 @@ dbc.Button("UK", id='btn-uk', className='market-button', n_clicks=0),
 dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0),
 
 
-# ✅ KPI Toggle (neu)
+# KPI Toggle
 html.H4("KPI ANSICHT", className='filter-title', style={'marginTop': '18px'}),
 dbc.RadioItems(
     id="kpi-scope",
@@ -887,7 +885,7 @@ html.Div([
     ),
 
     html.P(
-        "Hinweis: Der Jahresfilter wirkt nur auf zeitabhängige Visualisierungen (z. B. Markt-Trends, Genre-Entwicklung).",
+        "Der Jahresfilter wirkt nur auf zeitabhängige Visualisierungen (z. B. Markt-Trends, Genre-Entwicklung).",
         style={
             'color': '#5A6169',
             'fontSize': '10px',
@@ -1073,9 +1071,8 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-      "Hinweis zur Methodik: Der Wachstums-Momentum-Index ist normiert und dient der vergleichenden Einordnung im Zeitverlauf. "
-        "Er wird im Projekt nicht als exakte Wachstumsprognose interpretiert. "
-        "Für Trends bitte die Zeitreihen-Charts (Markt-Vergleich nach Jahr) nutzen.",
+      "Normierter Index zum Vergleich von Entwicklungen über die Zeit. "
+    "Für Details siehe die Zeitreihen im Marktvergleich.",
       target="growth-info",
       placement="right",
       style={"maxWidth": "320px"},
@@ -1110,9 +1107,8 @@ dbc.Tooltip(
 
     dbc.Tooltip(
         "Erfolgsquote = Anteil Tracks mit Success Score ≥ 65. "
-"Der Success Score ist ein deskriptiver Vergleichsindex und bündelt Chart-Performance, aggregierte Streaming-Signale, "
-"Artist-Reichweite sowie ausgewählte Audio-Features (Gewichtung projektintern festgelegt). "
-"Wichtig: kein Prognose- oder Kausalmodell.",
+"Der Success Score fasst mehrere Erfolgsfaktoren zu einer Kennzahl zusammen und bündelt Chart-Performance, aggregierte"
+"Streaming-Signale, Artist-Reichweite sowie ausgewählte Audio-Features (Gewichtung projektintern festgelegt).",
     target="success-info",
     placement="right",
     style={"maxWidth": "340px"},
@@ -1145,9 +1141,9 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-        "Bestimmt aus Ø Marktanteil je Genre (Historie 2017–2021). "
-        "Genres sind auf 9 Hauptkategorien harmonisiert für bessere Marktvergleichbarkeit. "
-        "Trade-off: Nischen-Details gehen verloren — „Other“ kann 2021 dominieren.",
+        "Bestimmt aus dem durchschnittlichen Marktanteil je Genre (2017–2021). "
+        "Die Genres sind zu 9 Hauptkategorien zusammengefasst. "
+        "2021 kann einen erhöhten Anteil der Kategorie „Other“ enthalten.",
         target="topgenre-info",
         placement="right",
         style={"maxWidth": "320px"},
@@ -1201,7 +1197,7 @@ dbc.Tooltip(
                                     "Durchschnittliche Marktanteile der Top-Genres. ",
                                     html.Strong("Hohe Balken"), " = dominante Genres. ",
                                     html.Strong("Niedrige Balken"), " = Nischen mit Potenzial. ",
-                                    html.Span("Datenbasis (Historie): 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
+                                    html.Span("Basis: Spotify Charts 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
                                 ], className='chart-explanation')
                             ], className='chart-header'),
                             dcc.Loading(
@@ -1223,7 +1219,7 @@ dbc.Tooltip(
                                     "Korrelations-Heatmap zeigt Zusammenhänge zwischen Audio-Features. ",
                                     html.Strong("Intensiv (nahe 1)"), " = Features treten gemeinsam auf. ",
                                     html.Strong("Blass (nahe 0)"), " = kein Zusammenhang. ",
-                                    html.Span("Datenbasis (Historie): 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
+                                    html.Span("Basis: Spotify Charts 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
                                 ], className='chart-explanation')
                             ], className='chart-header'),
                             dcc.Loading(
@@ -1268,7 +1264,7 @@ dbc.Tooltip(
                                     html.Strong("Größere Punkte"), " = höherer Score. ",
                                     html.Strong("Rechts oben"), " = Party-Hits. ",
                                     html.Strong("Links unten"), " = Balladen. ",
-                                    html.Span("Datenbasis (Historie): 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
+                                    html.Span("Basis: Spotify Charts 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
                                 ], className='chart-explanation')
                             ], className='chart-header'),
                             dcc.Loading(
@@ -1300,7 +1296,7 @@ html.Div(id='audio-toptracks-text', style={
                                     html.Strong("Steigende Linien"), " = Wachstumsmarkt. ",
                                     html.Strong("Fallende Linien"), " = schrumpfender Markt. ",
                                     html.Strong("Stabil"), " = etabliert. ",
-                                    html.Span("Datenbasis (Historie): 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
+                                    html.Span("Basis: Spotify Charts 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
                                 ], className='chart-explanation')
                             ], className='chart-header'),
                             dcc.Loading(
@@ -1327,7 +1323,7 @@ html.Div(id='audio-toptracks-text', style={
                                     html.Strong("Score >80"), " = sehr hohes Hit-Potenzial. ",
                                     html.Strong("60-80"), " = solide. ",
                                     html.Strong("<60"), " = moderat. ",
-                                    html.Span("Datenbasis (Historie): 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
+                                    html.Span("Basis: Spotify Charts 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
                                 ], className='chart-explanation')
                             ], className='chart-header'),
                             html.Div(
@@ -1352,7 +1348,7 @@ html.Div(id='audio-toptracks-text', style={
                                     html.Strong("Median (orange)"), " = typischer Score. ",
                                     html.Strong("Rechts"), " = Hit-Markt. ",
                                     html.Strong("Links"), " = schwieriger Markt. ",
-                                    html.Span("Datenbasis (Historie): 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
+                                    html.Span("Basis: Spotify Charts 2017–2021", style={'fontStyle': 'italic', 'color': '#95A5A6'})
                                 ], className='chart-explanation')
                             ], className='chart-header'),
                             dcc.Loading(
@@ -1410,8 +1406,8 @@ html.Div(id='audio-toptracks-text', style={
                                 "Vergleicht aktuelle Genre-Popularität (Live) mit historischem Durchschnitt (2017–2021). ",
                                 html.Strong("Türkis (+)"), " = Trend steigt. ",
                                 html.Strong("Pink (-)"), " = Trend sinkt. ",
-                                "Last.fm validiert Spotify-Trends (7 Tage Nutzer-Plays). ",
-                                "Genres werden konsistent über Keyword-Matching aus Titel und Künstler bestimmt."
+                                "Last.fm ergänzt Spotify um nutzerbasierte Plays (7 Tage). ",
+                                "Genres werden per Keyword-Zuordnung bestimmt."
                             ], className="chart-explanation", style={'marginBottom': '15px'}),
                     dcc.Loading(
                         id="loading-deviation",
@@ -1690,7 +1686,7 @@ def update_kpis(markets, kpi_scope):
     - GLOBAL: zeigen Gesamtmarkt (unabhängig von Filtern)
     """
     try:
-        # ✅ Scope-Logik
+        # Scope-Logik
         if kpi_scope == "GLOBAL":
             df_kpi = kpi_df
             df_enh = enhanced_df
@@ -2714,7 +2710,7 @@ def update_genre_deviation(markets, n_intervals):
             paper_bgcolor='rgba(0,0,0,0)', 
             plot_bgcolor='rgba(15,20,30,0.9)',
             title=(
-                '<b>Live Genre Trend-Analyse (Spotify + Last.fm Validation)</b><br>' +
+                '<b>Live Genre Trend-Analyse (Spotify + Last.fm)</b><br>' +
                 '<i>Aktuelle vs. historische Popularitätsverteilung 2017–2021</i>'
             ),
             xaxis_title='Abweichung (Prozentpunkte ggü. 2017–2021)',
