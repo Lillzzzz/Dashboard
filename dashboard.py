@@ -30,6 +30,9 @@ SPOTIFY_CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 LASTFM_API_KEY = os.getenv('LASTFM_API_KEY')
 
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
+
 # Optional: orjson-Beschleunigung (funktioniert auch ohne)
 try:
     import orjson  # noqa: F401
@@ -45,7 +48,7 @@ except Exception:
 
 # CSV von GitHub Release laden falls lokal nicht vorhanden
 def ensure_enhanced_csv():
-    csv_path = Path('data/spotify_charts_enhanced.csv')
+    csv_path = DATA_DIR / "spotify_charts_enhanced.csv"
     if csv_path.exists():
         return True
 
@@ -69,19 +72,19 @@ ensure_enhanced_csv()
 
 @lru_cache(maxsize=8)
 def get_kpi_data():
-    return pd.read_csv("data/cleaned_charts_kpi.csv")
+    return pd.read_csv(DATA_DIR / "cleaned_charts_kpi.csv")
 
 @lru_cache(maxsize=4)
 def get_enhanced_data():
     return pd.read_csv(
-        "data/spotify_charts_enhanced.csv",
+        DATA_DIR / "spotify_charts_enhanced.csv",
         dtype={'title': 'category', 'artist': 'category', 'market': 'category', 'genre_harmonized': 'category'},
         low_memory=True
     )
 
 @lru_cache(maxsize=4)
 def get_highpot_data():
-    return pd.read_csv("data/high_potential_tracks.csv")
+    return pd.read_csv(DATA_DIR / "high_potential_tracks.csv")
 
 
 def clear_cache():
@@ -90,7 +93,6 @@ def clear_cache():
     get_highpot_data.cache_clear()
 
 # Genre-Mapping aus JSON laden
-DATA_DIR = Path("data")
 genre_mapping_path = DATA_DIR / "genre_mapping.json"
 if genre_mapping_path.exists():
     with open(genre_mapping_path, "r", encoding="utf-8") as f:
@@ -117,7 +119,7 @@ print("\n" + "="*70)
 print("SPOTIFY A&R DASHBOARD - STARTUP")
 print("="*70)
 
-data_path = Path('./data')
+data_path = DATA_DIR
 
 if not data_path.exists():
     print("WARNUNG: './data' Ordner nicht gefunden!")
@@ -2629,12 +2631,15 @@ def update_genre_deviation(markets, n_intervals):
         hist_genre_share = df_hist.groupby('genre_harmonized')['market_share_percent'].mean()
         
         current_tracks = []
+        
+        spotify_any = []
         for m in markets:
-            spotify_tracks = spotify_api.get_featured_tracks(m, 10) or []
-            if not spotify_tracks:
-                # Fallback-Format passt (name/artist/weight wird unten gesetzt)
-                spotify_tracks = safe_fetch_spotify() or []
-            current_tracks.extend(spotify_tracks)
+            spotify_any.extend(spotify_api.get_featured_tracks(m, 10) or [])
+            
+        if not spotify_any:
+            spotify_any = safe_fetch_spotify() or []
+
+        current_tracks.extend(spotify_any)
             
         for m in markets:
             country = LASTFM_COUNTRY_MAP.get(m)
