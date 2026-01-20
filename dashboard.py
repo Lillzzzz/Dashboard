@@ -1049,10 +1049,12 @@ dbc.Tooltip(
 
                             html.Div(id='kpi-shannon', className='kpi-value', title="Genrekonzentration, höher = vielfältiger Markt"),
                             html.Div([
-                                "Misst Genre-Vielfalt. ",
-                                html.Strong("Hohe Werte (>2.0)"), " = vielfältiger Markt mit vielen Genres. ",
-                                html.Strong("Niedrige Werte (<1.5)"), " = konzentrierter Markt, wenige dominante Genres."
-                            ], className='kpi-desc')
+    "Misst Genre-Vielfalt (Shannon). ",
+    html.Strong("Höher"), " = vielfältiger Markt, ",
+    html.Strong("niedriger"), " = stärker konzentriert. ",
+    "Im Datensatz liegen die Werte typischerweise um ~1.3–1.4."
+], className='kpi-desc')
+
                         ], className='kpi-card')
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4'),
                     dbc.Col([
@@ -1072,9 +1074,9 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-      "Hinweis zur Methodik: Der Index (2017=100) dient nur als Referenz-Skalierung. "
-      "Er wird im Projekt nicht als echtes Wachstum/Prognose interpretiert. "
-      "Für Trends bitte die Zeitreihen-Charts (Markt-Vergleich nach Jahr) nutzen.",
+      "Hinweis zur Methodik: Der Wachstums-Momentum-Index ist normiert und dient der vergleichenden Einordnung im Zeitverlauf. "
+        "Er wird im Projekt nicht als exakte Wachstumsprognose interpretiert. "
+        "Für Trends bitte die Zeitreihen-Charts (Markt-Vergleich nach Jahr) nutzen.",
       target="growth-info",
       placement="right",
       style={"maxWidth": "320px"},
@@ -1085,11 +1087,9 @@ dbc.Tooltip(
     html.Div(id='kpi-growth', className='kpi-value'),
 
     html.Div([
-        "Index für Marktwachstum. ",
-        html.Strong(">100"), " = überdurchschnittliches Wachstum. ",
-        html.Strong("<100"), " = unterdurchschnittlich. ",
-        html.Strong("100"), " = Durchschnitt."
-    ], className='kpi-desc')
+    "Normierter Index zur Einordnung von Marktentwicklungen im Zeitverlauf. ",
+    html.Strong("Hinweis:"), " dient der Orientierung und ist keine Prognose."
+], className='kpi-desc')
 ], className='kpi-card')
 
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4'),
@@ -1110,10 +1110,10 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-        "Erfolgsquote = Anteil Tracks mit Success Score ≥ 65 (historischer Cutoff). "
-        "Score kombiniert 7 Signale: Chart-Performance, Streams (log), Follower (log), "
-        "Danceability, Energy, Top-10 & Top-50 (Gewichtungen im Report). "
-        "Wichtig: deskriptiver Vergleichs-Index, kein Kausalbeweis.",
+        "Erfolgsquote = Anteil Tracks mit Success Score ≥ 65. "
+"Der Success Score ist ein deskriptiver Vergleichsindex und bündelt Chart-Performance, aggregierte Streaming-Signale, "
+"Artist-Reichweite sowie ausgewählte Audio-Features (Gewichtung projektintern festgelegt). "
+"Wichtig: kein Prognose- oder Kausalmodell.",
     target="success-info",
     placement="right",
     style={"maxWidth": "340px"},
@@ -1147,7 +1147,7 @@ dbc.Tooltip(
 
     dbc.Tooltip(
         "Bestimmt aus Ø Marktanteil je Genre (Historie 2017–2021). "
-        "Genres sind harmonisiert (49 → 9 Kategorien) für bessere Marktvergleichbarkeit. "
+        "Genres sind auf 9 Hauptkategorien harmonisiert für bessere Marktvergleichbarkeit. "
         "Trade-off: Nischen-Details gehen verloren — „Other“ kann 2021 dominieren.",
         target="topgenre-info",
         placement="right",
