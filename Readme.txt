@@ -1,4 +1,4 @@
-Business Intelligence andAnalytics - Dashboard Spotify Performance Insights
+Business Intelligence and Analytics - Dashboard Spotify Performance Insights
 
 Projektübersicht:
 Dieses Dashboard habe ich im Rahmen des Kurses "Business Intelligence and Analytics" entwickelt. Es soll A&R-Manager bei der Bewertung von Musikmärkten unterstützen, indem es Genre-Trends und Audio-Features in drei internationalen Märkten analysiert.
