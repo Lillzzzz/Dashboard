@@ -502,7 +502,7 @@ def safe_fetch_spotify():
         logging.warning(f"Spotify API failed: {e}")
         return [
             {"name": "Fallback Track 1", "artist": "Fallback (API nicht verfügbar)", "popularity": 0, "market": "DE", "image": None, "source": "fallback"},
-            {"name": "Fallback Track 2", "artist": "Fallback (API nicht verfügbar)" "popularity": 0, "market": "UK", "image": None, "source": "fallback"},
+            {"name": "Fallback Track 2", "artist": "Fallback (API nicht verfügbar)", "popularity": 0, "market": "UK", "image": None, "source": "fallback"},
             {"name": "Fallback Track 3", "artist": "Fallback (API nicht verfügbar)", "popularity": 0, "market": "BR", "image": None, "source": "fallback"}
         ]
 
