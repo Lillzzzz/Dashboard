@@ -8,9 +8,9 @@ Live-Dashboard: https://dashboard-d0z8.onrender.com
 
 Zielsetzung:
 Das Dashboard verfolgt drei konkrete Ziele:
-- Reduktion des manuellen Analyseaufwands durch automatisierte Datenaufbereitung und Visualisierung.
-- Identifikation marktspezifischer Genre-Schwerpunkte und Erfolgsmuster zur Unterstützung von A&R- und Marketingentscheidungen.
-- Optionale Kontextualisierung kurzfristiger Streaming-Impulse über Spotify- und Last.fm-APIs (nicht Bestandteil der historischen KPI-Berechnung).
+- Automatisierte Aufbereitung und Visualisierung der relevanten Marktdaten.
+- Analyse von Genre-Strukturen und Erfolgskennzahlen auf Marktebene.
+- Ergänzung historischer KPIs um optionale Live-Signale aus Spotify und Last.fm.
 
 Analysierte Märkte: Deutschland, UK, Brasilien (2017-2021)
 
@@ -106,7 +106,7 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 Die Genre-Standardisierung ist in genre_mapping.json definiert. Beispielsweise werden "hip hop", "rap", "trap" und "deutschrap" alle als "Hip-Hop" klassifiziert.
 
 Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
-Die ETL-Pipeline ist deterministisch implementiert, sodass bei identischen Eingabedaten identische Ausgabe-Dateien erzeugt werden.
+Die ETL-Pipeline erzeugt bei identischen Eingabedaten reproduzierbare Ergebnisse.
 
 
 Visualisierungen:
@@ -172,7 +172,7 @@ Das Projekt kann in vier Schritten vollständig reproduziert werden:
    LASTFM_API_KEY=your_lastfm_key
 
    Hinweis: Das Dashboard funktioniert auch ohne API-Keys (Fallback auf lokale Daten).
-   Die Live-API-Komponenten dienen ausschließlich der optionalen Kontextualisierung und sind nicht Bestandteil der historischen Analyse oder der KPI-Berechnung.
+   Optionale Ergänzung der historischen Analyse durch aktuelle Streaming-Daten aus Spotify- und Last.fm-APIs.
 
 
 4. Dashboard starten:
