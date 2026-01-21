@@ -49,18 +49,22 @@ Dashboard/
 	dashboard.py              # Dashboard
 	datenverarbeitung.py      # ETL-Pipeline  
 	config.json               # Konfiguration
+	genre_mapping.json        # Genre-Harmonisierung
 	requirements.txt          # Dependencies
 	.env                      # API-Keys (nicht im Repo)
 
 	Verzeichnis: data/
-		cleaned_charts_kpi.csv
-		cleaned_market_trends.csv
-		high_potential_tracks.csv
-		genre_mapping.json
-		data_journal.csv
+		cleaned_charts_kpi.csv        # Output
+		cleaned_market_trends.csv     # Output
+		high_potential_tracks.csv     # Output
+		data_journal.csv              # Output
+		spotify_charts_enhanced.csv   # Wird automatisch von GitHub Release geladen (309 MB)
 	
 	Verzeichnis: assets/
   		styles.css
+
+HINWEIS: Die Rohdaten (charts.csv, Final database.csv, dataset.csv) sind NICHT im Repository enthalten. 
+Sie werden nur lokal für die Datenverarbeitung benötigt, wenn die CSV-Dateien neu generiert werden sollen.
 
 
 Ausführung:
@@ -103,7 +107,7 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 3. Zeitliche Eingrenzung auf 2017-2021
 4. Entfernung von Duplikaten
 5. Imputation fehlender Stream-Werte mit Median pro Markt
-6. Genre-Harmonisierung (Auf 9 Hauptkategorien reduziert)
+6. Genre-Harmonisierung (Auf 8 Hauptkategorien + "Other" reduziert)
 7. Berechnung eines Success Scores aus mehreren Faktoren
 8. Aggregation zu KPI-Metriken
 
