@@ -109,7 +109,7 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 8. Aggregation zu KPI-Metriken
 
 Genre-Mapping:
-Die Zuordnung von Roh-Genres zu den neun harmonisierten Hauptgenres erfolgt über die Datei genre_mapping.json. Diese Datei wurde manuell auf Basis explorativer Analyse der Rohdaten erstellt und definiert feste Mapping-Regeln (z. B. „rap“, „trap“, „german hip hop“ > „Hip-Hop“). Sie ist Bestandteil der ETL-Konfiguration und wird während der Datenverarbeitung von datenverarbeitung.py eingelesen. Die Datei wird nicht automatisch generiert, sondern bewusst versioniert, um eine konsistente und reproduzierbare Genre-Harmonisierung sicherzustellen.
+Die Zuordnung von Roh-Genres zu den neun harmonisierten Hauptgenres erfolgt über die Datei genre_mapping.json. Diese Datei wurde manuell auf Basis explorativer Analyse der Rohdaten erstellt und definiert feste Mapping-Regeln (z. B. „rap“, „trap“, „german hip hop“ > „Hip-Hop“). Sie ist Bestandteil der ETL-Konfiguration und wird während der Datenverarbeitung von datenverarbeitung.py eingelesen. Die Datei wird nicht automatisch generiert, sondern bewusst versioniert, um eine konsistente und reproduzierbare Genre-Harmonisierung sicherzustellen. Falls die Datei fehlt, nutzt die Pipeline einen identischen Fallback-Mapper im Python-Code.
 
 Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
 Die ETL-Pipeline erzeugt bei identischen Eingabedaten reproduzierbare Ergebnisse.
