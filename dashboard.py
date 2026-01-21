@@ -501,9 +501,9 @@ def safe_fetch_spotify():
     except Exception as e:
         logging.warning(f"Spotify API failed: {e}")
         return [
-            {"name": "Fallback Track 1", "artist": "Lokale Daten", "popularity": 0, "market": "DE", "image": None, "source": "fallback"},
-            {"name": "Fallback Track 2", "artist": "Lokale Daten", "popularity": 0, "market": "UK", "image": None, "source": "fallback"},
-            {"name": "Fallback Track 3", "artist": "Lokale Daten", "popularity": 0, "market": "BR", "image": None, "source": "fallback"}
+            {"name": "Fallback Track 1", "artist": "Fallback (API nicht verfügbar)", "popularity": 0, "market": "DE", "image": None, "source": "fallback"},
+            {"name": "Fallback Track 2", "artist": "Fallback (API nicht verfügbar)" "popularity": 0, "market": "UK", "image": None, "source": "fallback"},
+            {"name": "Fallback Track 3", "artist": "Fallback (API nicht verfügbar)", "popularity": 0, "market": "BR", "image": None, "source": "fallback"}
         ]
 
 
@@ -1058,7 +1058,7 @@ html.Div([
 
 dbc.Tooltip(
     "Basis: Spotify-Charts (DE/UK/BR), Historie 2017–2021. "
-    "Berechnung nutzt die 9 harmonisierten Hauptgenres (Pop…Other). "
+    "Berechnung nutzt die 9 harmonisierten Hauptgenres (Pop, Hip-Hop, Rock, Electronic, Latin, R&B, Country, Jazz, Other). "
     "Wichtig: 2021 ist teils stark von „Other“ geprägt > Vielfalt kann verzerrt wirken.",
     target="shannon-info",
     placement="right",
@@ -1127,9 +1127,9 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-        "Erfolgsquote = Anteil Tracks mit Success Score ≥ 65. "
-"Der Success Score fasst mehrere Erfolgsfaktoren zu einer Kennzahl zusammen und bündelt Chart-Performance, aggregierte"
-"Streaming-Signale, Artist-Reichweite sowie ausgewählte Audio-Features (Gewichtung projektintern festgelegt).",
+    "Erfolgsquote = Anteil Tracks mit Success Score ≥ 65. "
+    "Berechnet über alle Track-Einträge im enhanced-Datensatz (gesamt, nicht genre-spezifisch). "
+    "Der Success Score fasst mehrere Erfolgsfaktoren zu einer Kennzahl zusammen...",
     target="success-info",
     placement="right",
     style={"maxWidth": "340px"},
@@ -1424,7 +1424,7 @@ html.Div(id='audio-toptracks-text', style={
                             ], style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center', 'marginBottom': '12px'}),
                             html.Div(id='live-timestamp-genre', style={'fontSize': '11px', 'color': '#7F8C8D', 'marginBottom': '8px'}),
                             html.P([
-                                "Vergleicht aktuelle Genre-Popularität (Live) mit historischem Durchschnitt (2017–2021). ",
+                                "Vergleicht aktuelle Genre-Popularität (Live) mit dem historischen Durchschnitt (2017–2021) über die ausgewählten Märkte. ",
                                 html.Strong("Türkis (+)"), " = Trend steigt. ",
                                 html.Strong("Pink (-)"), " = Trend sinkt. ",
                                 "Last.fm ergänzt Spotify um nutzerbasierte Plays (7 Tage). ",
@@ -1518,7 +1518,7 @@ def predict_genre_simple(track_name, artist):
         "Pop": ["pop", "love", "baby", "heart", "girl", "boy", "dance"],
         "Hip-Hop": ["rap", "hip hop", "feat", "ft.", "lil ", "young", "gang"],
         "Rock": ["rock", "band", "guitar", "wild", "fire", "electric"],
-        "Dance/Electronic": ["house", "techno", "edm", "beat", "bass", "club", "party", "electronic"],
+        "Electronic": ["house", "techno", "edm", "beat", "bass", "club", "party", "electronic"],
         "Latin": ["latin", "reggaeton", "salsa", "bachata", "fiesta", "corazón", "sertanejo"],
         "R&B": ["r&b", "soul", "rhythm", "blues", "slow jam"],
         "Country": ["country", "cowboy", "truck", "whiskey"],
@@ -1715,7 +1715,7 @@ def update_from_mobile_filters(market_val, year_val):
 # - Streams (15%): Logarithmierte Stream-Zahlen (normalisiert)
 # - Audio-Features (30%): Danceability (15%) + Energy (15%)
 # - Artist-Reichweite (20%): Follower-Anzahl (logarithmiert)
-# - Top-Placements (10%): Top10 (5%) + Top50 (5%) Dummy-Variablen
+# - Top10 Chart-Platzierung (10%)
 #
 # WICHTIG: Der Score ist ein deskriptiver Vergleichsindex, keine Prognose.
 # Er fasst multiple Erfolgsdimensionen zusammen, beweist aber keine Kausalität.
