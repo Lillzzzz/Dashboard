@@ -107,7 +107,7 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 3. Zeitliche Eingrenzung auf 2017-2021
 4. Entfernung von Duplikaten
 5. Imputation fehlender Stream-Werte mit Median pro Markt
-6. Genre-Harmonisierung (Auf 8 Hauptkategorien + "Other" reduziert)
+6. Genre-Harmonisierung (Auf 9 Hauptkategorien reduziert (inkl. Other))
 7. Berechnung eines Success Scores aus mehreren Faktoren
 8. Aggregation zu KPI-Metriken
 
@@ -159,7 +159,7 @@ Aus der Analyse ergeben sich mehrere zentrale Muster:
 - Audio-Features wie Danceability und Energy zeigen Zusammenhänge mit Erfolg, erklären diesen jedoch nur begrenzt und nicht kausal.
 
 Limitation der Datenquelle:
-Die Genre-Identifikation basiert auf Metadata-Abgleich mit der Final Database. Für das Jahr 2021 zeigt sich eine deutlich reduzierte Genre-Coverage (10,2% vs. 53,8% in 2020), was zu einem erhöhten "Other"-Anteil führt. Diese Einschränkung liegt in der verwendeten Kaggle-Datenquelle begründet, die für 2021-Tracks weniger vollständige Genre-Metadaten enthält. Die Analyse fokussiert daher primär auf den Zeitraum 2017-2020 mit vollständiger Genre-Klassifikation.
+Die Genre-Identifikation basiert auf Metadata-Abgleich mit der Final Database. Für das Jahr 2021 zeigt sich eine deutlich reduzierte Genre-Coverage (10,2% vs. 53,8% in 2020), was zu einem erhöhten "Other"-Anteil führt. Diese Einschränkung liegt in der verwendeten Kaggle-Datenquelle begründet, die für 2021-Tracks weniger vollständige Genre-Metadaten enthält. Die Analyse umfasst 2017–2021, wobei 2021 eingeschränkt ist.
 
 
 Technischer Stack:
