@@ -77,7 +77,7 @@ def save_journal():
     journal_df = pd.DataFrame(JOURNAL_LOG)
     journal_path = OUTPUT_DIR / "data_journal.csv"
     journal_df.to_csv(journal_path, index=False, encoding='utf-8-sig')
-    print(f"\n📝 Data Journal: {journal_path} ({len(JOURNAL_LOG)} Schritte)")
+    print(f"\n Data Journal: {journal_path} ({len(JOURNAL_LOG)} Schritte)")
 
 # HILFSFUNKTIONEN
 
@@ -95,7 +95,7 @@ def clean_numeric_column(series, col_name, clip_min=None, clip_max=None):
     
     corrupt_count = series.notna().sum() - clean_series.notna().sum()
     if corrupt_count > 0:
-        print(f"   ⚠️ {col_name}: {corrupt_count} korrupte Werte bereinigt")
+        print(f"    {col_name}: {corrupt_count} korrupte Werte bereinigt")
     
     return clean_series
 
@@ -112,27 +112,7 @@ def harmonize_genre(genre_str):
     return "Other"
 
 def calculate_shannon_diversity(series):
-    """
-    Shannon-Diversität (Shannon-Wiener Index) für Genre-Vielfalt.
-    
-    FORMEL: H = -Σ(p_i * ln(p_i))
-    - p_i = Anteil Genre i (z.B. 0.35 für 35% Pop)
-    - ln = natürlicher Logarithmus
-    - Σ = Summe über alle Genres
-    
-    INTERPRETATION:
-    - H = 0.0: Nur ein Genre (keine Vielfalt)
-    - H = 1.0-1.5: 1-2 Genres dominieren (z.B. 60% Pop, 30% Hip-Hop)
-    - H = 1.5-2.0: Mehrere relevante Genres (typisch für Musikmärkte)
-    - H > 2.0: Viele Genres gleichverteilt
-    
-    BEISPIEL:
-    ['Pop', 'Pop', 'Pop', 'Hip-Hop', 'Rock']
-    → Pop: 60%, Hip-Hop: 20%, Rock: 20%
-    → H = -(0.6*ln(0.6) + 0.2*ln(0.2) + 0.2*ln(0.2)) ≈ 0.95
-    
-    1e-12 verhindert log(0) Fehler bei Genres mit 0%.
-    """
+    """Shannon-Diversität: H = -Σ(p_i * ln(p_i))"""
     counts = series.value_counts()
     proportions = counts / counts.sum()
     shannon = -np.sum(proportions * np.log(proportions + 1e-12))
@@ -192,20 +172,20 @@ def validate_kpi_output(kpi_df, min_year):
     dup_check = kpi_df.groupby(['market', 'year', 'genre_harmonized']).size()
     duplicates = dup_check[dup_check > 1]
     if len(duplicates) > 0:
-        errors.append(f"❌ DUPLIKATE: {len(duplicates)} doppelte (market, year, genre) Kombinationen gefunden!")
+        errors.append(f" DUPLIKATE: {len(duplicates)} doppelte (market, year, genre) Kombinationen gefunden!")
         print(f"\n   FEHLER: Duplikate in KPI:\n{duplicates.head()}")
     
     # CHECK 2: Market Share Summen
     share_sums = kpi_df.groupby(['market', 'year'])['market_share_percent'].sum().reset_index()
     bad_sums = share_sums[(share_sums['market_share_percent'] < 99.8) | (share_sums['market_share_percent'] > 100.2)]
     if len(bad_sums) > 0:
-        errors.append(f"❌ MARKET SHARE: {len(bad_sums)} (market, year) haben falsche Summen (≠100%)!")
+        errors.append(f" MARKET SHARE: {len(bad_sums)} (market, year) haben falsche Summen (≠100%)!")
         print(f"\n   FEHLER: Market Share Summen:\n{bad_sums}")
     
     # CHECK 3: Index Growth nicht konstant 100
     unique_values = kpi_df['index_growth_2017_2021'].nunique()
     if unique_values <= 1:
-        errors.append(f"❌ INDEX GROWTH: Nur {unique_values} unique Werte - wahrscheinlich Bug!")
+        errors.append(f" INDEX GROWTH: Nur {unique_values} unique Werte - wahrscheinlich Bug!")
         print(f"\n   FEHLER: index_growth_2017_2021 hat nur Wert: {kpi_df['index_growth_2017_2021'].unique()}")
     
     # Baseline-Check: Min year sollte immer 100 sein
@@ -213,12 +193,12 @@ def validate_kpi_output(kpi_df, min_year):
     if len(baseline_data) > 0:
         non_100 = baseline_data[baseline_data['index_growth_2017_2021'] != 100.0]
         if len(non_100) > 0:
-            errors.append(f"⚠️ WARNING: {len(non_100)} Baseline-Zeilen (year={min_year}) haben index ≠ 100!")
+            errors.append(f" WARNING: {len(non_100)} Baseline-Zeilen (year={min_year}) haben index ≠ 100!")
     
     # CHECK 4: Market Potential Score Range
     mps_stats = kpi_df['market_potential_score'].describe()
     if mps_stats['max'] > 150:
-        errors.append(f"⚠️ WARNING: market_potential_score max={mps_stats['max']:.1f} - sehr hoch, prüfen!")
+        errors.append(f" WARNING: market_potential_score max={mps_stats['max']:.1f} - sehr hoch, prüfen!")
         print(f"\n   WARNING: Market Potential Score Stats:\n{mps_stats}")
     
     return len(errors) == 0, errors
@@ -230,7 +210,7 @@ def main():
     min_year = MIN_YEAR
     
     print(f"\n{'='*80}")
-    print(f"  🎵 DATENVERARBEITUNG SPOTIFY CHARTS (VERBESSERT)")
+    print(f"   DATENVERARBEITUNG SPOTIFY CHARTS (VERBESSERT)")
     print(f"{'='*80}")
     print(f"Start: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"Märkte: {', '.join(MARKETS)}")
@@ -243,10 +223,10 @@ def main():
     try:
         charts = pd.read_csv(PATHS["raw_charts"], low_memory=False)
         log_step(step_counter, 'load', Path(PATHS["raw_charts"]).name, 'charts',
-                 'Initiales Laden der Spotify Charts-Daten mit allen verfügbaren Zeilen und Spalten.',
+                 'Laden der Charts-Daten.',
                  rows_after=len(charts))
         step_counter += 1
-        print(f"   ✅ charts.csv: {len(charts):,} Zeilen")
+        print(f"    charts.csv: {len(charts):,} Zeilen")
     except FileNotFoundError:
         raise FileNotFoundError("charts.csv nicht gefunden!")
     
@@ -329,9 +309,9 @@ def main():
                  'Laden der finalen Datenbank mit ergänzenden Track-Informationen und Metadaten.',
                  rows_after=len(final_db))
         step_counter += 1
-        print(f"   ✅ Final database.csv: {len(final_db):,} Zeilen")
+        print(f"    Final database.csv: {len(final_db):,} Zeilen")
     except FileNotFoundError:
-        print("   ⚠️ WARNUNG: Final database.csv nicht gefunden")
+        print("    WARNUNG: Final database.csv nicht gefunden")
         final_db = pd.DataFrame()
     
     try:
@@ -340,9 +320,9 @@ def main():
                  'Laden des Spotify-Datasets mit Audio-Features (Danceability, Energy, etc.).',
                  rows_after=len(dataset))
         step_counter += 1
-        print(f"   ✅ dataset.csv: {len(dataset):,} Zeilen")
+        print(f"    dataset.csv: {len(dataset):,} Zeilen")
     except FileNotFoundError:
-        print("   ⚠️ WARNUNG: dataset.csv nicht gefunden")
+        print("    WARNUNG: dataset.csv nicht gefunden")
         dataset = pd.DataFrame()
     
     # 3: AUDIO-FEATURES VORBEREITEN
@@ -355,7 +335,7 @@ def main():
             break
     
     if 'track_id' not in final_db.columns:
-        print("   ⚠️ WARNUNG: Keine Track-ID in Final database")
+        print("    WARNUNG: Keine Track-ID in Final database")
         final_db['track_id'] = None
     
     if not dataset.empty and 'track_id' in dataset.columns:
@@ -405,7 +385,7 @@ def main():
         
         print(f"\n   Audio Features: {len(audio_df):,} Zeilen")
     else:
-        print("   ⚠️ Keine Audio Features verfügbar")
+        print("    Keine Audio Features verfügbar")
     
     # 4: GENRE-MAPPING
     print_section("4: GENRE-MAPPING")
@@ -434,7 +414,7 @@ def main():
         print(f"\n   Genre-DataFrame: {len(genre_df):,} Zeilen")
         print(f"   Other-Rate: {other_rate:.1f}%")
     else:
-        print("   ⚠️ WARNUNG: Keine Track-ID für Genre-Mapping")
+        print("    WARNUNG: Keine Track-ID für Genre-Mapping")
         genre_df = pd.DataFrame()
     
     # 5: DATEN ZUSAMMENFÜHREN
@@ -514,12 +494,10 @@ def main():
             else:
                 growth_momentum = 100.0
             
-            # ✅ FIX: Market Potential Score mit normalisiertem Growth (0-100 Skala)
-            # Growth auf 200 cappen (= Verdoppelung) und auf 0-100 normieren
             growth_capped = min(growth_momentum, 200.0)
             growth_norm_0_100 = (growth_capped / 200.0) * 100
             
-            # Alle 3 Komponenten auf gleicher Skala (0-100), Gewichte 40/30/30
+            # Market Potential: 40% Share, 30% Success, 30% Growth
             market_potential = (
                 genre_row['market_share_percent'] * 0.4 +
                 success_rate * 0.3 +
@@ -537,7 +515,7 @@ def main():
     kpi_df = pd.DataFrame(kpi_list)
     log_step(step_counter, 'aggregate', 'merged', 'kpi_df',
              'Aggregation zu KPI-Metriken pro Genre, Jahr und Markt. Berechnet Marktanteile, Shannon-Diversität, Success-Rates und Growth-Momentum.',
-             rows_after=len(kpi_df), extra_info=f'Grouping: year × market × genre_harmonized | Market Potential: normalized growth (capped at 200)')
+             rows_after=len(kpi_df), extra_info=f'Grouping: year × market × genre_harmonized')
     step_counter += 1
     print(f"\n   KPI-Dataset: {len(kpi_df):,} Zeilen")
     
@@ -578,19 +556,19 @@ def main():
     high_potential = high_potential.sort_values('success_score', ascending=False)
     print(f"\n   High-Potential Tracks: {len(high_potential):,}")
     
-    # ✅ VALIDIERUNG VOR EXPORT
+    # VALIDIERUNG VOR EXPORT
     print_section("10: VALIDIERUNG")
     
     is_valid, validation_errors = validate_kpi_output(kpi_df, min_year)
     
     if not is_valid:
-        print("\n❌ VALIDIERUNG FEHLGESCHLAGEN:")
+        print("\n VALIDIERUNG FEHLGESCHLAGEN:")
         for error in validation_errors:
             print(f"   {error}")
-        print("\n⚠️ Export wird NICHT durchgeführt - bitte Fehler beheben!")
+        print("\n Export wird NICHT durchgeführt - bitte Fehler beheben!")
         return
     else:
-        print("\n✅ Alle Validierungen bestanden!")
+        print("\n Alle Validierungen bestanden!")
     
     # 11: EXPORT
     print_section("11: DATEN EXPORTIEREN")
@@ -602,7 +580,7 @@ def main():
         'cleaned_market_trends.csv': market_trends
     }
     
-    print(f"\n💾 Speichere nach: {OUTPUT_DIR.resolve()}\n")
+    print(f"\n Speichere nach: {OUTPUT_DIR.resolve()}\n")
     
     for filename, df in outputs.items():
         filepath = OUTPUT_DIR / filename
@@ -615,17 +593,17 @@ def main():
         size_kb = filepath.stat().st_size / 1024
         size_mb = size_kb / 1024
         size_str = f"{size_mb:.1f} MB" if size_mb >= 1 else f"{size_kb:.1f} KB"
-        print(f"   ✅ {filename:40s} │ {len(df):8,} Zeilen │ {size_str:>10}")
+        print(f"    {filename:40s} │ {len(df):8,} Zeilen │ {size_str:>10}")
     
     save_journal()
     
-    print_section("✅ AUFBEREITUNG ABGESCHLOSSEN")
+    print_section("AUFBEREITUNG ABGESCHLOSSEN")
     print(f"Ende: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
 
 if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        print(f"\n❌ FEHLER: {e}")
+        print(f"\n FEHLER: {e}")
         import traceback
         traceback.print_exc()
