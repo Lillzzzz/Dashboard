@@ -1,6 +1,6 @@
 """
-Business Intelligence andAnalytics - Dashboard Spotify Performance Insights
-Lilly C. - M.A.BusinessManagement
+Business Intelligence and Analytics - Dashboard Spotify Performance Insights
+Lilly C. - M.A.Business Management
 """
 
 
@@ -117,7 +117,7 @@ else:
 # Der Faktor 1.2 wurde explorativ gewählt, um nutzerbasierte Plays stärker zu berücksichtigen.
 # Alternativ getestet: 1.0 (gleichwertig): schlechtere Übereinstimmung mit historischen Genre-Trends
 # Eine systematische Kalibrierung steht aus und würde weitere Marktforschung erfordern.
-LASTFM_WEIGHT = 1.2  # Last.fm-Tracks höher gewichten: 
+LASTFM_WEIGHT = 1.2
                     
 
 # Rate-Limit Handling
@@ -1506,12 +1506,14 @@ def predict_genre_simple(track_name, artist):
     except Exception:
         return "Other"
     
-    # 1) Zuerst Mapping aus JSON nutzen
+    # 1) Zuerst Mapping aus JSON nutzen (genre_mapping.json)
+    #    Beispiel: "deutschrap" wird zu "Hip-Hop" gemappt
     for sub, main in GENRE_MAPPING_DASH.items():
         if sub.lower() in text:
             return main
     
-    # 2) Bisherige einfache Keyword-Regeln als Fallback
+    # 2) Fallback: Einfache Keyword-Regeln (falls JSON kein Match)
+    #    Diese Liste ist bewusst breit gefasst für robuste Genre-Zuordnung
     genre_keywords = {
         "Pop": ["pop", "love", "baby", "heart", "girl", "boy", "dance"],
         "Hip-Hop": ["rap", "hip hop", "feat", "ft.", "lil ", "young", "gang"],
