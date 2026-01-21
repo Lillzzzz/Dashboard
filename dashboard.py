@@ -1498,7 +1498,7 @@ def predict_genre_simple(track_name, artist):
     
     BEISPIEL:
     - "Lil Baby feat. Drake" > Hip-Hop (via "lil ", "feat")
-    - "Electric Love" > Dance/Electronic (via "electric")
+    - "Electric Love" > Electronic (via "electric")
     - "Unknown Artist - Track" > Other (kein Match)
     """
     try:
