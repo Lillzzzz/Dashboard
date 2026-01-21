@@ -112,6 +112,17 @@ Die Genre-Standardisierung ist in genre_mapping.json definiert. Beispielsweise w
 Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
 Die ETL-Pipeline erzeugt bei identischen Eingabedaten reproduzierbare Ergebnisse.
 
+Market Potential Score Berechnung:
+Der Market Potential Score kombiniert drei Komponenten auf einer 0-100 Skala:
+- Market Share (Gewicht 40%): Aktueller Marktanteil des Genres
+- Success Rate (Gewicht 30%): Anteil der Tracks mit hohem Success Score (≥65)
+- Growth Momentum (Gewicht 30%): Wachstum seit 2017, normiert auf 0-100 (max. Verdoppelung)
+
+Die Growth-Komponente wird auf 200% (Verdoppelung) begrenzt und anschließend auf 
+0-100 normiert, um Ausreißer-Dominanz zu verhindern und Vergleichbarkeit zwischen 
+Genres zu gewährleisten. Vor dem Export erfolgt eine automatische Validierung der 
+Datenqualität (keine Duplikate, Market Share Summen = 100%).
+
 
 Visualisierungen:
 Das Dashboard enthält acht verschiedene Visualisierungen:
@@ -127,13 +138,15 @@ Das Dashboard enthält acht verschiedene Visualisierungen:
 
 
 Zentrale Erkenntnisse:
-
 Aus der Analyse ergeben sich mehrere zentrale Muster:
 
 - Die drei betrachteten Märkte (Deutschland, UK, Brasilien) unterscheiden sich deutlich in ihren Genre-Strukturen.
 - Die Shannon-Diversität liegt in allen Märkten im Bereich von ca. 1,27–1,40 und weist auf insgesamt konzentrierte Märkte mit wenigen dominanten Genres hin.
 - Brasilien zeigt im Zeitverlauf einen Aufwärtstrend in den Marktverläufen, während der UK-Markt relativ an Anteil verliert.
 - Audio-Features wie Danceability und Energy zeigen Zusammenhänge mit Erfolg, erklären diesen jedoch nur begrenzt und nicht kausal.
+
+Limitation der Datenquelle:
+Die Genre-Identifikation basiert auf Metadata-Abgleich mit der Final Database. Für das Jahr 2021 zeigt sich eine deutlich reduzierte Genre-Coverage (23% vs. 75% in den Jahren 2017-2020), was zu einem erhöhten "Other"-Anteil von über 70% führt. Diese Einschränkung liegt in der verwendeten Kaggle-Datenquelle begründet, die für 2021-Tracks weniger vollständige Genre-Metadaten enthält. Die Analyse fokussiert daher primär auf den Zeitraum 2017-2020 mit vollständiger Genre-Klassifikation.
 
 
 Technischer Stack:
