@@ -1,8 +1,7 @@
 Business Intelligence and Analytics - Dashboard Spotify Performance Insights
 
 Projektübersicht:
-Dieses Dashboard habe ich im Rahmen des Kurses "Business Intelligence and Analytics" entwickelt. Ziel war es, A&R-Manager bei Marktanalysen zu unterstützen – mit besonderem Fokus auf Genre-Trends und Audio-Features in drei Märkten: Deutschland, UK und Brasilien (2017-2021).
-
+Dieses Dashboard habe ich im Rahmen des Kurses "Business Intelligence and Analytics" entwickelt. Ziel war es, A&R-Manager bei Marktanalysen zu unterstützen – mit besonderem Fokus auf historische Genre-Strukturen und Audio-Features in drei Märkten: Deutschland, UK und Brasilien (2017-2021).
 Die Entwicklung hat etwa 4 Wochen gedauert, inklusive mehrfacher Iteration der ETL-Pipeline und Trial-and-Error bei der Dashboard-UX. Einige Entscheidungen (z.B. Last.fm-Gewichtung 1.2) sind explorativ und würden für Produktivnutzung weitere Validierung benötigen.
 
 Live-Dashboard: https://dashboard-d0z8.onrender.com
@@ -51,6 +50,7 @@ Dashboard/
 	config.json               # Konfiguration
 	genre_mapping.json        # Genre-Harmonisierung
 	requirements.txt          # Dependencies
+	Readme.txt          	  # Readme
 	.env                      # API-Keys (nicht im Repo)
 
 	Verzeichnis: data/
@@ -58,13 +58,13 @@ Dashboard/
 		cleaned_market_trends.csv     # Output
 		high_potential_tracks.csv     # Output
 		data_journal.csv              # Output
-		spotify_charts_enhanced.csv   # Wird automatisch von GitHub Release geladen (309 MB)
-	
+			
 	Verzeichnis: assets/
   		styles.css
 
-HINWEIS: Die Rohdaten (charts.csv, Final database.csv, dataset.csv) sind NICHT im Repository enthalten. 
-Sie werden nur lokal für die Datenverarbeitung benötigt, wenn die CSV-Dateien neu generiert werden sollen.
+	spotify_charts_enhanced.csv   	# Wird aufgrund der Größe automatisch von GitHub Release geladen
+
+HINWEIS: Die Rohdaten (charts.csv, Final database.csv, dataset.csv) sind nicht im Repository enthalten. Sie werden nur lokal für die Datenverarbeitung benötigt, wenn die CSV-Dateien neu generiert werden sollen.
 
 
 Ausführung:
@@ -72,7 +72,7 @@ Ausführung:
 Datenverarbeitung starten:
 - python datenverarbeitung.py
 
-Das Skript erstellt vier Ausgabe-Dateien:
+Das Skript erstellt vier Ausgabe-Dateien aus den Originalen:
 - cleaned_charts_kpi.csv
 - spotify_charts_enhanced.csv
 - high_potential_tracks.csv 
@@ -89,14 +89,11 @@ Das Dashboard läuft dann auf http://localhost:8050
 Datenquellen:
 Für das Projekt habe ich verschiedene Datenquellen kombiniert:
 
-- Spotify Charts Dataset: Tägliche Chart-Positionen 2017-2021 
-  (26,2 Millionen Zeilen)
-- Spotify Audio Features Dataset: Technische Song-Eigenschaften wie 
-  Danceability, Energy, Tempo für 114.000 Tracks
-- Final Database: Artist-Informationen und Follower-Zahlen 
-  (170.000 Einträge)
+- Spotify Charts Dataset: Tägliche Chart-Positionen 2017-2021   (26,2 Millionen Zeilen)
+- Spotify Audio Features Dataset: Technische Song-Eigenschaften wie Danceability, Energy, Tempo für 114.000 Tracks
+- Final Database: Artist-Informationen und Follower-Zahlen (170.000 Einträge)
 - Spotify API: Live-Daten für aktuelle Top-Tracks
-- Last.fm API: Nutzer-basierte Genre-Trends zur Validierung
+- Last.fm API: Nutzer-basierte Genre-Trends zur kontextuellen Einordnung
 
 
 Datenbereinigung:
@@ -111,7 +108,8 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 7. Berechnung eines Success Scores aus mehreren Faktoren
 8. Aggregation zu KPI-Metriken
 
-Die Genre-Standardisierung ist in genre_mapping.json definiert. Beispielsweise werden "hip hop", "rap", "trap" und "german hip hop" alle als "Hip-Hop" klassifiziert.
+Genre-Mapping:
+Die Zuordnung von Roh-Genres zu den neun harmonisierten Hauptgenres erfolgt über die Datei genre_mapping.json. Diese Datei wurde manuell auf Basis explorativer Analyse der Rohdaten erstellt und definiert feste Mapping-Regeln (z. B. „rap“, „trap“, „german hip hop“ > „Hip-Hop“). Sie ist Bestandteil der ETL-Konfiguration und wird während der Datenverarbeitung von datenverarbeitung.py eingelesen. Die Datei wird nicht automatisch generiert, sondern bewusst versioniert, um eine konsistente und reproduzierbare Genre-Harmonisierung sicherzustellen.
 
 Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
 Die ETL-Pipeline erzeugt bei identischen Eingabedaten reproduzierbare Ergebnisse.
@@ -134,7 +132,7 @@ Der Market Potential Score kombiniert drei Komponenten auf einer 0-100 Skala:
 - Success Rate (Gewicht 30%): Anteil der Tracks mit hohem Success Score (≥65)
 - Growth Momentum (Gewicht 30%): Wachstum seit 2017, normiert auf 0-100
 
-Die Growth-Komponente wird auf 200% (Verdoppelung) begrenzt und anschließend auf 0-100 normiert, um Ausreißer-Dominanz zu verhindern und Vergleichbarkeit zwischen Genres zu gewährleisten. Vor dem Export erfolgt eine automatische Validierung der Datenqualität (keine Duplikate, Market Share Summen = 100%).
+Die Growth-Komponente wird auf 200% (Verdoppelung) begrenzt und anschließend auf 0-100 normiert, um Ausreißer-Dominanz zu verhindern und Vergleichbarkeit zwischen Genres zu gewährleisten. Vor dem Export erfolgt eine automatische Validierung der Datenqualität (keine Duplikate, Market Share Summen = 100%). Der Market Potential Score wird im Dashboard implizit über KPI-Kombinationen und Marktvergleiche abgebildet und dient als analytisches Konzept zur Einordnung von Genre-Attraktivität.
 
 
 Visualisierungen:
