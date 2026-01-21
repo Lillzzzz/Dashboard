@@ -854,7 +854,7 @@ dbc.RadioItems(
 
 html.P(
     "Gefiltert: KPIs folgen der Marktauswahl. Global: KPIs zeigen Gesamtmarkt.",
-    style={'color': '#5A6169', 'fontSize': '10px', 'fontStyle': 'italic', 'marginTop': '6px', 'marginBottom': '0'}
+    style={'color': '#7F8C8D', 'fontSize': '10px', 'fontStyle': 'italic', 'marginTop': '6px', 'marginBottom': '0'}
 ),
 
 html.Div([
@@ -887,7 +887,7 @@ html.Div([
     html.P(
         "Der Jahresfilter wirkt nur auf zeitabhängige Visualisierungen (z. B. Markt-Trends, Genre-Entwicklung).",
         style={
-            'color': '#5A6169',
+            'color': '#7F8C8D',
             'fontSize': '10px',
             'fontStyle': 'italic',
             'marginTop': '8px',
@@ -1416,7 +1416,7 @@ html.Div(id='audio-toptracks-text', style={
                         children=dcc.Graph(id='chart-genre-deviation', config={'displayModeBar': False}, style={'height': '400px', 'width': '100%'})
                     ),
                             html.Div(id='validation-stats'),
-                            html.Div("Quellen: Spotify (Live-Tracks) · Last.fm (7-Tage Nutzer-Daten) · Historik (2017–2021)", 
+                            html.Div("Quellen: Spotify (Live-Tracks) · Last.fm (7-Tage Nutzer-Daten) · 2017–2021", 
                                      style={'color': '#A0A0A0', 'fontSize': '11px', 'marginTop': '10px', 'textAlign': 'center'})
                         ], className="chart-card")
                     ], xl=6, lg=6, md=12, className='mb-4')
