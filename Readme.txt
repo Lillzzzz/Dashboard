@@ -3,7 +3,7 @@ Business Intelligence and Analytics - Dashboard Spotify Performance Insights
 Projektübersicht:
 Dieses Dashboard habe ich im Rahmen des Kurses "Business Intelligence and Analytics" entwickelt. Ziel war es, A&R-Manager bei Marktanalysen zu unterstützen – mit besonderem Fokus auf Genre-Trends und Audio-Features in drei Märkten: Deutschland, UK und Brasilien (2017-2021).
 
-Die Entwicklung hat etwa 4 Wochen gedauert, inklusive mehrfacher Iteration der ETL-Pipeline und Trial-and-Error  bei der Dashboard-UX. Einige Entscheidungen (z.B. Last.fm-Gewichtung 1.2) sind explorativ und würden für Produktivnutzung weitere Validierung benötigen.
+Die Entwicklung hat etwa 4 Wochen gedauert, inklusive mehrfacher Iteration der ETL-Pipeline und Trial-and-Error bei der Dashboard-UX. Einige Entscheidungen (z.B. Last.fm-Gewichtung 1.2) sind explorativ und würden für Produktivnutzung weitere Validierung benötigen.
 
 Live-Dashboard: https://dashboard-d0z8.onrender.com
 
@@ -107,21 +107,30 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 7. Berechnung eines Success Scores aus mehreren Faktoren
 8. Aggregation zu KPI-Metriken
 
-Die Genre-Standardisierung ist in genre_mapping.json definiert. Beispielsweise werden "hip hop", "rap", "trap" und "deutschrap" alle als "Hip-Hop" klassifiziert.
+Die Genre-Standardisierung ist in genre_mapping.json definiert. Beispielsweise werden "hip hop", "rap", "trap" und "german hip hop" alle als "Hip-Hop" klassifiziert.
 
 Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
 Die ETL-Pipeline erzeugt bei identischen Eingabedaten reproduzierbare Ergebnisse.
+
+
+Success Score Berechnung:
+Der Success Score kombiniert fünf Komponenten auf einer 0-100 Skala:
+- Chart-Rank (Gewicht 25%): Position in den Charts (normiert, höherer Rang = besserer Score)
+- Streams (Gewicht 15%): Logarithmisch normalisierte Stream-Zahlen
+- Audio-Features (Gewicht 30%): Kombination aus Danceability (15%) und Energy (15%)
+- Artist Followers (Gewicht 20%): Logarithmisch normalisierte Follower-Zahlen
+- Top10 Placement (Gewicht 10%): Bonus für Top-10-Platzierungen
+
+Die Formel gewichtet objektive Erfolgsindikatoren (Rank, Streams, Followers) mit 60% und Audio-Eigenschaften mit 40%. Tracks mit einem Score ≥65 gelten als High-Potential.
+
 
 Market Potential Score Berechnung:
 Der Market Potential Score kombiniert drei Komponenten auf einer 0-100 Skala:
 - Market Share (Gewicht 40%): Aktueller Marktanteil des Genres
 - Success Rate (Gewicht 30%): Anteil der Tracks mit hohem Success Score (≥65)
-- Growth Momentum (Gewicht 30%): Wachstum seit 2017, normiert auf 0-100 (max. Verdoppelung)
+- Growth Momentum (Gewicht 30%): Wachstum seit 2017, normiert auf 0-100
 
-Die Growth-Komponente wird auf 200% (Verdoppelung) begrenzt und anschließend auf 
-0-100 normiert, um Ausreißer-Dominanz zu verhindern und Vergleichbarkeit zwischen 
-Genres zu gewährleisten. Vor dem Export erfolgt eine automatische Validierung der 
-Datenqualität (keine Duplikate, Market Share Summen = 100%).
+Die Growth-Komponente wird auf 200% (Verdoppelung) begrenzt und anschließend auf 0-100 normiert, um Ausreißer-Dominanz zu verhindern und Vergleichbarkeit zwischen Genres zu gewährleisten. Vor dem Export erfolgt eine automatische Validierung der Datenqualität (keine Duplikate, Market Share Summen = 100%).
 
 
 Visualisierungen:
@@ -141,12 +150,12 @@ Zentrale Erkenntnisse:
 Aus der Analyse ergeben sich mehrere zentrale Muster:
 
 - Die drei betrachteten Märkte (Deutschland, UK, Brasilien) unterscheiden sich deutlich in ihren Genre-Strukturen.
-- Die Shannon-Diversität liegt in allen Märkten im Bereich von ca. 1,27–1,40 und weist auf insgesamt konzentrierte Märkte mit wenigen dominanten Genres hin.
+- Die Shannon-Diversität variiert zwischen den Märkten: Brasilien zeigt durchschnittlich 1,36, Deutschland 1,26 und UK 1,38, was auf unterschiedliche Konzentrationsgrade hinweist.
 - Brasilien zeigt im Zeitverlauf einen Aufwärtstrend in den Marktverläufen, während der UK-Markt relativ an Anteil verliert.
 - Audio-Features wie Danceability und Energy zeigen Zusammenhänge mit Erfolg, erklären diesen jedoch nur begrenzt und nicht kausal.
 
 Limitation der Datenquelle:
-Die Genre-Identifikation basiert auf Metadata-Abgleich mit der Final Database. Für das Jahr 2021 zeigt sich eine deutlich reduzierte Genre-Coverage (23% vs. 75% in den Jahren 2017-2020), was zu einem erhöhten "Other"-Anteil von über 70% führt. Diese Einschränkung liegt in der verwendeten Kaggle-Datenquelle begründet, die für 2021-Tracks weniger vollständige Genre-Metadaten enthält. Die Analyse fokussiert daher primär auf den Zeitraum 2017-2020 mit vollständiger Genre-Klassifikation.
+Die Genre-Identifikation basiert auf Metadata-Abgleich mit der Final Database. Für das Jahr 2021 zeigt sich eine deutlich reduzierte Genre-Coverage (10,2% vs. 53,8% in 2020), was zu einem erhöhten "Other"-Anteil führt. Diese Einschränkung liegt in der verwendeten Kaggle-Datenquelle begründet, die für 2021-Tracks weniger vollständige Genre-Metadaten enthält. Die Analyse fokussiert daher primär auf den Zeitraum 2017-2020 mit vollständiger Genre-Klassifikation.
 
 
 Technischer Stack:
