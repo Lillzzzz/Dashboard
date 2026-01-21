@@ -8,7 +8,7 @@ import json
 
 warnings.filterwarnings('ignore')
 
-# KONFIGURATION
+# Konfiguration
 
 CONFIG_PATH = Path("config.json")
 with open(CONFIG_PATH, "r", encoding="utf-8") as f:
@@ -402,7 +402,7 @@ def main():
     
     print(f"\n   Success-Score: Min={merged['success_score'].min():.2f}, Mean={merged['success_score'].mean():.2f}, Max={merged['success_score'].max():.2f}")
     
-    # 7: KPI-METRIKEN
+    # 7: KPI-Metriken
     print_section("7: KPI-METRIKEN")
     
     kpi_list = []
@@ -483,7 +483,7 @@ def main():
     high_potential = high_potential.sort_values('success_score', ascending=False)
     print(f"\n   High-Potential Tracks: {len(high_potential):,}")
     
-    # 10: EXPORT
+    # 10:Export
     print_section("10: DATEN EXPORTIEREN")
     
     outputs = {
