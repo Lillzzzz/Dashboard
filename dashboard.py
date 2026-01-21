@@ -88,6 +88,17 @@ def get_highpot_data():
 
 
 def clear_cache():
+    """
+    Löscht LRU-Cache der CSV-Loader.
+    NÖTIG:
+    - Nach manueller CSV-Aktualisierung
+    - Bei Memory-Problemen
+    - Beim Debugging
+    
+    NICHT NÖTIG:
+    - Im normalen Dashboard-Betrieb
+    - Bei Markt-/Jahresfilter-Änderungen
+    """
     get_kpi_data.cache_clear()
     get_enhanced_data.cache_clear()
     get_highpot_data.cache_clear()
@@ -101,10 +112,11 @@ else:
     GENRE_MAPPING_DASH = {}
 
 
-# Konstanten für Last.fm Gewichtung
-# Last.fm Gewichtung: Last.fm-Tracks werden höher gewichtet, da sie auf
+# Last.fm Gewichtung: Last.fm-Tracks werden höher gewichtet (Faktor 1.2), da sie auf
 # echten Nutzer-Plays (7 Tage) basieren und nicht algorithmus-gesteuert sind.
-# Validiert Spotify-Trends gegen Plattform-Bias.
+# Der Faktor 1.2 wurde explorativ gewählt, um nutzerbasierte Plays stärker zu berücksichtigen.
+# Alternativ getestet: 1.0 (gleichwertig): schlechtere Übereinstimmung mit historischen Genre-Trends
+# Eine systematische Kalibrierung steht aus und würde weitere Marktforschung erfordern.
 LASTFM_WEIGHT = 1.2  # Last.fm-Tracks höher gewichten: 
                     
 
@@ -396,7 +408,16 @@ class SpotifyAPI:
             return None
     
     def _ensure_token(self):
-        """Prueft Token und erneuert wenn noetig"""
+        """
+        Token-Management für Spotify API.
+        Spotify Access Tokens sind nur 1 Stunde gültig (3600s).
+        Erneuerung 5 Minuten vor Ablauf (300s Buffer), um Race Conditions zu vermeiden.
+    
+        ABLAUF:
+            1. Prüfe: Token noch gültig? (time.time() < token_expiry)
+            2. Falls abgelaufen: Neuen Token mit _get_token() holen
+            3. Falls Fehler: Return False (Fallback-Daten)
+    """
         import time
         if not self.token or time.time() >= self.token_expiry:
             print("Token abgelaufen, erneuere...")
@@ -1467,7 +1488,18 @@ html.Div(id='audio-toptracks-text', style={
 def predict_genre_simple(track_name, artist):
     """
     Vereinfachte Genre-Prädiktion basierend auf Keywords.
-    Konsistentes Keyword-Matching aus Titel und Künstler für reproduzierbare Kategorisierung.
+    
+    METHODIK:
+    1. Zuerst: Mapping aus genre_mapping.json (granular > 9 Hauptgenres)
+    2. Fallback: Keyword-Liste (z.B. "rap", "feat" > Hip-Hop)
+    3. Default: "Other" wenn kein Match
+    
+    LIMITATION: Rein heuristisch, keine ML-basierte Klassifikation. Funktioniert gut für eindeutige Genre-Marker, versagt bei hybriden Stilen.
+    
+    BEISPIEL:
+    - "Lil Baby feat. Drake" > Hip-Hop (via "lil ", "feat")
+    - "Electric Love" > Dance/Electronic (via "electric")
+    - "Unknown Artist - Track" > Other (kein Match)
     """
     try:
         text = ((str(track_name) or "") + " " + (str(artist) or "")).lower()
@@ -1652,6 +1684,10 @@ def update_market_selection(n_all, n_de, n_uk, n_br, current_markets):
 )
 def update_from_mobile_filters(market_val, year_val):
     """Mobile Dropdowns ändern Desktop Filter"""
+    # Mobile Dropdowns und Desktop-Buttons müssen synchron bleiben
+    # Dieser Callback stellt sicher, dass Änderungen im mobilen Dropdown
+    # die aktiven Button-States in der Desktop-Sidebar aktualisieren
+    
     # Markt setzen
     if market_val == 'ALL':
         markets = ['DE', 'UK', 'BR']
@@ -1670,6 +1706,18 @@ def update_from_mobile_filters(market_val, year_val):
     year_output = None if year_val == "ALL" else year_val
     
     return markets, classes['btn-all'], classes['btn-de'], classes['btn-uk'], classes['btn-br'], market_val, year_output
+
+# ==================== KPI BERECHNUNG
+# Success Score Komponenten (Gewichtung projektintern festgelegt):
+# - Chart-Rank (25%): Höhere Platzierung = höherer Score
+# - Streams (15%): Logarithmierte Stream-Zahlen (normalisiert)
+# - Audio-Features (30%): Danceability (15%) + Energy (15%)
+# - Artist-Reichweite (20%): Follower-Anzahl (logarithmiert)
+# - Top-Placements (10%): Top10 (5%) + Top50 (5%) Dummy-Variablen
+#
+# WICHTIG: Der Score ist ein deskriptiver Vergleichsindex, keine Prognose.
+# Er fasst multiple Erfolgsdimensionen zusammen, beweist aber keine Kausalität.
+# ====================================
 
 @app.callback(
     [Output('kpi-shannon', 'children'),
@@ -2044,7 +2092,9 @@ def update_audio_scatter(markets):
             )
             return fig, ""
 
-        # Reproduzierbares Sampling
+        # Reproduzierbares Sampling (max. 1000 Tracks für Performance)
+        # random_state = 42 sichert identische Samples bei gleichen Input-Daten
+        # 1000 Tracks reichen für repräsentative Verteilung, reduzieren aber Render-Zeit
         df_sample = df.sample(min(1000, len(df)), random_state=42).copy()
 
         colors = get_market_colors()
@@ -2082,10 +2132,14 @@ def update_audio_scatter(markets):
                 r2_lines.append(f"{market_labels.get(mkt, mkt)}: R² n/a (n={len(x)})")
                 continue
 
-            # lineare Regression y = a*x + b
+            ## Lineare Regression: y = a*x + b (OLS - Ordinary Least Squares)
             a, b = np.polyfit(x, y, 1)
             y_pred = a * x + b
 
+            # R² Berechnung: 1 - (SS_residual / SS_total)
+            # R² = 1: Perfekte Vorhersage, R² = 0: Keine Erklärungskraft
+            # SS_res = Summe der quadrierten Residuen (Fehler)
+            # SS_tot = Gesamtvarianz um den Mittelwert
             ss_res = np.sum((y - y_pred) ** 2)
             ss_tot = np.sum((y - np.mean(y)) ** 2)
             r2 = 1 - ss_res / ss_tot if ss_tot > 0 else np.nan
@@ -2226,7 +2280,7 @@ def update_market_trends(markets, year):
                     color=colors[market], 
                     width=3,
                     shape='spline',  # Glatte Kurven
-                    smoothing=1.0
+                    smoothing=1.0    # Max. Glättung (0=linear, 1=maximal geglättet)
                 ),
                 marker=dict(size=10, symbol='circle'),
                 hovertemplate='<b>%{fullData.name}</b><br>Jahr: %{x}<br>Marktanteil: %{y:.1f}%<extra></extra>'
@@ -2239,18 +2293,22 @@ def update_market_trends(markets, year):
             gridcolor='rgba(29,185,84,0.15)'
         )
         
-        # Y-Achse so skalieren dass Unterschiede SICHTBAR sind
+        # Y-Achsen Skalierung: Dynamisch anpassen für maximale Sichtbarkeit
+        # Problem: Bei kleinen Unterschieden wirkt alles flach auf 0-100% Skala
+        # Lösung: Zoom auf tatsächlichen Wertebereich mit 15% Padding
         y_values = df_grouped['market_share_percent'].values
         y_min = y_values.min()
         y_max = y_values.max()
         y_range = y_max - y_min
         
-        # Wenn Variation sehr klein, trotzdem Unterschiede zeigen
+        # Edge Case: Variation < 5%: Fixiertes 6%-Fenster um Mittelwert
+        # Beispiel: 33% - 34% wird zu [30%, 36%] statt [0%, 100%]
         if y_range < 5:
             y_mid = (y_min + y_max) / 2
             y_axis_min = max(0, y_mid - 3)
             y_axis_max = y_mid + 3
         else:
+            # Standard: 15% Padding oberhalb/unterhalb des Wertebereichs
             y_padding = y_range * 0.15
             y_axis_min = max(0, y_min - y_padding)
             y_axis_max = y_max + y_padding
@@ -2306,7 +2364,11 @@ def update_highpot_table(markets):
             artist_display = f"{artist_name[:25]}..." if len(artist_name) > 25 else artist_name
 
 
-            # Spotify Search Link (ohne Track-ID nötig) – robust gegen None/leer
+            # Spotify Search Link generieren (ohne Track-ID, da nicht immer verfügbar)
+            # Methodik: URL-encodierter Query-String für robuste Suche
+            # Format: https://open.spotify.com/search/[track+artist]
+            # Beispiel: "Shape of You Ed Sheeran": https://open.spotify.com/search/Shape%20of%20You%20Ed%20Sheeran
+            # Warum nicht Track-ID? highpot_df enthält nur track_name/artist, keine Spotify-IDs
             query = urllib.parse.quote(f"{track_name} {artist_name}")
             spotify_url = f"https://open.spotify.com/search/{query}"
 
@@ -2639,9 +2701,12 @@ def update_genre_deviation(markets, n_intervals):
         for m in markets:
             country = LASTFM_COUNTRY_MAP.get(m)
             if country:
-                lastfm_tracks = get_lastfm_toptracks(country, 10) or []  # reduziert von 15
+                # Last.fm 7-Tage Top-Charts ergänzen Spotify-Daten
+                # Last.fm ist nutzer-play-basiert (keine Algorithmus-Bias)
+                # Validiert ob Spotify Featured Tracks repräsentativ
+                lastfm_tracks = get_lastfm_toptracks(country, 10) or []
                 for t in lastfm_tracks:
-                    t['weight'] = LASTFM_WEIGHT
+                    t['weight'] = LASTFM_WEIGHT  # 1.2x Gewichtung (siehe Zeile 108)
                 current_tracks.extend(lastfm_tracks)
         
         if not current_tracks:
