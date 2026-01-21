@@ -1059,7 +1059,7 @@ html.Div([
 dbc.Tooltip(
     "Basis: Spotify-Charts (DE/UK/BR), Historie 2017–2021. "
     "Berechnung nutzt die 9 harmonisierten Hauptgenres (Pop…Other). "
-    "Wichtig: 2021 ist teils stark von „Other“ geprägt → Vielfalt kann verzerrt wirken.",
+    "Wichtig: 2021 ist teils stark von „Other“ geprägt > Vielfalt kann verzerrt wirken.",
     target="shannon-info",
     placement="right",
     style={"maxWidth": "320px"},
@@ -2708,7 +2708,7 @@ def update_genre_deviation(markets, n_intervals):
                 # Validiert ob Spotify Featured Tracks repräsentativ
                 lastfm_tracks = get_lastfm_toptracks(country, 10) or []
                 for t in lastfm_tracks:
-                    t['weight'] = LASTFM_WEIGHT  # 1.2x Gewichtung (siehe Zeile 108)
+                    t['weight'] = LASTFM_WEIGHT  # 1.2x Gewichtung
                 current_tracks.extend(lastfm_tracks)
         
         if not current_tracks:
@@ -2730,7 +2730,7 @@ def update_genre_deviation(markets, n_intervals):
         deviation_rows = []
         # Nur Genres anzeigen, die sowohl historisch als auch live vorkommen
         for g in hist_genre_share.index:
-            if g not in live_genre_share:  # Genre hat keine Live-Treffer → überspringen
+            if g not in live_genre_share:  # Genre hat keine Live-Treffer > überspringen
                 continue
             hist_val = float(hist_genre_share[g])
             live_val = float(live_genre_share[g])
