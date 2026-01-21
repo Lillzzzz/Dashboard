@@ -109,7 +109,7 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 8. Aggregation zu KPI-Metriken
 
 Genre-Mapping:
-Die Zuordnung von Roh-Genres zu den neun harmonisierten Hauptgenres erfolgt über die Datei genre_mapping.json. Diese Datei wurde manuell auf Basis explorativer Analyse der Rohdaten erstellt und definiert feste Mapping-Regeln (z. B. „rap“, „trap“, „german hip hop“ > „Hip-Hop“). Sie ist Bestandteil der ETL-Konfiguration und wird während der Datenverarbeitung von datenverarbeitung.py eingelesen. Die Datei wird nicht automatisch generiert, sondern bewusst versioniert, um eine konsistente und reproduzierbare Genre-Harmonisierung sicherzustellen. Falls die Datei fehlt, nutzt die Pipeline einen identischen Fallback-Mapper im Python-Code.
+Die Zuordnung von Roh-Genres zu den neun harmonisierten Hauptgenres erfolgt über die Datei genre_mapping.json. Diese Datei wurde auf Basis explorativer Datenanalyse entwickelt und definiert 50 feste Mapping-Regeln (z. B. „rap", „trap", „german hip hop" > „Hip-Hop"). Sie ist Bestandteil der ETL-Konfiguration und wird während der Datenverarbeitung von datenverarbeitung.py eingelesen. Die Datei ist versioniert, um eine konsistente und reproduzierbare Genre-Harmonisierung sicherzustellen. Falls die Datei fehlt, nutzt die Pipeline einen identischen Fallback-Mapper im Python-Code.
 
 Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
 Die ETL-Pipeline erzeugt bei identischen Eingabedaten reproduzierbare Ergebnisse.
@@ -132,7 +132,9 @@ Der Market Potential Score kombiniert drei Komponenten auf einer 0-100 Skala:
 - Success Rate (Gewicht 30%): Anteil der Tracks mit hohem Success Score (≥65)
 - Growth Momentum (Gewicht 30%): Wachstum seit 2017, normiert auf 0-100
 
-Die Growth-Komponente wird auf 200% (Verdoppelung) begrenzt und anschließend auf 0-100 normiert, um Ausreißer-Dominanz zu verhindern und Vergleichbarkeit zwischen Genres zu gewährleisten. Vor dem Export erfolgt eine automatische Validierung der Datenqualität (keine Duplikate, Market Share Summen = 100%). Der Market Potential Score wird im Dashboard implizit über KPI-Kombinationen und Marktvergleiche abgebildet und dient als analytisches Konzept zur Einordnung von Genre-Attraktivität.
+Die Growth-Komponente wird auf 200% (Verdoppelung) begrenzt und anschließend auf 0-100 normiert, um Ausreißer-Dominanz zu verhindern und Vergleichbarkeit zwischen Genres zu gewährleisten. Vor dem Export erfolgt eine automatische Validierung der Datenqualität (keine Duplikate, Market Share Summen = 100%). 
+
+HINWEIS: Der Market Potential Score wird NICHT als separate KPI-Karte im Dashboard angezeigt, sondern dient als analytisches Konzept zur Einordnung von Genre-Attraktivität. Die Score-Komponenten (Market Share, Success Rate, Growth) sind jedoch in den KPI-Metriken und zeitlichen Marktverläufen sichtbar.
 
 
 Visualisierungen:
