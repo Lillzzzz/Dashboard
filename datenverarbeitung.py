@@ -112,7 +112,27 @@ def harmonize_genre(genre_str):
     return "Other"
 
 def calculate_shannon_diversity(series):
-    """Berechnet Shannon-Diversität"""
+    """
+    Shannon-Diversität (Shannon-Wiener Index) für Genre-Vielfalt.
+    
+    FORMEL: H = -Σ(p_i * ln(p_i))
+    - p_i = Anteil Genre i (z.B. 0.35 für 35% Pop)
+    - ln = natürlicher Logarithmus
+    - Σ = Summe über alle Genres
+    
+    INTERPRETATION:
+    - H = 0.0: Nur ein Genre (keine Vielfalt)
+    - H = 1.0-1.5: 1-2 Genres dominieren (z.B. 60% Pop, 30% Hip-Hop)
+    - H = 1.5-2.0: Mehrere relevante Genres (typisch für Musikmärkte)
+    - H > 2.0: Viele Genres gleichverteilt
+    
+    BEISPIEL:
+    ['Pop', 'Pop', 'Pop', 'Hip-Hop', 'Rock']
+    → Pop: 60%, Hip-Hop: 20%, Rock: 20%
+    → H = -(0.6*ln(0.6) + 0.2*ln(0.2) + 0.2*ln(0.2)) ≈ 0.95
+    
+    1e-12 verhindert log(0) Fehler bei Genres mit 0%.
+    """
     counts = series.value_counts()
     proportions = counts / counts.sum()
     shannon = -np.sum(proportions * np.log(proportions + 1e-12))
