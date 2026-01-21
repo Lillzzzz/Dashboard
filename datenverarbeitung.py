@@ -168,8 +168,8 @@ def main():
     
     step_counter = 1
     
-    # SCHRITT 1: DATEN LADEN
-    print_section("SCHRITT 1: DATEN LADEN")
+    # 1: DATEN LADEN
+    print_section("1: DATEN LADEN")
     
     try:
         charts = pd.read_csv(PATHS["raw_charts"], low_memory=False)
@@ -197,8 +197,8 @@ def main():
         print(f"❌ FEHLER: {e}")
         return
     
-    # SCHRITT 2: CHARTS BEREINIGEN
-    print_section("SCHRITT 2: CHARTS BEREINIGEN")
+    # 2: CHARTS BEREINIGEN
+    print_section("2: CHARTS BEREINIGEN")
     
     charts['date'] = pd.to_datetime(charts['date'], errors='coerce')
     charts['year'] = charts['date'].dt.year
@@ -232,7 +232,7 @@ def main():
     # KRITISCH: Track-ID extrahieren
     charts['track_id'] = charts['url'].str.extract(r'track/([A-Za-z0-9]+)', expand=False)
     log_step(step_counter, 'feature_engineering', 'charts', 'charts',
-             'Extraktion der Track-ID aus Spotify-URL via Regex. Ermöglicht eindeutige Track-Identifikation über Datasets hinweg.',
+             'Track-ID aus der Spotify-URL gezogen (Regex), für sauberes mergen.',
              rows_before=len(charts), rows_after=len(charts),
              extra_info='Pattern: track/([A-Za-z0-9]+)')
     step_counter += 1
@@ -252,7 +252,7 @@ def main():
             charts.loc[mask, 'streams'] = median_streams
     
     log_step(step_counter, 'imputation', 'charts', 'charts',
-             'Imputation fehlender Stream-Werte mit Median pro Jahr und Markt. Erhält Datenqualität ohne Verzerrung der Statistiken.',
+             'Fehlende Streams: Median je Jahr×Markt eingesetzt (einfacher Fallback).',
              rows_before=len(charts), rows_after=len(charts),
              extra_info='Method: Median imputation grouped by year × market')
     step_counter += 1
@@ -268,8 +268,8 @@ def main():
     
     print(f"\n   Nach Bereinigung: {len(charts):,} Zeilen")
     
-    # SCHRITT 3: AUDIO-FEATURES INTEGRIEREN
-    print_section("SCHRITT 3: AUDIO-FEATURES INTEGRIEREN")
+    # 3: AUDIO-FEATURES INTEGRIEREN
+    print_section("3: AUDIO-FEATURES INTEGRIEREN")
     
     for col in ['Uri', 'uri', 'url', 'URL']:
         if col in final_db.columns:
@@ -314,15 +314,15 @@ def main():
         audio_df['Popularity'] = clean_numeric_column(audio_df['Popularity'], 'Popularity', clip_min=0, clip_max=100)
     
     log_step(step_counter, 'clean_numeric', 'audio_df', 'audio_df',
-             'Bereinigung und Clipping der Audio-Features auf plausible Wertebereiche. Tempo: 30-250 BPM, andere Features: 0-1.',
+             'Audio-Features in sinnvolle Bereiche gekappt (0–1, Tempo 30–250).',
              rows_before=len(audio_df), rows_after=len(audio_df),
              extra_info='Tempo: 30-250 BPM, Audio features: 0-1, Popularity: 0-100')
     step_counter += 1
     
     print(f"\n   Audio Features: {len(audio_df):,} Zeilen")
     
-    # SCHRITT 4: GENRE-DATEN VORBEREITEN
-    print_section("SCHRITT 4: GENRE-DATEN VORBEREITEN")
+    # 4: GENRE-DATEN VORBEREITEN
+    print_section("4: GENRE-DATEN VORBEREITEN")
     
     genre_cols = []
     for col in ['track_id', 'Genre', 'genre']:
@@ -345,8 +345,8 @@ def main():
         print("   ⚠️ WARNUNG: Keine Track-ID für Genre-Mapping")
         genre_df = pd.DataFrame()
     
-    # SCHRITT 5: DATEN ZUSAMMENFÜHREN
-    print_section("SCHRITT 5: DATEN ZUSAMMENFÜHREN")
+    # 5: DATEN ZUSAMMENFÜHREN
+    print_section("5: DATEN ZUSAMMENFÜHREN")
     
     rows_before = len(charts)
     merged = charts.merge(audio_df, on='track_id', how='left')
@@ -370,8 +370,8 @@ def main():
     
     print(f"\n   Merged Dataset: {len(merged):,} Zeilen")
     
-    # SCHRITT 6: SUCCESS-SCORE
-    print_section("SCHRITT 6: SUCCESS-SCORE BERECHNEN")
+    # 6: SUCCESS-SCORE
+    print_section("6: SCORE BERECHNEN")
     
     merged['success_score'] = calculate_success_score(merged)
     log_step(step_counter, 'feature_engineering', 'merged', 'merged',
@@ -382,8 +382,8 @@ def main():
     
     print(f"\n   Success-Score: Min={merged['success_score'].min():.2f}, Mean={merged['success_score'].mean():.2f}, Max={merged['success_score'].max():.2f}")
     
-    # SCHRITT 7: KPI-METRIKEN
-    print_section("SCHRITT 7: KPI-METRIKEN")
+    # 7: KPI-METRIKEN
+    print_section("7: KPI-METRIKEN")
     
     kpi_list = []
     
@@ -426,8 +426,8 @@ def main():
     step_counter += 1
     print(f"\n   KPI-Dataset: {len(kpi_df):,} Zeilen")
     
-    # SCHRITT 8: MARKET TRENDS
-    print_section("SCHRITT 8: MARKET TRENDS")
+    # 8: MARKET TRENDS
+    print_section("8: MARKET TRENDS")
     
     market_trends = merged.groupby(['year', 'market'])['streams'].sum().reset_index().rename(columns={'streams': 'total_streams'})
     market_trends['market_share_percent'] = (market_trends.groupby('year')['total_streams'].transform(lambda x: x / x.sum() * 100)).round(2)
@@ -437,8 +437,8 @@ def main():
     step_counter += 1
     print(f"\n   Market Trends: {len(market_trends):,} Zeilen")
     
-    # SCHRITT 9: HIGH-POTENTIAL TRACKS
-    print_section("SCHRITT 9: HIGH-POTENTIAL TRACKS")
+    # 9: HIGH-POTENTIAL TRACKS
+    print_section("9: HIGH-POTENTIAL TRACKS")
     
     recent_years = sorted(merged['year'].unique())[-2:]
     rows_before = len(merged)
@@ -463,8 +463,8 @@ def main():
     high_potential = high_potential.sort_values('success_score', ascending=False)
     print(f"\n   High-Potential Tracks: {len(high_potential):,}")
     
-    # SCHRITT 10: EXPORT
-    print_section("SCHRITT 10: DATEN EXPORTIEREN")
+    # 10: EXPORT
+    print_section("10: DATEN EXPORTIEREN")
     
     outputs = {
         'cleaned_charts_kpi.csv': kpi_df,
