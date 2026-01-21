@@ -1515,14 +1515,14 @@ def predict_genre_simple(track_name, artist):
     # 2) Fallback: Einfache Keyword-Regeln (falls JSON kein Match)
     #    Diese Liste ist bewusst breit gefasst für robuste Genre-Zuordnung
     genre_keywords = {
-        "Pop": ["pop", "love", "baby", "heart", "girl", "boy", "dance"],
-        "Hip-Hop": ["rap", "hip hop", "feat", "ft.", "lil ", "young", "gang"],
-        "Rock": ["rock", "band", "guitar", "wild", "fire", "electric"],
-        "Electronic": ["house", "techno", "edm", "beat", "bass", "club", "party", "electronic"],
-        "Latin": ["latin", "reggaeton", "salsa", "bachata", "fiesta", "corazón", "sertanejo"],
-        "R&B": ["r&b", "soul", "rhythm", "blues", "slow jam"],
-        "Country": ["country", "cowboy", "truck", "whiskey"],
-        "Jazz": ["jazz", "piano", "saxophone", "swing"],
+    "Pop": ["pop", "love", "baby", "heart", "girl", "boy"],
+    "Hip-Hop": ["rap", "hip hop", "feat", "ft.", "lil ", "young", "gang"],
+    "Rock": ["rock", "band", "guitar", "wild", "fire"],
+    "Electronic": ["house", "techno", "edm", "electro", "trance", "dubstep", "dnb", "drum", "bass", "rave", "club", "party", "electronic"],
+    "Latin": ["latin", "reggaeton", "salsa", "bachata", "fiesta", "corazón", "sertanejo"],
+    "R&B": ["r&b", "soul", "rhythm", "blues", "slow jam"],
+    "Country": ["country", "cowboy", "truck", "whiskey"],
+    "Jazz": ["jazz", "piano", "saxophone", "swing"],
     }
     
     # Keyword-Matching
