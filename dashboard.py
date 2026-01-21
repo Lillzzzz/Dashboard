@@ -1432,7 +1432,7 @@ html.Div(id='audio-toptracks-text', style={
             html.Div([
                 html.Small(
                     [
-        "Datenbasis (Historie): Spotify Charts & Spotify Audio Features (2017–2021, DE/UK/BR). ",
+        "Datenbasis: Spotify Charts & Spotify Audio Features (2017–2021, DE/UK/BR). ",
         "Optional: Live-Kontext über Spotify Web API und Last.fm (nicht Teil der historischen KPI-Berechnung). ",
         "Datenstand und ETL-Prozess siehe ",
         html.Code("data/data_journal.csv", style={'color': '#1DB954'}),
