@@ -74,7 +74,7 @@ Das Skript erstellt vier Ausgabe-Dateien:
 - high_potential_tracks.csv 
 - cleaned_market_trends.csv
 
-Zusätzlich wird data_journal.csv mit allen 23 Verarbeitungsschritten generiert.
+Zusätzlich wird data_journal.csv mit detaillierter Dokumentation aller Verarbeitungsschritte generiert.
 
 Dashboard starten:
 - python dashboard.py
