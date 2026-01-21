@@ -1,7 +1,9 @@
 Business Intelligence and Analytics - Dashboard Spotify Performance Insights
 
 Projektübersicht:
-Dieses Dashboard habe ich im Rahmen des Kurses "Business Intelligence and Analytics" entwickelt. Es soll A&R-Manager bei der Bewertung von Musikmärkten unterstützen, indem es Genre-Trends und Audio-Features in drei internationalen Märkten analysiert.
+Dieses Dashboard habe ich im Rahmen des Kurses "Business Intelligence and Analytics" entwickelt. Ziel war es, A&R-Manager bei Marktanalysen zu unterstützen – mit besonderem Fokus auf Genre-Trends und Audio-Features in drei Märkten: Deutschland, UK und Brasilien (2017-2021).
+
+Die Entwicklung hat etwa 4 Wochen gedauert, inklusive mehrfacher Iteration der ETL-Pipeline und Trial-and-Error  bei der Dashboard-UX. Einige Entscheidungen (z.B. Last.fm-Gewichtung 1.2) sind explorativ und würden für Produktivnutzung weitere Validierung benötigen.
 
 Live-Dashboard: https://dashboard-d0z8.onrender.com
 
@@ -27,16 +29,18 @@ Das Projekt kann lokal ausgeführt werden:
    source venv/bin/activate
    pip install -r requirements.txt
 
-3. API-Keys konfigurieren:
+3. API-Keys konfigurieren (optional, aber empfohlen):
    Eine .env Datei im Hauptverzeichnis erstellen mit:
    
-   SPOTIFY_CLIENT_ID=spotify_client_id
-   SPOTIFY_CLIENT_SECRET=spotify_client_secret
-   LASTFM_API_KEY=lastfm_api_key
+   SPOTIFY_CLIENT_ID=dein_spotify_client_id
+   SPOTIFY_CLIENT_SECRET=dein_spotify_client_secret
+   LASTFM_API_KEY=dein_lastfm_api_key
    
-   ENtsprechende Keys können hier erstellt werden:
+   Entsprechende Keys können hier erstellt werden:
    - Spotify: https://developer.spotify.com/dashboard
    - Last.fm: https://www.last.fm/api/account/create
+   
+   HINWEIS: Dashboard funktioniert auch ohne API-Keys (nutzt Fallback-Daten). Die Live-API-Integration ist ein Bonus-Feature und nicht zwingend erforderlich.
 
 
 Projektstruktur
@@ -178,9 +182,14 @@ Das Projekt kann in vier Schritten vollständig reproduziert werden:
 4. Dashboard starten:
    python dashboard.py
    Öffne anschließend http://localhost:8050
+   
+   Beim ersten Start lädt das Dashboard automatisch die große CSV-Datei (spotify_charts_enhanced.csv, 309MB) von GitHub herunter falls nicht lokal vorhanden.
+   Das kann 1-2 Minuten dauern – danach läuft alles lokal.
 
-Hinweis: datenverarbeitung.py muss nur ausgeführt werden, wenn die CSV-Dateien neu generiert werden sollen
-(die vorbereiteten CSV-Dateien sind bereits enthalten).
+	WICHTIG für Reproduktion:
+	- datenverarbeitung.py muss NUR ausgeführt werden, wenn die CSV-Dateien neu generiert werden sollen (z.B. bei geänderten Kaggle-Rohdaten).
+	- Die fertigen CSV-Dateien sind bereits im Repo enthalten.
+	- Das Dashboard läuft auch ohne API-Keys.
 
 
 Dokumentation:
