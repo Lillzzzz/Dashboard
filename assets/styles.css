@@ -81,7 +81,7 @@ body {
   line-height: 1.6 !important;
 }
 
-/* ==================== Sidebar: Brand Card (aus Inline migriert) ==================== */
+/* ==================== Sidebar: Brand Card ==================== */
 .sidebar-brand-card {
   padding: 20px;
   background: linear-gradient(
@@ -147,7 +147,6 @@ body {
 
 /* Kleine Utility */
 .mt-18 { margin-top: 18px !important; }
-
 /* ==================== Filter Card ==================== */
 .filter-card {
   background: rgba(20,25,40,0.85);
@@ -390,7 +389,7 @@ body {
 }
 ._dash-loading-callback { color: #1DB954 !important; }
 
-/* ==================== Dropdown (aus index_string migriert) ==================== */
+/* ==================== Dropdown==================== */
 .dark-dropdown .Select-control {
   background-color: #1e1e1e !important;
   border: 1px solid #1db954 !important;
@@ -426,7 +425,7 @@ body {
 /* Mobile Dropdown nur spacing */
 .mobile-dropdown { margin-bottom: 12px !important; }
 
-/* ==================== KPI Scope Segment + Toggle (aus index_string migriert) ==================== */
+/* ==================== KPI Scope Segment + Toggle ==================== */
 .kpi-scope-segment {
   display: flex !important;
   gap: 0 !important;
@@ -543,7 +542,7 @@ body {
   line-height: 1.4;
 }
 
-/* ==================== Mobile Filter Card (ersetzt den Inline-Wrapper) ==================== */
+/* ==================== Mobile Filter Card =================== */
 .mobile-filter-card {
   background: rgba(15,20,30,0.9);
   border-radius: 12px;
@@ -570,7 +569,7 @@ body {
 /* ==================== Utilities ==================== */
 .mb-4 { margin-bottom: 24px !important; }
 
-/* ==================== Mobile (ein Block, keine Duplikate) ==================== */
+/* ==================== Mobile =================== */
 @media (max-width: 768px) {
   html, body {
     width: 100% !important;
