@@ -951,7 +951,7 @@ html.Div([
                     html.H1("Spotify Performance Insights", className='header-title'),
                     html.P([
                         "Dieses interaktive Business-Intelligence-Dashboard analysiert internationale ",
-    "Musikmärkte auf Basis historischer Spotify-Daten (2017–2021) und ergänzt diese ",
+    "Musikmärkte auf Basis der Spotify-Daten (2017–2021) und ergänzt diese ",
     "optional um aktuelle Streaming-Impulse aus Spotify- und Last.fm-APIs. Ziel ist ",
     "die transparente Visualisierung von Marktstrukturen, Genre-Dynamiken und ",
     "Erfolgsmustern zur Unterstützung datenbasierter A&R- und Marketingentscheidungen."
@@ -1196,7 +1196,7 @@ html.Div([
                 html.Div(
     [
         html.Strong("Success Score (0–100): "),
-        "kompositer Indikator aus Charts/Streams/Artist-Reichweite (historisch 2017–2021). ",
+        "kompositer Indikator aus Charts/Streams/Artist-Reichweite (2017–2021). ",
         "Hinweis: Score ist ein Vergleichsmaß (deskriptiv) und beweist keine Kausalität."
     ],
     style={
@@ -1351,7 +1351,7 @@ html.Div(id='audio-toptracks-text', style={
                                     html.Div(id='market-label-5', className='market-badge', style=get_live_badge_style('market'))
                                 ], style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center'}),
                                 html.P([
-                                    "Ranking basierend auf historischen Erfolgsfaktoren (2017–2021). ",
+                                    "Ranking basierend auf Erfolgsfaktoren (2017–2021). ",
                                     html.Strong("Score >80"), " = sehr hohes Hit-Potenzial. ",
                                     html.Strong("60-80"), " = solide. ",
                                     html.Strong("<60"), " = moderat. ",
@@ -1465,7 +1465,7 @@ html.Div(id='audio-toptracks-text', style={
                 html.Small(
                     [
         "Datenbasis: Spotify Charts & Spotify Audio Features (2017–2021, DE/UK/BR). ",
-        "Optional: Live-Kontext über Spotify Web API und Last.fm (nicht Teil der historischen KPI-Berechnung). ",
+        "Optional: Live-Kontext über Spotify Web API und Last.fm (nicht Teil der KPI-Berechnung). ",
         "Datenstand und ETL-Prozess siehe ",
         html.Code("data/data_journal.csv", style={'color': '#1DB954'}),
         ". Methodische Hinweise: Kennzahlen sind als vergleichende Marktindikatoren zu verstehen."
