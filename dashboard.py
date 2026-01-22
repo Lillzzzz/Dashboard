@@ -870,7 +870,7 @@ html.Div([
                     dbc.Col([
                         html.Div([
     html.Div([
-        "ERFOLGSQUOTE ",
+        "SUCCESS SCORE",
         html.I("ⓘ", id="success-info", className="info-icon")
         
     ], className='kpi-label'),
