@@ -1,424 +1,505 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
-/* Basis Reset */
+/* =========================================================
+   1) Base / Reset
+   - damit das Layout auf allen Geräten “gleich startet”
+   ========================================================= */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Body mit coolem Gradient Background */
 body {
-    font-family: 'Inter', sans-serif !important;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(29, 185, 84, 0.12) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(78, 205, 196, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(255, 107, 107, 0.06) 0%, transparent 50%),
-        linear-gradient(135deg, #0a0e1a 0%, #1a1f35 50%, #0f1420 100%) !important;
-    background-attachment: fixed;
-    color: #fff !important;
-    overflow-x: hidden;
+  font-family: 'Inter', sans-serif !important;
+  color: #fff !important;
+  overflow-x: hidden;
+
+  /* Hintergrund: bisschen “Premium / Dashboard”-Vibe */
+  background:
+    radial-gradient(circle at 20% 80%, rgba(29, 185, 84, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(78, 205, 196, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 107, 107, 0.06) 0%, transparent 50%),
+    linear-gradient(135deg, #0a0e1a 0%, #1a1f35 50%, #0f1420 100%) !important;
+  background-attachment: fixed;
 }
 
-/* Animationen für Live-Feeling */
+/* =========================================================
+   2) Animations
+   - kleine Micro-Interactions wirken “live” & modern
+   ========================================================= */
 @keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 15px rgba(29, 185, 84, 0.5));
-    }
-    50% {
-        transform: scale(1.05);
-        filter: drop-shadow(0 0 25px rgba(29, 185, 84, 0.8));
-    }
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 15px rgba(29, 185, 84, 0.5));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 25px rgba(29, 185, 84, 0.8));
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 @keyframes live-blink {
-    0%, 100% { 
-        opacity: 1; 
-        filter: drop-shadow(0 0 4px rgba(29, 185, 84, 0.8));
-    }
-    50% { 
-        opacity: 0.6;
-        filter: drop-shadow(0 0 2px rgba(29, 185, 84, 0.4));
-    }
+  0%, 100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px rgba(29, 185, 84, 0.8));
+  }
+  50% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 2px rgba(29, 185, 84, 0.4));
+  }
 }
 
-/* Sidebar Navigation */
+/* =========================================================
+   3) Layout: Sidebar + Main
+   - Struktur vom Dashboard
+   ========================================================= */
 .sidebar {
-    background: linear-gradient(180deg, rgba(15,20,30,0.88) 0%, rgba(10,15,25,0.92) 100%);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border-right: 2px solid rgba(29,185,84,0.3);
-    padding: 24px;
-    min-height: 100vh;
-    position: sticky;
-    top: 0;
-    overflow-y: auto;
-    max-height: 100vh;
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
-}
+  min-height: 100vh;
+  max-height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
 
-.sidebar .status-item::before {
-    content: '●';
-    color: #1DB954;
-    margin-right: 8px;
-    animation: live-blink 1.5s ease-in-out infinite;
-    display: inline-block;
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(15,20,30,0.88) 0%, rgba(10,15,25,0.92) 100%);
+  border-right: 2px solid rgba(29,185,84,0.3);
+
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
 }
 
 .main-content {
-    padding: 24px;
+  padding: 24px;
 }
 
-/* Header Bereich oben */
+/* =========================================================
+   4) Reusable “Card Look”
+   - gemeinsame Optik für Panels (BI-Dashboard Style)
+   ========================================================= */
+.header-section,
+.filter-card,
+.chart-card,
+.kpi-card {
+  border: 2px solid rgba(29,185,84,0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+
+/* Header hat eigenen Verlauf + spacing */
 .header-section {
-    background: linear-gradient(135deg, rgba(15,20,30,0.85) 0%, rgba(20,25,40,0.88) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 2px solid rgba(29,185,84,0.3);
-    border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 24px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(15,20,30,0.85) 0%, rgba(20,25,40,0.88) 100%);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
 }
 
 .header-title {
-    font-size: 36px !important;
-    font-weight: 900 !important;
-    background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    margin: 0 !important;
+  font-size: 36px !important;
+  font-weight: 900 !important;
+  margin: 0 !important;
+
+  /* “Spotify-Grün” als Branding */
+  background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
 }
 
 .header-subtitle {
-    font-size: 11px !important;
-    color: #B3B3B3 !important;
-    margin-top: 12px !important;
-    line-height: 1.6 !important;
+  font-size: 11px !important;
+  color: #B3B3B3 !important;
+  margin-top: 12px !important;
+  line-height: 1.6 !important;
 }
 
-/* Filter Section */
+/* =========================================================
+   5) Filter / Buttons
+   - Nutzerführung: schnelle Auswahl, klare States
+   ========================================================= */
 .filter-card {
-    background: rgba(20,25,40,0.85);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border: 2px solid rgba(29,185,84,0.3);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  background: rgba(20,25,40,0.85);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+
+  /* leicht “ruhiger” als Header */
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .filter-title {
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    color: #1DB954 !important;
-    margin-bottom: 16px !important;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #1DB954 !important;
+  margin-bottom: 16px !important;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 }
 
-/* Market Buttons für die Auswahl */
 .market-button {
-    width: 100%;
-    min-height: 52px;
-    display: flex;
-    align-items: center;
-    padding: 14px 18px !important;
-    margin-bottom: 10px !important;
-    border: 2px solid rgba(29,185,84,0.3) !important;
-    border-radius: 10px !important;
-    background: rgba(20,25,40,0.8) !important;
-    color: #B3B3B3 !important;
-    font-size: 11px !important;
-    font-weight: 600 !important;
-    transition: all 0.3s ease !important;
-    text-align: left !important;
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+
+  padding: 14px 18px !important;
+  margin-bottom: 10px !important;
+
+  border: 2px solid rgba(29,185,84,0.3) !important;
+  border-radius: 10px !important;
+  background: rgba(20,25,40,0.8) !important;
+
+  color: #B3B3B3 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-align: left !important;
+
+  transition: all 0.3s ease !important;
 }
 
 .market-button:hover {
-    background: rgba(29,185,84,0.1) !important;
-    border-color: rgba(29,185,84,0.6) !important;
-    color: #1DB954 !important;
-    transform: translateX(4px);
+  background: rgba(29,185,84,0.1) !important;
+  border-color: rgba(29,185,84,0.6) !important;
+  color: #1DB954 !important;
+  transform: translateX(4px);
 }
 
 .market-button.active {
-    background: linear-gradient(135deg, rgba(29,185,84,0.2) 0%, rgba(29,185,84,0.3) 100%) !important;
-    border-color: #1DB954 !important;
-    color: #1DB954 !important;
+  background: linear-gradient(135deg, rgba(29,185,84,0.2) 0%, rgba(29,185,84,0.3) 100%) !important;
+  border-color: #1DB954 !important;
+  color: #1DB954 !important;
 }
 
-/* KPI Cards - die Kennzahlen oben */
+/* =========================================================
+   6) KPI Cards
+   - “oben schnell lesen”, KPIs müssen knallen
+   ========================================================= */
 .kpi-card {
-    background: linear-gradient(135deg, rgba(29,185,84,0.12) 0%, rgba(15,20,30,0.85) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 2px solid rgba(29,185,84,0.4);
-    border-radius: 16px;
-    padding: 24px 20px !important;
-    text-align: center;
-    height: 100%;
-    min-height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(29,185,84,0.12) 0%, rgba(15,20,30,0.85) 100%);
+  border-color: rgba(29,185,84,0.4);
+  border-radius: 16px;
+
+  padding: 24px 20px !important;
+  text-align: center;
+
+  height: 100%;
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .kpi-label {
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    color: #B3B3B3 !important;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 10px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  color: #B3B3B3 !important;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px !important;
 }
 
 .kpi-value {
-    font-size: 42px !important;
-    font-weight: 900 !important;
-    color: #1DB954 !important;
-    margin: 12px 0 !important;
-    text-shadow: 0 0 20px rgba(29,185,84,0.6);
+  font-size: 42px !important;
+  font-weight: 900 !important;
+  color: #1DB954 !important;
+  margin: 12px 0 !important;
+  text-shadow: 0 0 20px rgba(29,185,84,0.6);
 }
 
 .kpi-desc {
-    font-size: 11px !important;
-    color: #7F8C8D !important;
-    line-height: 1.4 !important;
-    margin-top: 8px !important;
+  font-size: 11px !important;
+  color: #7F8C8D !important;
+  line-height: 1.4 !important;
+  margin-top: 8px !important;
 }
 
-/* Chart Cards - für die Diagramme */
+/* =========================================================
+   7) Chart Cards
+   - gleiche Card-Logik, aber für Visuals
+   ========================================================= */
 .chart-card {
-    background: rgba(15,20,30,0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 2px solid rgba(29,185,84,0.3);
-    border-radius: 16px;
-    padding: 24px !important;
-    height: 100%;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: rgba(15,20,30,0.85);
+  border-radius: 16px;
+  padding: 24px !important;
+  height: 100%;
 }
 
 .chart-header {
-    margin-bottom: 16px;
+  margin-bottom: 16px;
 }
 
 .chart-title {
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    color: #FFFFFF !important;
-    margin-bottom: 8px !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+
+  margin-bottom: 8px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Hinweis: ::before hat aktuell kein content, daher i. d. R. unsichtbar */
 .chart-title::before {
-    animation: live-blink 1.5s ease-in-out infinite;
+  animation: live-blink 1.5s ease-in-out infinite;
+}
+
+.market-badge {
+  padding: 4px 12px;
+  background: rgba(29,185,84,0.2);
+  border: 1px solid rgba(29,185,84,0.5);
+  border-radius: 16px;
+
+  font-size: 11px !important;
+  color: #1DB954 !important;
+  font-weight: 600 !important;
 }
 
 .chart-explanation {
-    font-size: 12px !important;
-    color: #B3B3B3 !important;
-    line-height: 1.8 !important;
-    margin-top: 8px !important;
-    padding: 16px 18px;
-    background: rgba(29,185,84,0.05);
-    border-left: 3px solid rgba(29,185,84,0.5);
-    border-radius: 6px;
+  font-size: 12px !important;
+  color: #B3B3B3 !important;
+  line-height: 1.8 !important;
+  margin-top: 8px !important;
+
+  padding: 16px 18px;
+  background: rgba(29,185,84,0.05);
+  border-left: 3px solid rgba(29,185,84,0.5);
+  border-radius: 6px;
 }
 
-/* Badges und Pills */
-.market-badge,
-.api-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    background: rgba(29,185,84,0.2);
-    border: 1px solid rgba(29,185,84,0.5);
-    border-radius: 16px;
-    font-size: 11px !important;
-    color: #1DB954 !important;
-    font-weight: 600 !important;
-}
-
-.api-badge {
-    border: 2px solid #1DB954;
-    font-weight: 700 !important;
-    letter-spacing: 1px;
-}
-
+/* =========================================================
+   8) Status / Validation Pills & Badges
+   - kleine Labels = schnelle Qualitäts-Checks
+   ========================================================= */
 .val-pill {
-    padding: 6px 12px;
-    background: rgba(20, 25, 40, 0.9);
-    border: 1px solid rgba(29, 185, 84, 0.3);
-    border-radius: 20px;
-    font-size: 11px !important;
-    color: #B3B3B3 !important;
-    font-weight: 600;
-    white-space: nowrap;
+  padding: 6px 12px;
+  background: rgba(20, 25, 40, 0.9);
+  border: 1px solid rgba(29, 185, 84, 0.3);
+  border-radius: 20px;
+
+  font-size: 11px !important;
+  color: #B3B3B3 !important;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .val-pill.success {
-    border-color: #1DB954;
-    color: #1DB954 !important;
-    background: rgba(29, 185, 84, 0.1);
+  border-color: #1DB954;
+  color: #1DB954 !important;
+  background: rgba(29, 185, 84, 0.1);
 }
 
 .val-pill.danger {
-    border-color: #FF6B6B;
-    color: #FF6B6B !important;
-    background: rgba(255, 107, 107, 0.1);
+  border-color: #FF6B6B;
+  color: #FF6B6B !important;
+  background: rgba(255, 107, 107, 0.1);
 }
 
-/* Track Items in Listen */
+.api-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 14px;
+  background: rgba(29,185,84,0.2);
+  border: 2px solid #1DB954;
+  border-radius: 16px;
+
+  font-size: 11px !important;
+  color: #1DB954 !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px;
+}
+
+/* Live-Punkt für Sidebar Status */
+.sidebar .status-item::before {
+  content: '●';
+  color: #1DB954;
+  margin-right: 8px;
+
+  animation: live-blink 1.5s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* =========================================================
+   9) Track List Items
+   - list view: schnell scanbar, nice hover
+   ========================================================= */
 .track-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 20px;
-    margin-bottom: 12px;
-    background: linear-gradient(90deg, rgba(25, 25, 25, 0.6) 0%, rgba(20, 20, 20, 0.6) 100%);
-    border-left: 4px solid #1DB954;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 16px 20px;
+  margin-bottom: 12px;
+
+  background: linear-gradient(90deg, rgba(25, 25, 25, 0.6) 0%, rgba(20, 20, 20, 0.6) 100%);
+  border-left: 4px solid #1DB954;
+  border-radius: 8px;
+
+  transition: all 0.2s ease;
 }
 
 .track-item:hover {
-    background: linear-gradient(90deg, rgba(29, 185, 84, 0.1) 0%, rgba(29, 185, 84, 0.05) 100%);
-    transform: translateX(4px);
+  background: linear-gradient(90deg, rgba(29, 185, 84, 0.1) 0%, rgba(29, 185, 84, 0.05) 100%);
+  transform: translateX(4px);
 }
 
-/* Loading States */
+/* =========================================================
+   10) Dash Loading
+   - wirkt “nicht kaputt”, wenn was lädt
+   ========================================================= */
 ._dash-loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
 }
 
 ._dash-loading-callback {
-    color: #1DB954 !important;
+  color: #1DB954 !important;
 }
 
-/* Custom Scrollbar Design */
+/* =========================================================
+   11) Utilities
+   - kleine Helfer, damit’s schnell bleibt
+   ========================================================= */
+.mb-4 {
+  margin-bottom: 24px !important;
+}
+
+/* =========================================================
+   12) Scrollbar (Webkit)
+   - passt optisch zum Dark Theme
+   ========================================================= */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(29, 185, 84, 0.5);
-    border-radius: 4px;
+  background: rgba(29, 185, 84, 0.5);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(29, 185, 84, 0.7);
+  background: rgba(29, 185, 84, 0.7);
 }
 
-/* Quick Utility */
-.mb-4 {
-    margin-bottom: 24px !important;
-}
-
-/* Mobile Responsive Design */
+/* =========================================================
+   13) Responsive (Mobile)
+   - “edge to edge”, keine komischen Offsets
+   ========================================================= */
 @media (max-width: 768px) {
-    html, body {
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow-x: hidden !important;
-    }
 
-    .container-fluid {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
+  html, body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
 
-    .container-fluid > .row {
-        margin: 0 !important;
-        --bs-gutter-x: 0 !important;
-    }
+  /* Bootstrap Container wirklich clean */
+  .container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin: 0 !important;
+  }
 
-    .container-fluid > .row > [class*="col-"] {
-        padding: 0 !important;
-    }
+  .container-fluid > .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    --bs-gutter-x: 0 !important;
+  }
 
-    .main-content {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 auto !important;
-        padding: 12px !important;
-    }
+  .container-fluid > .row > [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 
-    .sidebar {
-        display: none !important;
-    }
+  /* Sidebar raus, Fokus auf Content */
+  .sidebar {
+    display: none !important;
+  }
 
-    .header-section,
-    .chart-card {
-        width: 100% !important;
-        margin: 0 0 12px 0 !important;
-        border-radius: 12px !important;
-        border-left: none !important;
-        border-right: none !important;
-    }
+  /* Main Content: voller Screen, aber mit angenehmem Rand */
+  .main-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 12px 12px !important;
+  }
 
-    .header-section {
-        padding: 20px 12px !important;
-    }
+  /* Cards auf Mobile: nicht “kantig”, aber auch nicht zu fett */
+  .header-section,
+  .chart-card {
+    width: 100% !important;
+    margin: 0 0 12px 0 !important;
+    border-radius: 12px !important;
+    border-left: none !important;
+    border-right: none !important;
+  }
 
-    .chart-card {
-        padding: 16px 12px !important;
-    }
+  .header-section {
+    padding: 20px 12px !important;
+  }
 
-    .js-plotly-plot, 
-    .plotly, 
-    .plot-container {
-        width: 100% !important;
-        max-width: 100vw !important;
-        margin: 0 !important;
-    }
+  .chart-card {
+    padding: 16px 12px !important;
+  }
 
-    .kpi-card {
-        min-height: 140px;
-        padding: 16px 12px !important;
-        margin: 0 8px 12px 8px !important;
-        border-radius: 12px !important;
-    }
+  /* Plotly immer 100% */
+  .js-plotly-plot, .plotly, .plot-container {
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+  }
 
-    .kpi-value {
-        font-size: 32px !important;
-    }
+  /* KPI kompakter für Mobile */
+  .kpi-card {
+    min-height: 140px;
+    padding: 16px 12px !important;
+    margin: 0 0 12px 0 !important;
+    border-radius: 12px !important;
+  }
 
-    #highpot-table-container,
-    #spotify-live-tracks {
-        margin: 0 !important;
-        width: 100% !important;
-    }
+  .kpi-value {
+    font-size: 32px !important;
+  }
+
+  /* Tabellen/Listen: keine “überbreiten” Hacks */
+  #highpot-table-container,
+  #spotify-live-tracks {
+    margin: 0 !important;
+    width: 100% !important;
+  }
 }
 
 @media (max-width: 576px) {
-    .kpi-desc {
-        font-size: 9px !important;
-    }
+  .kpi-desc {
+    font-size: 9px !important;
+  }
 
-    .chart-card {
-        padding: 12px 8px !important;
-    }
+  .chart-card {
+    padding: 12px 8px !important;
+  }
 
-    .chart-title {
-        font-size: 14px !important;
-    }
+  .chart-title {
+    font-size: 14px !important;
+  }
 }
