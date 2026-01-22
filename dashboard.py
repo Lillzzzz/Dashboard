@@ -617,14 +617,15 @@ app.index_string = '''
         {%css%}
         <style>
         .kpi-scope-segment {
-          display: flex !important;
-          gap: 0 !important;
-          width: 220px;
-          background: rgba(20,25,40,0.9);
-          border: 1px solid rgba(29,185,84,0.35);
-          border-radius: 999px;
-          padding: 3px;
-        }
+  display: flex !important;
+  gap: 0 !important;
+  width: 100%;              /* ← Passt sich an Container an */
+  max-width: 220px;         /* ← Begrenzt maximale Breite */
+  background: rgba(20,25,40,0.9);
+  border: 1px solid rgba(29,185,84,0.35);
+  border-radius: 999px;
+  padding: 3px;
+}
         .kpi-scope-segment .form-check {
           flex: 1 1 0;
           margin: 0 !important;
