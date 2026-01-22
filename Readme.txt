@@ -1,8 +1,9 @@
 Business Intelligence and Analytics - Dashboard Spotify Performance Insights
 
 Projektübersicht:
-Dieses Dashboard habe ich im Rahmen des Kurses "Business Intelligence and Analytics" entwickelt. Ziel war es, A&R-Manager bei Marktanalysen zu unterstützen – mit besonderem Fokus auf historische Genre-Strukturen und Audio-Features in drei Märkten: Deutschland, UK und Brasilien (2017-2021).
-Die Entwicklung hat etwa 4 Wochen gedauert, inklusive mehrfacher Iteration der ETL-Pipeline und Trial-and-Error bei der Dashboard-UX. Einige Entscheidungen (z.B. Last.fm-Gewichtung 1.2) sind explorativ und würden für Produktivnutzung weitere Validierung benötigen.
+Dieses Dashboard wurde im Rahmen des Kurses "Business Intelligence and Analytics" entwickelt. Es dient der datenbasierten Unterstützung von A&R-Managern bei Marktanalysen mit Fokus auf Genre-Strukturen und Audio-Features in drei Märkten: Deutschland, UK und Brasilien (2017-2021).
+
+Die Implementierung umfasst eine vollautomatisierte ETL-Pipeline, ein interaktives Dash-Dashboard mit acht Visualisierungen sowie optionale Live-API-Integration (Spotify, Last.fm). Alle Verarbeitungsschritte sind im Data Journal dokumentiert und vollständig reproduzierbar.
 
 Live-Dashboard: https://dashboard-d0z8.onrender.com
 
