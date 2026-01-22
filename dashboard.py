@@ -874,8 +874,9 @@ dbc.RadioItems(
 
 
 html.P(
-    "Gefiltert: KPIs folgen der Marktauswahl. Global: KPIs zeigen Gesamtmarkt.",
-    style={'color': '#7F8C8D', 'fontSize': '10px', 'fontStyle': 'italic', 'marginTop': '6px', 'marginBottom': '0'}
+    "Gefiltert: KPIs passen sich der Marktauswahl an. "
+    "Global: KPIs zeigen immer alle drei Märkte zusammen.",
+    style={'color': '#7F8C8D', 'fontSize': '11px', 'fontStyle': 'italic', 'marginTop': '6px', 'marginBottom': '0'}
 ),
 
 html.Div([
@@ -909,7 +910,7 @@ html.Div([
         "Der Jahresfilter wirkt nur auf zeitabhängige Visualisierungen (z. B. Markt-Trends, Genre-Entwicklung).",
         style={
             'color': '#7F8C8D',
-            'fontSize': '10px',
+            'fontSize': '11px',
             'fontStyle': 'italic',
             'marginTop': '8px',
             'marginBottom': '0',
