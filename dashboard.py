@@ -57,7 +57,7 @@ def ensure_enhanced_csv():
         url = "https://github.com/Lillzzzz/Dashboard/releases/download/v1.0/spotify_charts_enhanced.csv"
         response = requests.get(url, timeout=30)
         response.raise_for_status()
-        csv_path.parent.mkdir(exist_ok=True)
+        csv_path.parent.mkdir(parents=True, exist_ok=True)
         csv_path.write_bytes(response.content)
         logging.info("spotify_charts_enhanced.csv geladen!")
         return True
@@ -797,54 +797,18 @@ app.layout = dbc.Container([
                     html.Div([
                         
                         html.Div([
-                            html.H3("DASHBOARD", style={
-                                'color': '#1DB954',
-                                'marginBottom': '2px',
-                                'fontWeight': '900',
-                                'fontSize': '26px',
-                                'letterSpacing': '2px'
-                            }),
-                            html.Div(style={
-                                'width': '60px',
-                                'height': '3px',
-                                'background': 'linear-gradient(90deg, #1DB954 0%, transparent 100%)',
-                                'marginBottom': '10px',
-                                'borderRadius': '2px'
-                            }),
-                            html.P("Business Intelligence and Analytics", style={
-                                'color': '#7F8C8D',
-                                'fontSize': '12px',
-                                'marginBottom': '8px',
-                                'fontWeight': '500',
-                                'letterSpacing': '0.5px'
-                            }),
-                            html.P("Datenbasierte Markt- und Erfolgsanalyse zur Unterstützung strategischer A&R-Entscheidungen. "
-                                    "Untersucht Genre-Marktanteile, Erfolgskennzahlen, Audio-Charakteristiken sowie High-Potential-Tracks "
-                                    "in den Märkten Deutschland, UK und Brasilien.", style={
-                                'color': '#7F8C8D',
-                                'fontSize': '11px',
-                                'fontStyle': 'italic',
-                                'marginBottom': '0',
-                                'lineHeight': '1.6'
-                            })
-                        ])
-                    ], style={
-                        'padding': '20px',
-                        'background': (
-    'linear-gradient('
-    '135deg, '
-    'rgba(0,0,0,1) 0%, '
-    'rgba(0,0,0,1) 22%, '
-    'rgba(29, 185, 84, 0.08) 45%, '
-    'rgba(15, 20, 30, 0.95) 100%'
-    ')'
-),
-                        'borderRadius': '14px',
-                        'border': '1px solid rgba(29, 185, 84, 0.25)',
-                        'marginBottom': '24px',
-                        'boxShadow': '0 4px 16px rgba(0, 0, 0, 0.3)'
-                    })
-                ]),
+    html.Div([
+        html.H3("DASHBOARD", className="sidebar-brand-title"),
+        html.Div(className="sidebar-brand-divider"),
+        html.P("Business Intelligence and Analytics", className="sidebar-brand-subtitle"),
+        html.P(
+            "Datenbasierte Markt- und Erfolgsanalyse zur Unterstützung strategischer A&R-Entscheidungen. "
+            "Untersucht Genre-Marktanteile, Erfolgskennzahlen, Audio-Charakteristiken sowie High-Potential-Tracks "
+            "in den Märkten Deutschland, UK und Brasilien.",
+            className="sidebar-brand-text"
+        )
+    ])
+], className="sidebar-brand-card"),
                 
                 html.Div([
                     html.H4("MARKT FILTER", className='filter-title'),
@@ -852,7 +816,7 @@ app.layout = dbc.Container([
                         "Wählen Sie einen einzelnen Markt, zwei Märkte im direkten Vergleich oder alle drei Märkte zusammen. ",
                         "So lassen sich regionale Unterschiede in Genre-Präferenzen, Audio-Features und Künstler-Performance ",
                         "gezielt analysieren und marktspezifische Trends identifizieren."
-                    ], style={'fontSize': '11px', 'color': '#7F8C8D', 'marginBottom': '16px', 'lineHeight': '1.6'}),
+                    ], className="sidebar-help-text"),
                     
 dbc.Button("ALLE MÄRKTE", id='btn-all', className='market-button active', n_clicks=0),
 dbc.Button("DEUTSCHLAND", id='btn-de', className='market-button', n_clicks=0),
@@ -861,7 +825,7 @@ dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0),
 
 
 # KPI Toggle
-html.H4("KPI ANSICHT", className='filter-title', style={'marginTop': '18px'}),
+html.H4("KPI ANSICHT", className="filter-title mt-18"),
 dbc.RadioItems(
     id="kpi-scope",
     className="kpi-scope-segment",
@@ -877,7 +841,7 @@ dbc.RadioItems(
 html.P(
     "Gefiltert: KPIs passen sich der Marktauswahl an. "
     "Global: KPIs zeigen immer alle drei Märkte zusammen.",
-    style={'color': '#7F8C8D', 'fontSize': '11px', 'fontStyle': 'italic', 'marginTop': '6px', 'marginBottom': '0'}
+      className="sidebar-note"
 ),
 
 html.Div([
@@ -896,16 +860,8 @@ html.Div([
         value=None,
         clearable=True,
         placeholder="Jahr wählen (optional)",
-        className="dark-dropdown",
-        style={
-            "backgroundColor": "rgba(6, 8, 14, 0.9)",
-            "color": "#ffffff",
-            "border": "1px solid rgba(29, 185, 84, 0.35)",
-            "borderRadius": "6px",
-            "fontSize": "12px",
-            "zIndex": 9999
-        }
-    ),
+        className="dark-dropdown dark-dropdown-box"
+),
 
     html.P(
         "Der Jahresfilter wirkt nur auf zeitabhängige Visualisierungen (z. B. Markt-Trends, Genre-Entwicklung).",
@@ -923,23 +879,12 @@ html.Div([
                 ], className='filter-card'),
                 
                 html.Div([
-                    html.H5([
-                        html.Span("", style={
-                            'color': '#1DB954',
-                            'fontSize': '14px',
-                            'marginRight': '8px',
-                            'animation': 'blink 2s ease-in-out infinite'
-                        }),
-                        "API STATUS"
-                    ], style={'color': '#1DB954', 'fontSize': '13px', 'marginBottom': '10px', 'fontWeight': '700'}),
-                    html.P(id='api-status-text', style={'fontSize': '11px', 'color': '#B3B3B3'})
-                ], style={
-                    'padding': '14px',
-                    'background': 'rgba(29,185,84,0.05)',
-                    'borderRadius': '10px',
-                    'border': '1px solid rgba(29,185,84,0.2)',
-                    'marginTop': '20px'
-                })
+    html.H5([
+        html.Span("", className="api-dot"),
+        "API STATUS"
+    ], className="api-title"),
+    html.P(id="api-status-text", className="api-text")
+], className="api-card")
             ], className='sidebar')
         ], width=3, className='p-0'),
         
@@ -955,31 +900,29 @@ html.Div([
     "optional um aktuelle Streaming-Impulse aus Spotify- und Last.fm-APIs. Ziel ist ",
     "die transparente Visualisierung von Marktstrukturen, Genre-Dynamiken und ",
     "Erfolgsmustern zur Unterstützung datenbasierter A&R- und Marketingentscheidungen."
-                    ], style={'fontSize': '13px', 'color': '#7F8C8D', 'fontStyle': 'italic', 'marginTop': '8px', 'lineHeight': '1.6'})
+                    ], className="header-intro")
                 ], className='header-section'),
                 
                 
                 
                # MOBILE FILTER
                 html.Div([
-                    html.H4("FILTER", style={'color': '#1DB954', 'fontSize': '14px', 'fontWeight': '700', 'marginBottom': '12px'}),
+                    html.H4("FILTER", className="mobile-filter-title"),
                     
                     dcc.Dropdown(
-                        id='market-dropdown-mobile',
-                        options=[
-                            {'label': 'Alle Märkte', 'value': 'ALL'},
-                            {'label': 'Deutschland', 'value': 'DE'},
-                            {'label': 'UK', 'value': 'UK'},
-                            {'label': 'Brasilien', 'value': 'BR'}
-                        ],
-                        value='ALL',
-                        clearable=False,
-                        className="dark-dropdown",
-                        style={
-                            "backgroundColor": "rgba(6, 8, 14, 0.9)",
-                            "marginBottom": "12px"
-                        }
-                    ),
+    id='market-dropdown-mobile',
+    options=[
+        {'label': 'Alle Märkte', 'value': 'ALL'},
+        {'label': 'Deutschland', 'value': 'DE'},
+        {'label': 'UK', 'value': 'UK'},
+        {'label': 'Brasilien', 'value': 'BR'},
+    ],
+    value='ALL',
+    clearable=False,
+    className="dark-dropdown dark-dropdown-box mobile-dropdown",
+    style={"backgroundColor": "rgba(6, 8, 14, 0.9)", "marginBottom": "12px"}
+),
+
                     
                     dcc.Dropdown(
                         id="year-dropdown-mobile",
@@ -999,49 +942,28 @@ html.Div([
     }
 ),
 
-                 html.Div(
+                html.Div(
     [
-        html.Div("KPI Ansicht", style={
-            "color": "#1DB954",
-            "fontSize": "12px",
-            "fontWeight": "700",
-            "marginBottom": "8px"
-        }),
-
+        html.Div("KPI Ansicht", className="mobile-kpi-title"),
         html.Div(
             [
-                dbc.Switch(
-                    id="kpi-scope-toggle",
-                    value=False,  # False = FILTERED, True = GLOBAL
-                    className="toggle-switch"
-                ),
-                html.Div(id="kpi-scope-toggle-label", className="toggle-text")
+                dbc.Switch(id="kpi-scope-toggle", value=False, className="toggle-switch"),
+                html.Div(id="kpi-scope-toggle-label", className="toggle-text"),
             ],
-            className="toggle-row"
+            className="toggle-row",
         ),
-
         html.P(
             "Gefiltert: KPIs folgen der Marktauswahl. Global: KPIs zeigen Gesamtmarkt.",
-            className="kpi-scope-help"
-        )
+            className="kpi-scope-help",
+        ),
     ],
-    style={
-    "marginTop": "12px",
-    "color": "#7F8C8D"
-}
+    className="mobile-kpi-block",
 ),
 
+], className="mobile-filter-card d-block d-md-none"),
 
-                ], className='d-block d-md-none', style={
-                    'background': 'rgba(15,20,30,0.9)',
-                    'border': '2px solid rgba(29,185,84,0.3)',
-                    'borderRadius': '12px',
-                    'padding': '16px',
-                    'marginBottom': '16px'
-                }),
+html.Div(id="data-quality-warning", style={"marginBottom": "12px"}),
 
-
-                html.Div(id="data-quality-warning", style={"marginBottom": "12px"}),
 
                 
                 # KPI Row
@@ -1050,12 +972,8 @@ html.Div([
                         html.Div([
                             html.Div([
     "SHANNON DIVERSITÄT ",
-    html.I("ⓘ", id="shannon-info", style={
-        'fontSize': '14px',
-        'color': '#1DB954',
-        'cursor': 'help',
-        'marginLeft': '4px'
-    })
+    html.I("ⓘ", id="shannon-info", className="info-icon")
+
 ], className='kpi-label'),
 
 dbc.Tooltip(
@@ -1083,16 +1001,10 @@ html.Div([
                         html.Div([
     html.Div([
         "WACHSTUMS-MOMENTUM ",
-        html.I(
-            "ⓘ",
-            id="growth-info",
-            style={
-                'fontSize': '14px',
-                'color': '#1DB954',
-                'cursor': 'help',
-                'marginLeft': '4px'
-            }
-        )
+        html.I("ⓘ", id="growth-info", className="info-icon")
+
+        
+        
     ], className='kpi-label'),
 
     dbc.Tooltip(
@@ -1122,16 +1034,8 @@ html.Div([
                         html.Div([
     html.Div([
         "ERFOLGSQUOTE ",
-        html.I(
-            "ⓘ",
-            id="success-info",
-            style={
-                'fontSize': '14px',
-                'color': '#1DB954',
-                'cursor': 'help',
-                'marginLeft': '4px'
-            }
-        )
+        html.I("ⓘ", id="success-info", className="info-icon")
+        
     ], className='kpi-label'),
 
     dbc.Tooltip(
@@ -1158,16 +1062,9 @@ html.Div([
                         html.Div([
     html.Div([
         "TOP GENRE ",
-        html.I(
-            "ⓘ",
-            id="topgenre-info",
-            style={
-                'fontSize': '14px',
-                'color': '#1DB954',
-                'cursor': 'help',
-                'marginLeft': '4px'
-            }
-        )
+        html.I("ⓘ", id="topgenre-info", className="info-icon")
+        
+        
     ], className='kpi-label'),
 
     dbc.Tooltip(
@@ -1181,7 +1078,8 @@ html.Div([
         delay={"show": 180, "hide": 80}
 ),
 
-    html.Div(id='kpi-genre', className='kpi-value', style={'fontSize': '24px'}),
+    html.Div(id="kpi-genre", className="kpi-value kpi-value--text"),
+
 
     html.Div([
     html.Strong("A&R-Implikation: "),
@@ -1191,24 +1089,15 @@ html.Div([
 ], className='kpi-card')
 
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4')
-                ], className='mb-4', style={'padding': '8px', 'background': 'rgba(29,185,84,0.03)', 'borderRadius': '12px', 'border': '1px solid rgba(29,185,84,0.15)'}),
+                ], className="mb-4 kpi-row-wrap"),
                 
                 html.Div(
-    [
-        html.Strong("Success Score (0–100): "),
-        "kompositer Indikator aus Charts/Streams/Artist-Reichweite (2017–2021). ",
-        "Hinweis: Score ist ein Vergleichsmaß (deskriptiv) und beweist keine Kausalität."
-    ],
-    style={
-        'color': '#95A5A6',
-        'fontSize': '11px',
-        'marginTop': '-10px',
-        'marginBottom': '14px',
-        'padding': '10px 12px',
-        'background': 'rgba(20,25,40,0.6)',
-        'border': '1px solid rgba(29,185,84,0.15)',
-        'borderRadius': '10px'
-    }
+  [
+    html.Strong("Success Score (0–100): "),
+    "kompositer Indikator aus Charts/Streams/Artist-Reichweite (2017–2021). ",
+    "Hinweis: Score ist ein Vergleichsmaß (deskriptiv) und beweist keine Kausalität."
+  ],
+  className="note-box"
 ),
 
                 
@@ -1219,10 +1108,10 @@ html.Div([
                         html.Div([
                             html.Div([
                                 html.Div([
-                                    html.H3("Genre-Marktanteile (Grouped Bar Chart)", className='chart-title', style={'fontSize': '18px', 'fontWeight': '700', 'marginBottom': '8px'}),
+                                    html.H3("Genre-Marktanteile (Grouped Bar Chart)", className="chart-title chart-title--lg"),
                                     html.Div([
                                         html.Div(id='market-label-1', className='market-badge'),
-                                        html.Span(id='year-badge-1', className='market-badge', style={'marginLeft': '6px'})
+                                        html.Span(id="year-badge-1", className="market-badge badge-ml-6")
                                     ], style={'display': 'flex', 'alignItems': 'center'})
                                 ], style={'display': 'flex', 'justifyContent': 'space-between'}),
                                 html.P([
@@ -1244,7 +1133,7 @@ html.Div([
                         html.Div([
                             html.Div([
                                 html.Div([
-                                    html.H3("Audio-Feature Korrelation (Heatmap)", className='chart-title', style={'fontSize': '18px', 'fontWeight': '700', 'marginBottom': '8px'}),
+                                    html.H3("Audio-Feature Korrelation (Heatmap)", className="chart-title chart-title--lg"),
                                     html.Div(id='market-label-2', className='market-badge')
                                 ], style={'display': 'flex', 'justifyContent': 'space-between'}),
                                 html.P([
@@ -1288,7 +1177,7 @@ html.Div([
                         html.Div([
                             html.Div([
                                 html.Div([
-                                    html.H3("Audio-Features vs. Erfolg (Scatter Plot)", className='chart-title', style={'fontSize': '18px', 'fontWeight': '700', 'marginBottom': '8px'}),
+                                    html.H3("Audio-Features vs. Erfolg (Scatter Plot)", className="chart-title chart-title--lg"),
                                     html.Div(id='market-label-3', className='market-badge')
                                 ], style={'display': 'flex', 'justifyContent': 'space-between'}),
                                 html.P([
@@ -1317,7 +1206,7 @@ html.Div(id='audio-toptracks-text', style={
                         html.Div([
                             html.Div([
                                 html.Div([
-                                    html.H3("Markt-Vergleich nach Jahr (Line Chart)", className='chart-title', style={'fontSize': '18px', 'fontWeight': '700', 'marginBottom': '8px'}),
+                                    html.H3("Markt-Vergleich nach Jahr (Line Chart)", className="chart-title chart-title--lg"),
                                     html.Div([
                                         html.Div(id='market-label-4', className='market-badge'),
                                         html.Span(id='year-badge-2', className='market-badge', style={'marginLeft': '6px'})
@@ -1347,7 +1236,7 @@ html.Div(id='audio-toptracks-text', style={
                         html.Div([
                             html.Div([
                                 html.Div([
-                                    html.H3("Top 20 High-Potential Tracks (Ranking)", className='chart-title', style={'fontSize': '18px', 'fontWeight': '700', 'marginBottom': '8px'}),
+                                    html.H3("Top 20 High-Potential Tracks (Ranking)", className="chart-title chart-title--lg"),
                                     html.Div(id='market-label-5', className='market-badge', style=get_live_badge_style('market'))
                                 ], style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center'}),
                                 html.P([
@@ -1372,7 +1261,7 @@ html.Div(id='audio-toptracks-text', style={
                         html.Div([
                             html.Div([
                                 html.Div([
-                                    html.H3("Erfolgs-Verteilung (Histogram)", className='chart-title', style={'fontSize': '18px', 'fontWeight': '700', 'marginBottom': '8px'}),
+                                    html.H3("Erfolgs-Verteilung (Histogram)", className="chart-title chart-title--lg"),
                                     html.Div(id='market-label-6', className='market-badge', style=get_live_badge_style('market'))
                                 ], style={'display': 'flex', 'justifyContent': 'space-between', 'alignItems': 'center'}),
                                 html.P([
