@@ -1057,9 +1057,10 @@ html.Div([
 ], className='kpi-label'),
 
 dbc.Tooltip(
-    "Basis: Spotify-Charts (DE/UK/BR), Historie 2017–2021. "
-    "Berechnung nutzt die 9 harmonisierten Hauptgenres (Pop, Hip-Hop, Rock, Electronic, Latin, R&B, Country, Jazz, Other). "
-    "Wichtig: 2021 ist teils stark von „Other“ geprägt > Vielfalt kann verzerrt wirken.",
+    "Die Shannon-Diversität misst die Genrekonzentration eines Marktes. "
+    "Niedrige Werte (< 1.2) signalisieren Dominanz weniger Genres – schwieriger Markteintritt für Nischen-Acts. "
+    "Hohe Werte (> 1.4) zeigen fragmentierte Märkte mit Raum für Genre-Experimente. "
+    "Limitation: 2021-Daten enthalten erhöhten 'Other'-Anteil (reduzierte Metadaten-Abdeckung).",
     target="shannon-info",
     placement="right",
     style={"maxWidth": "320px"},
@@ -1067,10 +1068,9 @@ dbc.Tooltip(
 ),
 
                             html.Div(id='kpi-shannon', className='kpi-value', title="Genrekonzentration, höher = vielfältiger Markt"),
-                            html.Div([
-    "Misst Genre-Vielfalt (Shannon). ",
-    html.Strong("Höher"), " = vielfältiger Markt, ",
-    html.Strong("niedriger"), " = stärker konzentriert. ",
+                            ml.Strong("Strategic Insight: "), 
+    "Niedrige Diversität = klare Genre-Leader (Mainstream-fokussiert). "
+    "Hohe Diversität = Nischen-Chancen, aber höherer Marketing-Aufwand für Durchbruch."
 ], className='kpi-desc')
 
                         ], className='kpi-card')
@@ -1092,8 +1092,11 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-      "Normierter Index zum Vergleich von Entwicklungen über die Zeit. "
-    "Für Details siehe die Zeitreihen im Marktvergleich.",
+      "Normierter Wachstumsindex (Basis: 2017 = 100). "
+    "Berechnet aus aggregierten Stream-Entwicklungen pro Markt. "
+    "Werte > 120: Stark wachsende Märkte (Budget-Opportunity). "
+    "Werte < 90: Schrumpfende Märkte (defensive Strategie erforderlich). "
+    "Hinweis: Deskriptiver Vergleichsindex, keine Zukunftsprognose.",
       target="growth-info",
       placement="right",
       style={"maxWidth": "320px"},
@@ -1104,8 +1107,9 @@ dbc.Tooltip(
     html.Div(id='kpi-growth', className='kpi-value'),
 
     html.Div([
-    "Normierter Index zur Einordnung von Marktentwicklungen im Zeitverlauf. ",
-    html.Strong("Hinweis:"), " dient der Orientierung und ist keine Prognose."
+    html.Strong("Budget-Allocation: "),
+    "Wachstumsmärkte rechtfertigen aggressive Kampagnen. "
+    "Stagnierende Märkte erfordern Effizienz-Fokus und etablierte Acts."
 ], className='kpi-desc')
 ], className='kpi-card')
 
@@ -1127,9 +1131,10 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-    "Erfolgsquote = Anteil Tracks mit Success Score ≥ 65. "
-    "Berechnet über alle Track-Einträge im enhanced-Datensatz (gesamt, nicht genre-spezifisch). "
-    "Der Success Score fasst mehrere Erfolgsfaktoren zu einer Kennzahl zusammen...",
+    "Prozentsatz der Tracks mit Success Score ≥ 65 (Chart-Performance + Streams + Follower-Reichweite). "
+    "Hohe Quote (> 35%): 'Hit-Markt' – viele Tracks durchbrechen kritische Schwellen. "
+    "Niedrige Quote (< 25%): Gatekeeper-Markt – nur etablierte Acts performen. "
+    "KPI für Risikobewertung bei New Signings und Release-Timing.",
     target="success-info",
     placement="right",
     style={"maxWidth": "340px"},
@@ -1138,10 +1143,10 @@ dbc.Tooltip(
 
     html.Div(id='kpi-success', className='kpi-value', title="Anteil Tracks mit Success Score ≥ 65"),
     html.Div([
-        "Prozent Tracks mit Score >= 65. ",
-        html.Strong("Hoch (>30%)"), " = viele erfolgreiche Tracks. ",
-        html.Strong("Niedrig (<20%)"), " = schwieriger Markt."
-    ], className='kpi-desc')
+    html.Strong("Release-Strategie: "),
+    "Hohe Quote = Test-Market für Newcomer. "
+    "Niedrige Quote = Priorität auf sichere Catalog-Acts mit Fan-Base."
+], className='kpi-desc')
 ], className='kpi-card')
 
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4'),
@@ -1162,9 +1167,10 @@ dbc.Tooltip(
     ], className='kpi-label'),
 
     dbc.Tooltip(
-        "Bestimmt aus dem durchschnittlichen Marktanteil je Genre (2017–2021). "
-        "Die Genres sind zu 9 Hauptkategorien zusammengefasst. "
-        "2021 kann einen erhöhten Anteil der Kategorie „Other“ enthalten.",
+        "Dominantes Genre nach durchschnittlichem Marktanteil (2017–2021). "
+    "Basiert auf 9 harmonisierten Kategorien inkl. 'Other' (unklassifiziert). "
+    "Kritisch für Portfolio-Alignment: Roster-Gap-Analyse, Signing-Prioritäten, "
+    "und Competitive Positioning gegen Major-Label-Kataloge.",
         target="topgenre-info",
         placement="right",
         style={"maxWidth": "320px"},
@@ -1174,9 +1180,10 @@ dbc.Tooltip(
     html.Div(id='kpi-genre', className='kpi-value', style={'fontSize': '24px'}),
 
     html.Div([
-        "Dominantes Genre mit größtem Marktanteil. ",
-        "Zeigt aktuelle Präferenzen und Portfolio-Fokus des Marktes."
-    ], className='kpi-desc')
+    html.Strong("A&R-Implikation: "),
+    "Dominantes Genre = größtes Commercial-Potenzial, aber auch höchste Competition. "
+    "Zweit-/Drittplatzierte Genres oft strategische Arbitrage-Opportunities."
+], className='kpi-desc')
 ], className='kpi-card')
 
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4')
