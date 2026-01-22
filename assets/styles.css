@@ -1,36 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
-/* ===== Reset / Basis ===== */
+/* ==================== Reset ==================== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   font-family: 'Inter', sans-serif !important;
-  color: #fff !important;
-  overflow-x: hidden;
   background:
     radial-gradient(circle at 20% 80%, rgba(29, 185, 84, 0.12) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(78, 205, 196, 0.08) 0%, transparent 50%),
     radial-gradient(circle at 40% 40%, rgba(255, 107, 107, 0.06) 0%, transparent 50%),
     linear-gradient(135deg, #0a0e1a 0%, #1a1f35 50%, #0f1420 100%) !important;
   background-attachment: fixed;
+  color: #fff !important;
+  overflow-x: hidden;
 }
 
-/* ===== Animationen ===== */
+/* ==================== Animationen ==================== */
 @keyframes pulse {
   0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(29, 185, 84, 0.5)); }
   50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(29, 185, 84, 0.8)); }
 }
-
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
 @keyframes live-blink {
   0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px rgba(29, 185, 84, 0.8)); }
   50% { opacity: 0.6; filter: drop-shadow(0 0 2px rgba(29, 185, 84, 0.4)); }
 }
 
-/* ===== Layout ===== */
+/* ==================== Layout ==================== */
 .sidebar {
   background: linear-gradient(180deg, rgba(15,20,30,0.88) 0%, rgba(10,15,25,0.92) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-right: 2px solid rgba(29,185,84,0.3);
   padding: 24px;
   min-height: 100vh;
@@ -39,24 +39,23 @@ body {
   overflow-y: auto;
   max-height: 100vh;
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
 
 .main-content { padding: 24px; }
 
-/* ===== Gemeinsame Card-Optik ===== */
+/* ==================== Gemeinsame Card-Optik ==================== */
 .header-section,
 .filter-card,
 .chart-card,
-.kpi-card {
+.kpi-card,
+.mobile-filter-card {
   border: 2px solid rgba(29,185,84,0.3);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
-/* ===== Header ===== */
+/* ==================== Header ==================== */
 .header-section {
   background: linear-gradient(135deg, rgba(15,20,30,0.85) 0%, rgba(20,25,40,0.88) 100%);
   border-radius: 16px;
@@ -67,21 +66,89 @@ body {
 .header-title {
   font-size: 36px !important;
   font-weight: 900 !important;
-  margin: 0 !important;
   background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
+  margin: 0 !important;
 }
 
-.header-subtitle {
-  font-size: 11px !important;
-  color: #B3B3B3 !important;
-  margin-top: 12px !important;
+.header-intro {
+  font-size: 13px !important;
+  color: #7F8C8D !important;
+  font-style: italic;
+  margin-top: 8px !important;
   line-height: 1.6 !important;
 }
 
-/* ===== Filter ===== */
+/* ==================== Sidebar: Brand Card (aus Inline migriert) ==================== */
+.sidebar-brand-card {
+  padding: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,1) 22%,
+    rgba(29, 185, 84, 0.08) 45%,
+    rgba(15, 20, 30, 0.95) 100%
+  );
+  border-radius: 14px;
+  border: 1px solid rgba(29, 185, 84, 0.25);
+  margin-bottom: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-brand-title {
+  color: #1DB954;
+  margin-bottom: 2px;
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: 2px;
+}
+
+.sidebar-brand-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #1DB954 0%, transparent 100%);
+  margin-bottom: 10px;
+  border-radius: 2px;
+}
+
+.sidebar-brand-subtitle {
+  color: #7F8C8D;
+  font-size: 12px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-brand-text {
+  color: #7F8C8D;
+  font-size: 11px;
+  font-style: italic;
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
+.sidebar-help-text {
+  font-size: 11px;
+  color: #7F8C8D;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.sidebar-note {
+  color: #7F8C8D;
+  font-size: 11px;
+  font-style: italic;
+  margin-top: 6px;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+/* Kleine Utility */
+.mt-18 { margin-top: 18px !important; }
+
+/* ==================== Filter Card ==================== */
 .filter-card {
   background: rgba(20,25,40,0.85);
   border-radius: 12px;
@@ -101,6 +168,7 @@ body {
   letter-spacing: 1.5px;
 }
 
+/* Buttons */
 .market-button {
   width: 100%;
   min-height: 52px;
@@ -114,8 +182,8 @@ body {
   color: #B3B3B3 !important;
   font-size: 11px !important;
   font-weight: 600 !important;
-  text-align: left !important;
   transition: all 0.3s ease !important;
+  text-align: left !important;
 }
 
 .market-button:hover {
@@ -131,20 +199,18 @@ body {
   color: #1DB954 !important;
 }
 
-/* ===== KPI ===== */
+/* ==================== KPI ==================== */
 .kpi-card {
   background: linear-gradient(135deg, rgba(29,185,84,0.12) 0%, rgba(15,20,30,0.85) 100%);
-  border-color: rgba(29,185,84,0.4);
+  border: 2px solid rgba(29,185,84,0.4);
   border-radius: 16px;
-
   padding: 24px 20px !important;
   text-align: center;
   height: 100%;
   min-height: 180px;
-
   display: flex;
   flex-direction: column;
- 
+  justify-content: center;
 }
 
 .kpi-label {
@@ -164,6 +230,8 @@ body {
   text-shadow: 0 0 20px rgba(29,185,84,0.6);
 }
 
+.kpi-value--text { font-size: 24px !important; }
+
 .kpi-desc {
   font-size: 11px !important;
   color: #7F8C8D !important;
@@ -171,7 +239,34 @@ body {
   margin-top: 8px !important;
 }
 
-/* ===== Charts ===== */
+.info-icon {
+  font-size: 14px;
+  color: #1DB954;
+  cursor: help;
+  margin-left: 4px;
+}
+
+/* KPI Row Wrapper */
+.kpi-row-wrap {
+  padding: 8px !important;
+  background: rgba(29,185,84,0.03) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(29,185,84,0.15) !important;
+}
+
+/* Hinweisbox */
+.note-box {
+  color: #95A5A6;
+  font-size: 11px;
+  margin-top: -10px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  background: rgba(20,25,40,0.6);
+  border: 1px solid rgba(29,185,84,0.15);
+  border-radius: 10px;
+}
+
+/* ==================== Charts ==================== */
 .chart-card {
   background: rgba(15,20,30,0.85);
   border-radius: 16px;
@@ -191,8 +286,7 @@ body {
   text-overflow: ellipsis;
 }
 
-/* Hinweis: ohne content ist ::before i.d.R. nicht sichtbar */
-.chart-title::before { animation: live-blink 1.5s ease-in-out infinite; }
+.chart-title--lg { font-size: 18px !important; font-weight: 700 !important; }
 
 .market-badge {
   padding: 4px 12px;
@@ -203,6 +297,8 @@ body {
   color: #1DB954 !important;
   font-weight: 600 !important;
 }
+
+.badge-ml-6 { margin-left: 6px !important; }
 
 .chart-explanation {
   font-size: 12px !important;
@@ -215,7 +311,7 @@ body {
   border-radius: 6px;
 }
 
-/* ===== Validation / Badges ===== */
+/* ==================== Validation / API Badge ==================== */
 .val-pill {
   padding: 6px 12px;
   background: rgba(20, 25, 40, 0.9);
@@ -239,30 +335,35 @@ body {
   background: rgba(255, 107, 107, 0.1);
 }
 
-.api-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  background: rgba(29,185,84,0.2);
-  border: 2px solid #1DB954;
-  border-radius: 16px;
-  font-size: 11px !important;
-  color: #1DB954 !important;
-  font-weight: 700 !important;
-  letter-spacing: 1px;
+/* Sidebar API Card (aus Inline migriert) */
+.api-card {
+  padding: 14px;
+  background: rgba(29,185,84,0.05);
+  border-radius: 10px;
+  border: 1px solid rgba(29,185,84,0.2);
+  margin-top: 20px;
 }
 
-/* Live-Punkt in der Sidebar */
-.sidebar .status-item::before {
-  content: '●';
+.api-title {
   color: #1DB954;
-  margin-right: 8px;
-  animation: live-blink 1.5s ease-in-out infinite;
-  display: inline-block;
+  font-size: 13px;
+  margin-bottom: 10px;
+  font-weight: 700;
 }
 
-/* ===== Tracks ===== */
+.api-dot {
+  color: #1DB954;
+  font-size: 14px;
+  margin-right: 8px;
+  animation: blink 2s ease-in-out infinite;
+}
+
+.api-text {
+  font-size: 11px;
+  color: #B3B3B3;
+}
+
+/* ==================== Tracks ==================== */
 .track-item {
   display: flex;
   align-items: center;
@@ -280,7 +381,7 @@ body {
   transform: translateX(4px);
 }
 
-/* ===== Loading ===== */
+/* ==================== Dash Loading ==================== */
 ._dash-loading {
   display: flex;
   justify-content: center;
@@ -289,18 +390,188 @@ body {
 }
 ._dash-loading-callback { color: #1DB954 !important; }
 
-/* ===== Utilities ===== */
-.mb-4 { margin-bottom: 24px !important; }
+/* ==================== Dropdown (aus index_string migriert) ==================== */
+.dark-dropdown .Select-control {
+  background-color: #1e1e1e !important;
+  border: 1px solid #1db954 !important;
+  color: #1db954 !important;
+}
+.dark-dropdown .Select-value-label,
+.dark-dropdown .Select-placeholder {
+  color: #1db954 !important;
+}
+.dark-dropdown .Select-menu-outer {
+  background-color: #1e1e1e !important;
+  border: 1px solid #1db954 !important;
+  z-index: 9999 !important;
+}
+.dark-dropdown .VirtualizedSelectOption {
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+}
+.dark-dropdown .VirtualizedSelectFocusedOption {
+  background-color: #1db954 !important;
+  color: #0f141e !important;
+}
 
-/* ===== Scrollbar ===== */
+/* Dropdown “Box”-Look, ersetzt deine inline style={} */
+.dark-dropdown-box {
+  background-color: rgba(6, 8, 14, 0.9) !important;
+  border: 1px solid rgba(29, 185, 84, 0.35) !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  color: #ffffff !important;
+}
+
+/* Mobile Dropdown nur spacing */
+.mobile-dropdown { margin-bottom: 12px !important; }
+
+/* ==================== KPI Scope Segment + Toggle (aus index_string migriert) ==================== */
+.kpi-scope-segment {
+  display: flex !important;
+  gap: 0 !important;
+  width: 100%;
+  max-width: 220px;
+  background: rgba(20,25,40,0.9);
+  border: 1px solid rgba(29,185,84,0.35);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+.kpi-scope-segment .form-check {
+  flex: 1 1 0;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.kpi-scope-segment .form-check-input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: auto;
+}
+
+.kpi-scope-segment label {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 !important;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #B3B3B3;
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.kpi-scope-segment .form-check-input:checked + .form-check-label {
+  background: rgba(29,185,84,0.18);
+  color: #1DB954;
+  border: 1px solid rgba(29,185,84,0.55);
+  box-shadow: 0 0 0 1px rgba(29,185,84,0.15) inset;
+}
+
+.toggle-switch .form-check {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+
+.toggle-switch { margin-left: 0 !important; padding-left: 0 !important; }
+.toggle-switch label { display: none !important; }
+
+.toggle-switch .form-check-input {
+  position: relative;
+  width: 56px !important;
+  height: 30px !important;
+  border-radius: 999px !important;
+  background-color: rgba(127,127,127,0.25) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  cursor: pointer;
+  margin: 0 !important;
+  box-shadow: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.toggle-switch .form-check-input::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.toggle-switch .form-check-input:checked {
+  background-color: rgba(29,185,84,0.22) !important;
+  border: 1px solid rgba(29,185,84,0.55) !important;
+}
+
+.toggle-switch .form-check-input:checked::before { transform: translateX(26px); }
+
+.toggle-text {
+  color: #B3B3B3;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-start;
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.kpi-scope-help {
+  color: #5A6169;
+  font-size: 10px;
+  font-style: italic;
+  margin-top: 6px;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+/* ==================== Mobile Filter Card (ersetzt den Inline-Wrapper) ==================== */
+.mobile-filter-card {
+  background: rgba(15,20,30,0.9);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.mobile-filter-title {
+  color: #1DB954;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.mobile-kpi-block { margin-top: 12px; color: #7F8C8D; }
+.mobile-kpi-title { color: #1DB954; font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+
+/* ==================== Scrollbar ==================== */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
 ::-webkit-scrollbar-thumb { background: rgba(29, 185, 84, 0.5); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(29, 185, 84, 0.7); }
 
-/* ===== Mobile ===== */
-@media (max-width: 768px) {
+/* ==================== Utilities ==================== */
+.mb-4 { margin-bottom: 24px !important; }
 
+/* ==================== Mobile (ein Block, keine Duplikate) ==================== */
+@media (max-width: 768px) {
   html, body {
     width: 100% !important;
     max-width: 100% !important;
@@ -344,8 +615,17 @@ body {
     border-right: none !important;
   }
 
-  .header-section { padding: 20px 12px !important; }
-  .chart-card { padding: 16px 12px !important; }
+  .chart-header {
+    gap: 6px;
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+
+  .market-badge {
+    flex-wrap: wrap;
+    max-width: 100%;
+    margin-bottom: 4px;
+  }
 
   .js-plotly-plot, .plotly, .plot-container {
     width: 100% !important;
@@ -353,7 +633,6 @@ body {
     margin: 0 !important;
   }
 
-  /* nur die Unterschiede zur Desktop-Version */
   .kpi-card {
     min-height: 140px;
     padding: 16px 12px !important;
