@@ -792,36 +792,32 @@ app.layout = dbc.Container([
     dbc.Row([
         # SIDEBAR
         dbc.Col([
-            html.Div([
-                html.Div([
-                    html.Div([
-                        
-                        html.Div([
     html.Div([
-        html.H3("DASHBOARD", className="sidebar-brand-title"),
+
+        html.Div([
+            html.H3("DASHBOARD", className="sidebar-brand-title"),
         html.Div(className="sidebar-brand-divider"),
-        html.P("Business Intelligence and Analytics", className="sidebar-brand-subtitle"),
-        html.P(
+            html.P("Business Intelligence and Analytics", className="sidebar-brand-subtitle"),
+            html.P(
             "Datenbasierte Markt- und Erfolgsanalyse zur Unterstützung strategischer A&R-Entscheidungen. "
             "Untersucht Genre-Marktanteile, Erfolgskennzahlen, Audio-Charakteristiken sowie High-Potential-Tracks "
             "in den Märkten Deutschland, UK und Brasilien.",
-            className="sidebar-brand-text"
-        )
-    ])
-], className="sidebar-brand-card"),
-                
-                html.Div([
-                    html.H4("MARKT FILTER", className='filter-title'),
-                    html.P([
+           className="sidebar-brand-text"
+            )
+        ], className="sidebar-brand-card"),
+
+        html.Div([
+            html.H4("MARKT FILTER", className='filter-title'),
+            html.P([
                         "Wählen Sie einen einzelnen Markt, zwei Märkte im direkten Vergleich oder alle drei Märkte zusammen. ",
                         "So lassen sich regionale Unterschiede in Genre-Präferenzen, Audio-Features und Künstler-Performance ",
                         "gezielt analysieren und marktspezifische Trends identifizieren."
                     ], className="sidebar-help-text"),
                     
 dbc.Button("ALLE MÄRKTE", id='btn-all', className='market-button active', n_clicks=0),
-dbc.Button("DEUTSCHLAND", id='btn-de', className='market-button', n_clicks=0),
-dbc.Button("UK", id='btn-uk', className='market-button', n_clicks=0),
-dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0),
+            dbc.Button("DEUTSCHLAND", id='btn-de', className='market-button', n_clicks=0),
+            dbc.Button("UK", id='btn-uk', className='market-button', n_clicks=0),
+            dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0)
 
 
 # KPI Toggle
@@ -876,17 +872,15 @@ html.Div([
     )
 ])
 
-                ], className='filter-card'),
+        ], className='filter-card'),
                 
-                html.Div([
-    html.H5([
-        html.Span("", className="api-dot"),
-        "API STATUS"
-    ], className="api-title"),
-    html.P(id="api-status-text", className="api-text")
-], className="api-card")
-            ], className='sidebar')
-        ], width=3, className='p-0'),
+                 html.Div([
+            html.H5([html.Span("", className="api-dot"), "API STATUS"], className="api-title"),
+            html.P(id="api-status-text", className="api-text")
+        ], className="api-card"),
+
+    ], className='sidebar')
+], width=3, className='p-0'),
         
         # MAIN CONTENT
         dbc.Col([
@@ -963,6 +957,7 @@ html.Div([
 ], className="mobile-filter-card d-block d-md-none"),
 
 html.Div(id="data-quality-warning", style={"marginBottom": "12px"}),
+
 
 
                 
