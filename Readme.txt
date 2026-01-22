@@ -79,7 +79,7 @@ Das Skript erstellt vier Ausgabe-Dateien aus den Originalen:
 - high_potential_tracks.csv 
 - cleaned_market_trends.csv
 
-Zusätzlich wird data_journal.csv mit detaillierter Dokumentation aller Verarbeitungsschritte generiert.
+Zusätzlich wird data_journal.csv mit detaillierter Dokumentation generiert.
 
 Dashboard starten:
 - python dashboard.py
@@ -112,7 +112,6 @@ Der ETL-Prozess in datenverarbeitung.py läuft komplett automatisch:
 Genre-Mapping:
 Die Zuordnung von Roh-Genres zu den neun harmonisierten Hauptgenres erfolgt über die Datei genre_mapping.json. Diese Datei wurde auf Basis explorativer Datenanalyse entwickelt und definiert 50 feste Mapping-Regeln (z. B. „rap", „trap", „german hip hop" > „Hip-Hop"). Sie ist Bestandteil der ETL-Konfiguration und wird während der Datenverarbeitung von datenverarbeitung.py eingelesen. Die Datei ist versioniert, um eine konsistente und reproduzierbare Genre-Harmonisierung sicherzustellen. Falls die Datei fehlt, nutzt die Pipeline einen identischen Fallback-Mapper im Python-Code.
 
-Alle Verarbeitungsschritte sind in data_journal.csv dokumentiert.
 Die ETL-Pipeline erzeugt bei identischen Eingabedaten reproduzierbare Ergebnisse.
 
 
