@@ -732,7 +732,7 @@ html.Div([
                     html.H1("Spotify Performance Insights", className='header-title'),
                     html.P([
                         "Dieses interaktive Business-Intelligence-Dashboard analysiert internationale ",
-    "Musikmärkte auf Basis der Spotify-Daten (2017–2021) und ergänzt diese ",
+    "Musikmärkte auf Basis von Spotify-Daten und ergänzt diese ",
     "optional um aktuelle Streaming-Impulse aus Spotify- und Last.fm-APIs. Ziel ist ",
     "die transparente Visualisierung von Marktstrukturen, Genre-Dynamiken und ",
     "Erfolgsmustern zur Unterstützung datenbasierter A&R- und Marketingentscheidungen."
