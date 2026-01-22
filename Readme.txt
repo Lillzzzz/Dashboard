@@ -6,6 +6,7 @@ Dieses Dashboard wurde im Rahmen des Kurses "Business Intelligence and Analytics
 Die Implementierung umfasst eine vollautomatisierte ETL-Pipeline, ein interaktives Dash-Dashboard mit acht Visualisierungen sowie optionale Live-API-Integration (Spotify, Last.fm). Alle Verarbeitungsschritte sind im Data Journal dokumentiert und vollständig reproduzierbar.
 
 Live-Dashboard: https://dashboard-d0z8.onrender.com
+Github: https://github.com/Lillzzzz/Dashboard
 
 
 Zielsetzung:
