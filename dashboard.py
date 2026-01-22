@@ -817,7 +817,7 @@ app.layout = dbc.Container([
 dbc.Button("ALLE MÄRKTE", id='btn-all', className='market-button active', n_clicks=0),
             dbc.Button("DEUTSCHLAND", id='btn-de', className='market-button', n_clicks=0),
             dbc.Button("UK", id='btn-uk', className='market-button', n_clicks=0),
-            dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0)
+            dbc.Button("BRASILIEN", id='btn-br', className='market-button', n_clicks=0),
 
 
 # KPI Toggle
