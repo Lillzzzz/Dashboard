@@ -1068,10 +1068,12 @@ dbc.Tooltip(
 ),
 
                             html.Div(id='kpi-shannon', className='kpi-value', title="Genrekonzentration, höher = vielfältiger Markt"),
-                            ml.Strong("Strategic Insight: "), 
+html.Div([
+    html.Strong("Strategic Insight: "),
     "Niedrige Diversität = klare Genre-Leader (Mainstream-fokussiert). "
     "Hohe Diversität = Nischen-Chancen, aber höherer Marketing-Aufwand für Durchbruch."
 ], className='kpi-desc')
+
 
                         ], className='kpi-card')
                     ], xl=3, lg=6, md=6, sm=12, className='mb-4'),
