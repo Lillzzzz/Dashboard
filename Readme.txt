@@ -134,7 +134,7 @@ Der Market Potential Score kombiniert drei Komponenten auf einer 0-100 Skala:
 
 Die Growth-Komponente wird auf 200% (Verdoppelung) begrenzt und anschließend auf 0-100 normiert, um Ausreißer-Dominanz zu verhindern und Vergleichbarkeit zwischen Genres zu gewährleisten. Vor dem Export erfolgt eine automatische Validierung der Datenqualität (keine Duplikate, Market Share Summen = 100%). 
 
-HINWEIS: Der Market Potential Score wird NICHT als separate KPI-Karte im Dashboard angezeigt, sondern dient als analytisches Konzept zur Einordnung von Genre-Attraktivität. Die Score-Komponenten (Market Share, Success Rate, Growth) sind jedoch in den KPI-Metriken und zeitlichen Marktverläufen sichtbar.
+Hinweis: Der Market Potential Score wird NICHT als separate KPI-Karte im Dashboard angezeigt, sondern dient als analytisches Konzept zur Einordnung von Genre-Attraktivität. Die Score-Komponenten (Market Share, Success Rate, Growth) sind jedoch in den KPI-Metriken und zeitlichen Marktverläufen sichtbar.
 
 
 Visualisierungen:
@@ -212,8 +212,8 @@ Das Projekt kann in vier Schritten vollständig reproduziert werden:
    Beim ersten Start lädt das Dashboard automatisch die große CSV-Datei (spotify_charts_enhanced.csv, 309MB) von GitHub herunter falls nicht lokal vorhanden.
    Das kann 1-2 Minuten dauern – danach läuft alles lokal.
 
-	WICHTIG für Reproduktion:
-	- datenverarbeitung.py muss NUR ausgeführt werden, wenn die CSV-Dateien neu generiert werden sollen (z.B. bei geänderten Kaggle-Rohdaten).
+	Wichtig für Reproduktion:
+	- datenverarbeitung.py muss nur ausgeführt werden, wenn die CSV-Dateien neu generiert werden sollen (z.B. bei geänderten Kaggle-Rohdaten).
 	- Die fertigen CSV-Dateien sind bereits im Repo enthalten.
 	- Das Dashboard läuft auch ohne API-Keys.
 
